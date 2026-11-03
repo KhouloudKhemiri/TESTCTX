@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Liste" Cible="CTX_CREDIT_CLIENT_AFF.xml" />
+		<Tab Nom="Paiement" Cible="CTX_CREDIT_CLIENT_PAI.xml" />
+</TabPage>
+
+</Entites>

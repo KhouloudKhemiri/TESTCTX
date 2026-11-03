@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Modification" 
+Titre="Liste Balance" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="Liste BALANCE"
+		Titre="Liste Balance"
+    Tables="BALANCE_TABLE2"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" COMPTE"
+    >
+
+    <Text Position="0" Label="AGENCE" ColTable="AGENCE" Nom="AGENCE" Type="AlphaNumerique" Longueur="2" Unique="Non" PositionCel="1" LongueurCel="6" LabelCel="AGENCE"/>
+    <Text Position="NLigne" Label="COMPTE" ColTable="COMPTE" Nom="COMPTE" Type="AlphaNumerique" Longueur="13"   Unique="Non" PositionCel="2" LongueurCel="10" LabelCel="COMPTE"/>
+	<Text Position="NLigne" Label="NOMRSC" ColTable="NOMRSC" Nom="NOMRSC" Type="AlphaNumerique" Longueur="30" Unique="Non" PositionCel="3" LongueurCel="25" LabelCel="CPT NOMRSC"/>
+ 	<Text Position="NLigne" Label="ANCIEN_SOLDE" ColTable="ANCIEN_SOLDE" Nom="ANCIEN_SOLDE" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="13" LabelCel="ANCIEN_SOLDE"/>
+ 	<Text Position="NLigne" Label="MVT_DEBIT" ColTable="MVT_DEBIT" Nom="MVT_DEBIT" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="13" LabelCel="MVT_DEBIT"/>
+ 	<Text Position="NLigne" Label="MVT_CREDIT" ColTable="MVT_CREDIT" Nom="MVT_CREDIT" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="13" LabelCel="MVT_CREDIT"/>
+ 	<Text Position="NLigne" Label="NOUVEAU_SOLDE" ColTable="NOUVEAU_SOLDE" Nom="NOUVEAU_SOLDE" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="13" LabelCel="NOUVEAU_SOLDE"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

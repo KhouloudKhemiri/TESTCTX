@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+<Tableau Label="Suppression" Titre="APUREMENT MEG RECU (DB)/CREDIT CLIENT" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+	
+	<Formulaire Nom="APUREMENT MEG RECU (DB)/CREDIT CLIENT"
+		Titre="APUREMENT MEG RECU (DB)/CREDIT CLIENT" 
+    Tables="FL1000"
+		IndSuppression="SU3002"
+    LigneClickEvent="SUPPRESSION"
+		Action="SUPPRESSION"
+  	ValSupp="1"
+		Where =" CODOPE3002='T036'"
+			OrderBy=" CODAGC3002, DATOPE3002, CODOPE3002, AGCNUM3002, SERNUM3002, ORDNUM3002"
+    >
+
+    <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+    <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+    <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+    <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="6" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="6" LabelCel="Ser Ref" />
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="6" LabelCel="Ord Ref" />
+	<Text Position="NLigne" Label="N° Compte à créditer" ColTable="AGXOPE3002" Nom="AGXOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="6" LabelCel="Agc Cpt" />  
+	<Text Position="2" Label="" ColTable="NAXOPE3002" Nom="NAXOPE3002" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="6" LabelCel="Nat Cpt" />
+	<Text Position="2" Label="" ColTable="ORXOPE3002" Nom="ORXOPE3002" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="6" LabelCel="Ord Cpt" />
+  
+	<Text Position="2" Label="" ColTable="KLXOPE3002" Nom="KLXOPE3002" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="6" LabelCel="Clé Cpt">
+
+	   <OnInit>				
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS030007%' and CODNAT1030='%THIS030008%' and ORDCPT1030='%THIS030009%' and KLECPT1030='%THIS030010%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS030007%' and CODNAT1030='%THIS030008%' and ORDCPT1030='%THIS030009%' and KLECPT1030='%THIS030010%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="SLDCPT" Type="AlphaNumerique" ColTable="SLDCPT10"/>            
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+          
+             if (%THIS030010%.equals("") )
+             {
+             return;
+             }
+          
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS030011%="Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+                
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;         
+                  %THIS030024% = "0";         
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                    %THIS030024% = "0";         
+                  } else
+                  {
+                    CLO = 1;
+                    %THIS030024% = "1";         
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS030011%="Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS030011%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS030011%="";
+                  }
+                             
+			      	       %THIS030012%= %NOMCPT%;
+                     %THIS030018%= %SLDCPT%;
+                     %THIS030019%= %SLDCPT%;            
+                   
+                }
+              }
+               ]]> 
+         </Result>
+		</OnInit>
+  </Text> 
+
+   <SimpleText Position="2" Label="" Valeur="" />
+
+   <Text Position="NLigne" Label="Nom et prénom ou R/S" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non" Obligatoire="Non" /> 
+ 
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="8" LongueurCel="10" LabelCel="Montant opération"/>
+
+	<Text Position="NLigne" Label="Agence ou service émetteur" ColTable="AGYOPE3002" Nom="AGYOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="9" LongueurCel="7" LabelCel="Agc EMT">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+  </Text>
+
+  <Text Position="NLigne" Label="Agence ou service concerné" ColTable="AGZREC3002" Nom="AGZREC3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Non" PositionCel="10" LongueurCel="6" LabelCel="Ag Conc">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+  </Text>
+
+  <Text Position="NLigne" Label="Description" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="Date valeur" ColTable="DATVAL3002" Nom="DATVAL3002" Type="Date" Longueur="10" Unique="Non" Obligatoire="Non" PositionCel="12" LongueurCel="10" LabelCel="Date Valeur" />
+
+ 	<Text Position="NLigne" Label="Ancien Solde" ColTable="" Nom="" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Disabled="Oui" Obligatoire="Non" />
+ 	<Text Position="NLigne" Label="Nouveau Solde" ColTable="" Nom="" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Disabled="Oui" Obligatoire="Non" />
+
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+				 %THIS030001% = "93";
+				 %THIS030002% = %Journee%;
+				 %THIS030003% = "T036";
+         %THIS030020% = %CODEUSER%;
+         %THIS030021% = "4";
+         %THIS030022% = "08";
+         %THIS030023% = "3";         
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

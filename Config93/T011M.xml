@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Modification" Titre="APUREMENT DEBIT A REGULARISER/MEG AGENCE" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="APUREMENT DEBIT A REGULARISER/MEG AGENCE"
+		Titre="APUREMENT DEBIT A REGULARISER/MEG AGENCE"
+    Tables="FL1000"
+		IndSuppression="SU3002"
+    LigneClickEvent="MODIFICATION"
+		Action="MODIFICATION"
+		Where =" CODOPE3002='T011'"
+			OrderBy=" CODAGC3002, DATOPE3002, CODOPE3002, AGCNUM3002, SERNUM3002, ORDNUM3002"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+  <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="7" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="6" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="9" LabelCel="Ordre Ref"/>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="15" LabelCel="Montant opération">
+      <OnUpdate>
+			    <Requet Tables="FL1091" Where=" SU1091 = 0 and (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE91=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1091" Where=" SU1091 = 1 and (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE91=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+        <Result>
+          <![CDATA[
+                     int p = %THIS020007%.indexOf("+");
+                     int m = %THIS020007%.indexOf("-");
+                     int e = %THIS020007%.indexOf("*");
+                     int d = %THIS020007%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS020007%="ERREUR: Montant erroné";
+                      return;
+                     }
+
+             if (Integer.parseInt(%INSACT%.trim())==0)
+							 { 
+                if (Integer.parseInt(%INSSUP%.trim())==0)
+                { 
+                 %THIS020007%="ERREUR: Instance Inexistante dans  les DEBIT  A REGULARISER (FL1091)" ;
+                }
+               }
+               %THIS020008%="";
+           ]]>
+              </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Agence ou service concerné" ColTable="MEGOPE3002" Nom="MEGOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="12" LabelCel="Agc concerné">
+  		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+      <OnUpdate>     
+			   <Requet Tables="FL1091" Where=" (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE91=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="CPTAGC" Type="AlphaNumerique" ColTable="CPTAGC91"/>
+					  <Select Nom="AGYOPE" Type="AlphaNumerique" ColTable="AGYOPE91"/>
+				  </Requet>
+				  <Result>          
+          <![CDATA[
+             if(%THIS020008%.equals(""))
+             {
+             return;
+             }
+                if (%THIS020008%.equals("93"))
+                {
+                 %THIS020008%="ERREUR: Agence doit être différente de 93" ;
+                 return;
+                }
+                if (%THIS020008%.equals(%CPTAGC%))
+                {
+                  %THIS020010% = %CPTAGC%; 
+                  %THIS020011% = %AGYOPE%; 
+                } else
+                {
+                  %THIS020008%="ERREUR: Agence doit être = " + %CPTAGC%;
+                }
+           ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+   <Text Position="NLigne" Label="Description" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" PositionCel="6" LongueurCel="26" LabelCel="Description"/>
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGXOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGYOPE3002" Label="" Valeur="" />
+
+   <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+    
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS020001%="93";
+				 %THIS020002%=%Journee%;
+				 %THIS020003%="T011";
+         %THIS020012%=%CODEUSER%;
+         %THIS020013% = "1";
+         %THIS020014% = "01";
+         %THIS020015% = "0"; 
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="SELECTION DES EFFETS EN ENTREE DU PFC AU CTX"
+		Titre="SELECTION DES EFFETS EN ENTREE DU PFC AU CTX"
+    Tables="FL1062_AAPUR"
+		IndSuppression="SU1062A"
+		Action="CREATION"
+>
+        
+  <Text Position="0" Label="N° Compte Agence : " ColTable="CPTAGC62A" Nom="CPTAGC62A" Type="AlphaNumerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS0101%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS0101%="ERREUR: Agence Inexistante" ;
+              } 
+              %THIS0104% = "";
+              %THIS0105% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="2" Label="" ColTable="CPTNAT62A" Nom="CPTNAT62A" Type="Numerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+				    <Result>
+               <![CDATA[  
+                  %THIS0104% = "";
+                  %THIS0105%="";
+               ]]> 
+           </Result>
+         </OnUpdate>
+       </Text>
+
+  <Text Position="2" Label="" ColTable="CPTORD62A" Nom="CPTORD62A" Type="Numerique" Longueur="5" Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+				    <Result>
+               <![CDATA[  
+                  %THIS0104% = "";
+                  %THIS0105%="";
+               ]]> 
+           </Result>
+         </OnUpdate>
+       </Text>
+
+  <Text Position="2" Label="" ColTable="CPTCLE62A" Nom="CPTCLE62A" Type="Numerique" Longueur="1" Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+            <Requet Tables="DUAL"   >
+  			  		<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0101%',%THIS0102%,%THIS0103%)"/>
+			  	  </Requet>
+				    <Result>
+               <![CDATA[  
+                  if(%THIS0104%.equals("") )
+                  {
+                   return;
+                  }
+                  if (!%THIS0104%.equals(%CLECPT%))
+                  {
+                   %THIS0104% = "ERREUR: Clé Invalide";
+                   return;
+                  }
+                  %THIS0105%="";
+               ]]> 
+           </Result>
+         </OnUpdate>
+       </Text>
+
+  <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE62A" Nom="ENGOPE62A" Type="AlphaNumerique" Longueur="3"  Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+			    <Requet Tables="FL1062_AAPUR" Where=" CPTAGC62A='%THIS0101%' and CPTNAT62A=%THIS0102% and CPTORD62A=%THIS0103% and CPTCLE62A='%THIS0104%' and ENGOPE62A='%THIS0105%' and SU1062A=0" >
+					  <Select Nom="NBRAAP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+  			    <Requet Tables="FL1062_TEMP" Where=" SU1062T=0" >
+	  				  <Select Nom="NBRTMP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+		  		  </Requet>
+  			    <Requet Tables="FL1062" Where=" CPTAGC62='%THIS0101%' and CPTNAT62=%THIS0102% and CPTORD62=%THIS0103% and CPTCLE62='%THIS0104%' and ENGOPE62='%THIS0105%' and SU1062=0" >
+	  				  <Select Nom="NBRINS" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+		  		  </Requet>
+
+				    <Result>
+               <![CDATA[  
+             if(Integer.parseInt(%NBRTMP%.trim())!=0)
+							{
+                 %THIS0105%="ERREUR: Veuillez finaliser l'opération de validation antérieure" ;
+                 return;
+              }
+             if(Integer.parseInt(%NBRAAP%.trim())!=0)
+							{
+                 %THIS0105%="ERREUR: Instances déja apurées" ;
+                 return;
+              } 
+             if(Integer.parseInt(%NBRINS%.trim())==0)
+							{
+                 %THIS0105%="ERREUR: Aucune instance ne correspond à ces critères" ;
+                 return;
+              }
+             %THIS0106%="Nombre d'Instances selectionnés = " + %NBRINS%;
+             %THIS0107%=%NBRINS%;
+               ]]> 
+           </Result>
+         </OnUpdate>
+       </Text>
+
+    <SimpleText Position="NLigne" Label="" Valeur="" />
+    <SimpleText Position="0" Class="Invisible"  ColTable="NBRINS62A" Label="" Valeur="" />
+		
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+		 <OnUpdate>
+        <Procedure Nom="SELECT_FL1062('%THIS0101%',%THIS0102%,%THIS0103%,%THIS0104%,'%THIS0105%')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+		
+	</Formulaire>
+	
+</Entites>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+<Tableau Label="Modification" Titre="CLOTURE DE COMPTE" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="CLOTURE DE COMPTE"
+		Titre="CLOTURE DE COMPTE"
+    Tables="FL1030"
+		IndSuppression="SU1030"
+    LigneClickEvent="MODIFICATION"
+		Action="MODIFICATION"
+			OrderBy=" CODAGC1030, CODNAT1030, ORDCPT1030, KLECPT1030"
+    >
+
+  <Text Position="0" Label="Agence" ColTable="CODAGC1030" Nom="CODAGC1030" Type="AlphaNumerique" Longueur="2" Unique="Oui" Obligatoire="Oui" PositionCel="1" LongueurCel="4" LabelCel="Agc">
+      <OnInit>
+			    <Requet Tables="FL5503" Where=" SU5503='0' and CODAGC5503='%THIS020001%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020001%' " >
+					  <Select Nom="LIBAGC" Type="AlphaNumerique" ColTable="LIB5503"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS020001%="ERREUR: Agence Inexistante" ;
+                 return;
+              }
+              %THIS020005% = %LIBAGC%;
+				  </Result>
+    </OnInit>
+  </Text>
+  <Text Position="2" Label="Nature" ColTable="CODNAT1030" Nom="CODNAT1030" Type="Numerique" Longueur="2" Unique="Oui" Obligatoire="Oui" PositionCel="2" LongueurCel="4" LabelCel="Nat">
+      <OnInit>
+        <Result>
+          <![CDATA[  
+						 if ((%THIS020002%.compareTo("03")==0) || (%THIS020002%.compareTo("04")==0) || (%THIS020002%.compareTo("05")==0) || (%THIS020002%.compareTo("06")==0))
+             {
+             }else
+             { %THIS020002%="ERREUR: Nature doit etre = 03, 04, 05 ou 06";
+              return;
+             }
+             if (%THIS020002%.compareTo("03")==0)
+             {
+                %THIS020006% = "COMPTES COURANT DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS020002%.compareTo("04")==0)
+             {
+                %THIS020006% = "COMPTES CHEQUES DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS020002%.compareTo("05")==0)
+             {
+                %THIS020006% = "COMPTES ETATIQUE DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS020002%.compareTo("06")==0)
+             {
+                %THIS020006% = "COMPTES DOUTEUX ET LITIGIEUX AUTRES COMPTES";
+             }
+               ]]> 
+				</Result>
+ 		  </OnInit>
+  </Text>
+  <Text Position="2" Label="Ordre" ColTable="ORDCPT1030" Nom="ORDCPT1030" Type="Numerique" Longueur="5" Unique="Oui" Obligatoire="Oui" PositionCel="3" LongueurCel="7" LabelCel="Ord"/>
+  <Text Position="2" Label="Clé" ColTable="KLECPT1030" Nom="KLECPT1030" Type="Numerique" Longueur="1" Unique="Oui" Obligatoire="Oui" PositionCel="4" LongueurCel="4" LabelCel="Clé">
+      <OnInit>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020001%' and CODNAT1030='%THIS020002%' and ORDCPT1030='%THIS020003%' and KLECPT1030='%THIS020004%' " >
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+					  <Select Nom="SLDCPT" Type="AlphaNumerique" ColTable="SLDCPT10"/>            
+				  </Requet>
+				  <Result>
+          <![CDATA[  
+
+             if (%SRVCPT%.compareTo("1")==0)
+             {
+                %THIS020005% = "Attention le compte du client CTX est sous code surveillance";
+                %THIS020006% = "";
+             }
+             %THIS020010%=%SLDCPT%;
+          ]]> 
+         </Result>
+    </OnInit>
+  </Text>
+
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+  <SimpleText Position="77" ColTable="" Label="" Valeur="" />
+
+  <Text Position="NLigne" Label="Nom et Prénom" ColTable="NOMRSC" Nom="NOMRSC" Type="AlphaNumerique" Disabled="Oui" Longueur="30" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="27" LabelCel="Nom Prénom"/>
+  <Text Position="NLigne" Label="Adresse" ColTable="ADRPRS" Nom="ADRPRS" Type="AlphaNumerique" Disabled="Oui" Longueur="46" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="23" LabelCel="Adresse"/>
+
+		<List Position="NLigne" Label="Code Cloture" ColTable="CODCLO10" Index="Oui"  Obligatoire="Oui" Type="Numerique" Longueur="1" PositionCel="7" LongueurCel="6" LabelCel="Code Clo"> 
+			<Option Valeur="0" >Actif</Option>
+			<Option Valeur="1" >Cloturé</Option>
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+            if (%THIS020009%.compareTo("1")==0)
+            {
+              if (%THIS020010%.compareTo("0,000")==0)
+              {
+                %THIS020011% = %Journee%;
+              } else
+              {
+                %THIS020010%="ERREUR: Le Compte n'est pas soldé";
+              }
+            }
+
+            if (%THIS020009%.compareTo("0")==0)
+            {
+              public static String replaceNull(String input)
+              {
+               return input == null ? "" : input;
+              }
+              if (replaceNull(%THIS020011%) == "")
+              {
+                DATCLO = "";
+              } else
+              {
+                DATCLO=%THIS020011%.substring(8, 10)+"/"+%THIS020011%.substring(5, 7)+"/"+%THIS020011%.substring(0, 4);
+              }
+  					  if (DATCLO.compareTo(%Journee%)==0)
+              { 
+                %THIS020011% = "";
+              } else
+              {
+                %THIS020004%="ERREUR: La réactivation du compte ne peut se faire que le meme jour de la cloture " + "(= "+DATCLO+")";
+              }
+            }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+		</List>
+
+ 	<Text Position="NLigne" Label="Solde" ColTable="SLDCPT10" Nom="SLDCPT10" Type="Float" Longueur="12" AprVirg="3" Disabled="Oui" Unique="Non" Obligatoire="Oui" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CLOCPT10" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+				</Result>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS00%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS00%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS00%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS00%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

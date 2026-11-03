@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+
+	<Formulaire Nom="OUVERT COMPTE PERS. PHYSIQUE COMMERCANTE"
+		Titre="OUVERT COMPTE PERS. PHYSIQUE COMMERCANTE"
+    Tables="FL1030"
+		IndSuppression="SU1030"
+		Action="CREATION" >
+
+  <Text Position="0" Label="Agence" ColTable="CODAGC1030" Nom="CODAGC1030" Type="AlphaNumerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" SU5503='0' and CODAGC5503='%THIS0101%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS0101%' " >
+					  <Select Nom="LIBAGC" Type="AlphaNumerique" ColTable="LIB5503"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS0101%="ERREUR: Agence Inexistante" ;
+                 return;
+              }
+              %THIS0105% = %LIBAGC%;
+              %THIS0104% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+  <Text Position="2" Label="Nature" ColTable="CODNAT1030" Nom="CODNAT1030" Type="Numerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+				<Result>
+						 if ((%THIS0102%.compareTo("03")==0) || (%THIS0102%.compareTo("04")==0) || (%THIS0102%.compareTo("06")==0))
+             {
+             }else
+             { %THIS0102%="ERREUR: Nature doit etre = 03, 04 ou 06";
+              return;
+             }
+             if (%THIS0102%.compareTo("03")==0)
+             {
+                %THIS0106% = "COMPTES COURANT DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS0102%.compareTo("04")==0)
+             {
+                %THIS0106% = "COMPTES CHEQUES DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS0102%.compareTo("06")==0)
+             {
+                %THIS0106% = "COMPTES DOUTEUX ET LITIGIEUX AUTRES COMPTES";
+             }
+              %THIS0124% = "";
+              %THIS0104% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  <Text Position="2" Label="Ordre" ColTable="ORDCPT1030" Nom="ORDCPT1030" Type="Numerique" Longueur="5" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+				<Result>
+              %THIS0104% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  <Text Position="2" Label="Clé" ColTable="KLECPT1030" Nom="KLECPT1030" Type="Numerique" Longueur="1" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0101%' and CODNAT1030=%THIS0102% and ORDCPT1030=%THIS0103% and KLECPT1030='%THIS0104%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0101%',%THIS0102%,%THIS0103%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+             if(%THIS0104%.equals("") )
+             {
+             return;
+             }
+             if (Integer.parseInt(%NBRCPT%.trim())!=0)
+						 {
+               %THIS0104%="ERREUR: Enregistrement existe  ";
+               return;
+             } 
+            if (!%THIS0104%.equals(%CLECPT%))
+            {
+             %THIS0104% = "ERREUR: Clé Invalide";
+             return;
+            }
+          ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+  <SimpleText Position="77" ColTable="" Label="" Valeur="" />
+
+  <Text Position="NLigne" Label="Nom et Prénom" ColTable="NOMRSC" Nom="NOMRSC" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="Adresse" ColTable="ADRPRS" Nom="ADRPRS" Type="AlphaNumerique" Longueur="46" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="NLigne" Label="Code PTT" ColTable="CODPTT1030A" Nom="CODPTT1030A" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Oui" >
+		<Description Colonne="CODPTT" Label="LIBPTT" Table="FL5501"/>
+      <OnUpdate>
+			    <Requet Tables="FL5501" Where=" CODPTT='%THIS0109%' " >
+					  <Select Nom="NBRPTT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRPTT%.trim())==0)
+							{
+                 %THIS0109%="ERREUR: Code PTT Inexistant" ;
+              } 
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="Fonction" ColTable="FONCPT10" Nom="FONCPT10" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Non" />
+
+  <Text Position="NLigne" Label="Date Naissance" ColTable="NAICPT10" Nom="NAICPT10" Type="Date" Longueur="10" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             if(%THIS0111%.equals("") )
+             {
+             return;
+             }
+
+           java.text.SimpleDateFormat dateStandard = new java.text.SimpleDateFormat("dd/MM/yyyy");
+					 java.util.Date DATOPE=dateStandard.parse(%Journee%);
+					 java.util.Date DATNAI=dateStandard.parse(%THIS0111%);
+
+						 if ((DATNAI.compareTo(DATOPE)>0) || (DATNAI.compareTo(DATOPE)==0))
+             { 
+               %THIS0111%="ERREUR: Date de Naissance doit etre inférieur à la date du jour";
+             }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+		<List Position="NLigne" Label="Sexe" ColTable="SEXCPT10" Index="Oui"  Obligatoire="Oui" Type="AlphaNumerique" Longueur="1"> 
+			<Option Valeur="M" >Masculin</Option>
+			<Option Valeur="F" >Féminin</Option>
+		</List>
+
+
+		<List Position="NLigne" Label="Document présenté" ColTable="CODDOC1030" Index="Oui"  Obligatoire="Oui" Type="Numerique" Longueur="1"> 
+			<Option Valeur="0" >C.I.N</Option>
+			<Option Valeur="1" >Passeport</Option>
+			<Option Valeur="2" >C.Séjour</Option>
+      <OnUpdate>
+				<Result>
+            %THIS0114% = "";
+            %THIS0119% = "";
+        </Result>
+      </OnUpdate>
+		</List>
+
+	<Text Position="NLigne" Label="Numéro du document" ColTable="ORDDOC1030" Nom="ORDDOC1030" Type="AlphaNumerique" Longueur="8" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             public boolean isNumeric(String input) {
+               try {
+                 Integer.parseInt(input);
+                 return true;
+               }
+               catch (NumberFormatException e) {
+                 // s is not numeric
+                 return false;
+               }
+             }
+             
+            if (%THIS0113%.equals("0"))
+            { if (isNumeric(%THIS0114%))
+              {
+               %THIS0114%=Long.toString(Long.parseLong(%THIS0114%.trim()) + 100000000L).substring(1, 9); 
+              } else
+              {
+               %THIS0114% = "ERREUR: C.I.N doit etre numérique";
+              }
+            }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Date de délivrance" ColTable="DATLIV1030" Nom="DATLIV1030" Type="Date" Longueur="10" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             if(%THIS0115%.equals("") )
+             {
+             return;
+             }
+
+           java.text.SimpleDateFormat dateStandard = new java.text.SimpleDateFormat("dd/MM/yyyy");
+					 java.util.Date DATOPE=dateStandard.parse(%Journee%);
+					 java.util.Date DATNAI=dateStandard.parse(%THIS0111%);
+					 java.util.Date DATLIV=dateStandard.parse(%THIS0115%);
+
+						 if (!(DATLIV.compareTo(DATNAI)>0) || !(DATLIV.compareTo(DATOPE)<0))
+             { 
+               %THIS0115%="ERREUR: Date de Délivrance doit etre SUP à Date naissance et INF à Date du jour";
+             }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+	<Text Position="4" Label="Lieu de délivrance" ColTable="LIELIV10" Nom="LIELIV10" Type="AlphaNumerique" Longueur="10" Unique="Non" Obligatoire="Oui" />
+	<Text Position="NLigne" Label="Code activité (client)" ColTable="CODACT1030" Nom="CODACT1030" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+			    <Requet Tables="FL5507" Where=" SU5507='0' and CODACT='%THIS0117%' " >
+					  <Select Nom="NBRACT" Type="Numerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+			    <Requet Tables="FL5507" Where=" SU5507='0' and CODACT='%THIS0117%' " >
+					  <Select Nom="LIBAGCTIV" Type="AlphaNumerique" ColTable="LIBACT"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRACT%.trim())==0)
+							{
+                 %THIS0117%="ERREUR: Code Activité Inexistant" ;
+                 return;
+              }
+              %THIS0118% = %LIBAGCTIV%;
+				  </Result>
+    </OnUpdate>
+  </Text>
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+
+		<List Position="NLigne" Label="Nationalité" ColTable="CODPAY1030" Index="Oui"  Obligatoire="Oui" Type="AlphaNumerique" Longueur="2"> 
+   <Option Valeur="AD">AD  :  Andorra                       </Option>
+   <Option Valeur="AE">AE  :  U.A.E                         </Option>
+   <Option Valeur="AF">AF  :  Afghanistan                   </Option>
+   <Option Valeur="AG">AG  :  Antigua                       </Option>
+   <Option Valeur="AI">AI  :  Anguilla                      </Option>
+   <Option Valeur="AL">AL  :  Albania                       </Option>
+   <Option Valeur="AM">AM  :  Armenia                       </Option>
+   <Option Valeur="AN">AN  :  Neth Ant.                     </Option>
+   <Option Valeur="AO">AO  :  Angola                        </Option>
+   <Option Valeur="AQ">AQ  :  Antarctica                    </Option>
+   <Option Valeur="AR">AR  :  Argentina                     </Option>
+   <Option Valeur="AS">AS  :  American Samoa                </Option>
+   <Option Valeur="AT">AT  :  Austria                       </Option>
+   <Option Valeur="AU">AU  :  Australia                     </Option>
+   <Option Valeur="AW">AW  :  Aruba                         </Option>
+   <Option Valeur="AX">AX  :  ALAND                         </Option>
+   <Option Valeur="AZ">AZ  :  Azerbaijan                    </Option>
+   <Option Valeur="BA">BA  :  Bosnia-Herz                   </Option>
+   <Option Valeur="BB">BB  :  Barbados                      </Option>
+   <Option Valeur="BD">BD  :  Bangladesh                    </Option>
+   <Option Valeur="BE">BE  :  Belgium                       </Option>
+   <Option Valeur="BF">BF  :  Burkina Faso                  </Option>
+   <Option Valeur="BG">BG  :  Bulgaria                      </Option>
+   <Option Valeur="BH">BH  :  Bahrain                       </Option>
+   <Option Valeur="BI">BI  :  Burundi                       </Option>
+   <Option Valeur="BJ">BJ  :  Benin                         </Option>
+   <Option Valeur="BM">BM  :  Bermuda                       </Option>
+   <Option Valeur="BN">BN  :  Brunei                        </Option>
+   <Option Valeur="BO">BO  :  Bolivia                       </Option>
+   <Option Valeur="BR">BR  :  Brazil                        </Option>
+   <Option Valeur="BS">BS  :  Bahamas                       </Option>
+   <Option Valeur="BT">BT  :  Bhutan                        </Option>
+   <Option Valeur="BV">BV  :  Bouvet Island                 </Option>
+   <Option Valeur="BW">BW  :  Botswana                      </Option>
+   <Option Valeur="BY">BY  :  Belarus                       </Option>
+   <Option Valeur="BZ">BZ  :  Belize                        </Option>
+   <Option Valeur="CA">CA  :  Canada                        </Option>
+   <Option Valeur="CC">CC  :  Cocos Islands                 </Option>
+   <Option Valeur="CD">CD  :  Congo                         </Option>
+   <Option Valeur="CF">CF  :  Cent Afr                      </Option>
+   <Option Valeur="CG">CG  :  Congo                         </Option>
+   <Option Valeur="CH">CH  :  Switzerland                   </Option>
+   <Option Valeur="CI">CI  :  Ivory                         </Option>
+   <Option Valeur="CK">CK  :  Cook Islands                  </Option>
+   <Option Valeur="CL">CL  :  Chile                         </Option>
+   <Option Valeur="CM">CM  :  Cameroon                      </Option>
+   <Option Valeur="CN">CN  :  China                         </Option>
+   <Option Valeur="CO">CO  :  Columbia                      </Option>
+   <Option Valeur="CR">CR  :  Costa Rica                    </Option>
+   <Option Valeur="CU">CU  :  Cuba                          </Option>
+   <Option Valeur="CV">CV  :  Cape Verde                    </Option>
+   <Option Valeur="CX">CX  :  Christmas Is.                 </Option>
+   <Option Valeur="CY">CY  :  Cyprus                        </Option>
+   <Option Valeur="CZ">CZ  :  Czech Republic                </Option>
+   <Option Valeur="DE">DE  :  Germany                       </Option>
+   <Option Valeur="DJ">DJ  :  Djibouti                      </Option>
+   <Option Valeur="DK">DK  :  Denmark                       </Option>
+   <Option Valeur="DM">DM  :  Dominica                      </Option>
+   <Option Valeur="DO">DO  :  Dominican                     </Option>
+   <Option Valeur="DZ">DZ  :  Algeria                       </Option>
+   <Option Valeur="EC">EC  :  Ecuador                       </Option>
+   <Option Valeur="EE">EE  :  Estonia                       </Option>
+   <Option Valeur="EG">EG  :  Egypt                         </Option>
+   <Option Valeur="EH">EH  :  Western Sahara                </Option>
+   <Option Valeur="ER">ER  :  Eritrea                       </Option>
+   <Option Valeur="ES">ES  :  Spain                         </Option>
+   <Option Valeur="ET">ET  :  Ethiopia                      </Option>
+   <Option Valeur="EU">EU  :  EUR Countries                 </Option>
+   <Option Valeur="FI">FI  :  Finland                       </Option>
+   <Option Valeur="FJ">FJ  :  Fiji                          </Option>
+   <Option Valeur="FK">FK  :  Falkland Is.                  </Option>
+   <Option Valeur="FM">FM  :  Micronesia                    </Option>
+   <Option Valeur="FO">FO  :  Faroe Islands                 </Option>
+   <Option Valeur="FR">FR  :  France                        </Option>
+   <Option Valeur="GA">GA  :  Gabon                         </Option>
+   <Option Valeur="GB">GB  :  G.B.                          </Option>
+   <Option Valeur="GD">GD  :  Grenada                       </Option>
+   <Option Valeur="GE">GE  :  Georgia                       </Option>
+   <Option Valeur="GF">GF  :  French Guiana                 </Option>
+   <Option Valeur="GG">GG  :  Channel Islands               </Option>
+   <Option Valeur="GH">GH  :  Ghana                         </Option>
+   <Option Valeur="GI">GI  :  Gibraltar                     </Option>
+   <Option Valeur="GL">GL  :  Greenland                     </Option>
+   <Option Valeur="GM">GM  :  Gambia                        </Option>
+   <Option Valeur="GN">GN  :  Guinea                        </Option>
+   <Option Valeur="GO">GO  :  GOLD                          </Option>
+   <Option Valeur="GP">GP  :  Guadeloupe                    </Option>
+   <Option Valeur="GQ">GQ  :  Equ. Guinea                   </Option>
+   <Option Valeur="GR">GR  :  Greece                        </Option>
+   <Option Valeur="GS">GS  :  S Georgia                     </Option>
+   <Option Valeur="GT">GT  :  Guatemala                     </Option>
+   <Option Valeur="GU">GU  :  Guam                          </Option>
+   <Option Valeur="GW">GW  :  Guinea-Bissau                 </Option>
+   <Option Valeur="GY">GY  :  Guyana                        </Option>
+   <Option Valeur="HK">HK  :  H.K.                          </Option>
+   <Option Valeur="HM">HM  :  Heard .McDonald               </Option>
+   <Option Valeur="HN">HN  :  Honduras                      </Option>
+   <Option Valeur="HR">HR  :  Croatia                       </Option>
+   <Option Valeur="HT">HT  :  Haiti                         </Option>
+   <Option Valeur="HU">HU  :  Hungary                       </Option>
+   <Option Valeur="ID">ID  :  Indonesia                     </Option>
+   <Option Valeur="IE">IE  :  Ireland                       </Option>
+   <Option Valeur="IL">IL  :  Israel                        </Option>
+   <Option Valeur="IM">IM  :  Isle of Man                   </Option>
+   <Option Valeur="IN">IN  :  India                         </Option>
+   <Option Valeur="IO">IO  :  Br Ind. Oc. Ter               </Option>
+   <Option Valeur="IQ">IQ  :  Iraq                          </Option>
+   <Option Valeur="IR">IR  :  Iran                          </Option>
+   <Option Valeur="IS">IS  :  Iceland                       </Option>
+   <Option Valeur="IT">IT  :  Italy                         </Option>
+   <Option Valeur="JE">JE  :  Jersey                        </Option>
+   <Option Valeur="JM">JM  :  Jamaica                       </Option>
+   <Option Valeur="JO">JO  :  Jordan                        </Option>
+   <Option Valeur="JP">JP  :  Japan                         </Option>
+   <Option Valeur="KE">KE  :  Kenya                         </Option>
+   <Option Valeur="KG">KG  :  Kyrgyzstan                    </Option>
+   <Option Valeur="KH">KH  :  Cambodia                      </Option>
+   <Option Valeur="KI">KI  :  Kiribati                      </Option>
+   <Option Valeur="KM">KM  :  Comoro                        </Option>
+   <Option Valeur="KN">KN  :  St Kitts .Nevis               </Option>
+   <Option Valeur="KP">KP  :  Korea                         </Option>
+   <Option Valeur="KR">KR  :  Korea, Rep. of                </Option>
+   <Option Valeur="KW">KW  :  Kuwait                        </Option>
+   <Option Valeur="KY">KY  :  Cayman Islands                </Option>
+   <Option Valeur="KZ">KZ  :  Kazakstan                     </Option>
+   <Option Valeur="LA">LA  :  Lao                           </Option>
+   <Option Valeur="LB">LB  :  Lebanon                       </Option>
+   <Option Valeur="LC">LC  :  St. Lucia                     </Option>
+   <Option Valeur="LI">LI  :  Liecht                        </Option>
+   <Option Valeur="LK">LK  :  Sri Lanka                     </Option>
+   <Option Valeur="LR">LR  :  Liberia                       </Option>
+   <Option Valeur="LS">LS  :  Lesotho                       </Option>
+   <Option Valeur="LT">LT  :  Lithuania                     </Option>
+   <Option Valeur="LU">LU  :  Luxembourg                    </Option>
+   <Option Valeur="LV">LV  :  Latvia                        </Option>
+   <Option Valeur="LY">LY  :  Libya                         </Option>
+   <Option Valeur="MA">MA  :  Morocco                       </Option>
+   <Option Valeur="MC">MC  :  Monaco                        </Option>
+   <Option Valeur="MD">MD  :  Moldova, Rep of               </Option>
+   <Option Valeur="ME">ME  :  Montenegro                    </Option>
+   <Option Valeur="MF">MF  :  Saint Martin                  </Option>
+   <Option Valeur="MG">MG  :  Madagascar                    </Option>
+   <Option Valeur="MH">MH  :  Marshall Is.                  </Option>
+   <Option Valeur="MK">MK  :  Macedonia                     </Option>
+   <Option Valeur="ML">ML  :  Mali                          </Option>
+   <Option Valeur="MM">MM  :  Myanmar                       </Option>
+   <Option Valeur="MN">MN  :  Mongolia                      </Option>
+   <Option Valeur="MO">MO  :  Macau                         </Option>
+   <Option Valeur="MP">MP  :  N. Mariana Is.                </Option>
+   <Option Valeur="MQ">MQ  :  Martinique                    </Option>
+   <Option Valeur="MR">MR  :  Mauritania                    </Option>
+   <Option Valeur="MS">MS  :  Monserrat                     </Option>
+   <Option Valeur="MT">MT  :  Malta                         </Option>
+   <Option Valeur="MU">MU  :  Mauritius                     </Option>
+   <Option Valeur="MV">MV  :  Maldives                      </Option>
+   <Option Valeur="MW">MW  :  Malawi                        </Option>
+   <Option Valeur="MX">MX  :  Mexico                        </Option>
+   <Option Valeur="MY">MY  :  Malaysia                      </Option>
+   <Option Valeur="MZ">MZ  :  Mozambique                    </Option>
+   <Option Valeur="NA">NA  :  Namibia                       </Option>
+   <Option Valeur="NC">NC  :  New Caledonia                 </Option>
+   <Option Valeur="NE">NE  :  Niger                         </Option>
+   <Option Valeur="NF">NF  :  Norfolk Island                </Option>
+   <Option Valeur="NG">NG  :  Nigeria                       </Option>
+   <Option Valeur="NI">NI  :  Nicaragua                     </Option>
+   <Option Valeur="NL">NL  :  Netherlands                   </Option>
+   <Option Valeur="NO">NO  :  Norway                        </Option>
+   <Option Valeur="NP">NP  :  Nepal                         </Option>
+   <Option Valeur="NR">NR  :  Nauru                         </Option>
+   <Option Valeur="NU">NU  :  Niue                          </Option>
+   <Option Valeur="NZ">NZ  :  N.Z.                          </Option>
+   <Option Valeur="OM">OM  :  Oman                          </Option>
+   <Option Valeur="PA">PA  :  Panama                        </Option>
+   <Option Valeur="PE">PE  :  Peru                          </Option>
+   <Option Valeur="PF">PF  :  Fr. Polynesia                 </Option>
+   <Option Valeur="PG">PG  :  Pap. New Guinea               </Option>
+   <Option Valeur="PH">PH  :  Philippines                   </Option>
+   <Option Valeur="PI">PI  :  PLATINUM                      </Option>
+   <Option Valeur="PK">PK  :  Pakistan                      </Option>
+   <Option Valeur="PL">PL  :  Poland                        </Option>
+   <Option Valeur="PM">PM  :  St. Pierre                    </Option>
+   <Option Valeur="PN">PN  :  Pitcairn                      </Option>
+   <Option Valeur="PR">PR  :  Puerto Rico                   </Option>
+   <Option Valeur="PS">PS  :  Occp Palst Teri               </Option>
+   <Option Valeur="PT">PT  :  Portugal                      </Option>
+   <Option Valeur="PW">PW  :  Palau                         </Option>
+   <Option Valeur="PY">PY  :  Paraguay                      </Option>
+   <Option Valeur="QA">QA  :  Qatar                         </Option>
+   <Option Valeur="RE">RE  :  Reunion                       </Option>
+   <Option Valeur="RO">RO  :  Romania                       </Option>
+   <Option Valeur="RS">RS  :  Serbia                        </Option>
+   <Option Valeur="RU">RU  :  Russian Fed                   </Option>
+   <Option Valeur="RW">RW  :  Rwanda                        </Option>
+   <Option Valeur="SA">SA  :  Saudi Arabia                  </Option>
+   <Option Valeur="SB">SB  :  Solomon Islands               </Option>
+   <Option Valeur="SC">SC  :  Seychelles                    </Option>
+   <Option Valeur="SD">SD  :  Sudan                         </Option>
+   <Option Valeur="SE">SE  :  Sweden                        </Option>
+   <Option Valeur="SG">SG  :  Singapore                     </Option>
+   <Option Valeur="SH">SH  :  St. Helena                    </Option>
+   <Option Valeur="SI">SI  :  Slovenia                      </Option>
+   <Option Valeur="SJ">SJ  :  Svalbard                      </Option>
+   <Option Valeur="SK">SK  :  Slovakia                      </Option>
+   <Option Valeur="SL">SL  :  Sierra Leone                  </Option>
+   <Option Valeur="SM">SM  :  San Marino                    </Option>
+   <Option Valeur="SN">SN  :  Senegal                       </Option>
+   <Option Valeur="SO">SO  :  Somalia                       </Option>
+   <Option Valeur="SR">SR  :  Suriname                      </Option>
+   <Option Valeur="SS">SS  :  SILVER                        </Option>
+   <Option Valeur="ST">ST  :  Sao Tome                      </Option>
+   <Option Valeur="SV">SV  :  El Salvador                   </Option>
+   <Option Valeur="SY">SY  :  Syria                         </Option>
+   <Option Valeur="SZ">SZ  :  Swaziland                     </Option>
+   <Option Valeur="TC">TC  :  Turks . Caicos                </Option>
+   <Option Valeur="TD">TD  :  Chad                          </Option>
+   <Option Valeur="TF">TF  :  Fr. S. Territ.                </Option>
+   <Option Valeur="TG">TG  :  Togo                          </Option>
+   <Option Valeur="TH">TH  :  Thailand                      </Option>
+   <Option Valeur="TJ">TJ  :  Tajikistan                    </Option>
+   <Option Valeur="TK">TK  :  Tokelau                       </Option>
+   <Option Valeur="TL">TL  :  TIMOR.EST                     </Option>
+   <Option Valeur="TM">TM  :  Turkmenistan                  </Option>
+   <Option Valeur="TN">TN  :  Tunisia                       </Option>
+   <Option Valeur="TO">TO  :  Tonga                         </Option>
+   <Option Valeur="TP">TP  :  East Timor                    </Option>
+   <Option Valeur="TR">TR  :  Turkey                        </Option>
+   <Option Valeur="TT">TT  :  Trinidad Tobago               </Option>
+   <Option Valeur="TV">TV  :  Tuvalu                        </Option>
+   <Option Valeur="TW">TW  :  Taiwan                        </Option>
+   <Option Valeur="TZ">TZ  :  Tanzania                      </Option>
+   <Option Valeur="UA">UA  :  Ukraine                       </Option>
+   <Option Valeur="UG">UG  :  Uganda                        </Option>
+   <Option Valeur="UM">UM  :  US Minor Out Is               </Option>
+   <Option Valeur="US">US  :  USA                           </Option>
+   <Option Valeur="UY">UY  :  Uruguay                       </Option>
+   <Option Valeur="UZ">UZ  :  Uzbekistan                    </Option>
+   <Option Valeur="VA">VA  :  Vatican                       </Option>
+   <Option Valeur="VC">VC  :  St. Vincent                   </Option>
+   <Option Valeur="VE">VE  :  Venezuala                     </Option>
+   <Option Valeur="VG">VG  :  Virgin Islands                </Option>
+   <Option Valeur="VI">VI  :  Virgin Islands                </Option>
+   <Option Valeur="VN">VN  :  Vietnam                       </Option>
+   <Option Valeur="VU">VU  :  Vanuatu                       </Option>
+   <Option Valeur="WF">WF  :  Wallis .Futuna                </Option>
+   <Option Valeur="WS">WS  :  Samoa                         </Option>
+   <Option Valeur="XA">XA  :  XAU and XAG                   </Option>
+   <Option Valeur="XB">XB  :  European Unit                 </Option>
+   <Option Valeur="XC">XC  :  East Caribbean                </Option>
+   <Option Valeur="XD">XD  :  Special Drawing               </Option>
+   <Option Valeur="XE">XE  :  Europa                        </Option>
+   <Option Valeur="XG">XG  :  Gold                          </Option>
+   <Option Valeur="XO">XO  :  West Africa                   </Option>
+   <Option Valeur="XP">XP  :  XPD AND XPT                   </Option>
+   <Option Valeur="XS">XS  :  Silver                        </Option>
+   <Option Valeur="XX">XX  :  Worldwide                     </Option>
+   <Option Valeur="YE">YE  :  Yemen                         </Option>
+   <Option Valeur="YT">YT  :  Mayotte                       </Option>
+   <Option Valeur="YU">YU  :  Yugoslavia                    </Option>
+   <Option Valeur="ZA">ZA  :  South Afr                     </Option>
+   <Option Valeur="ZM">ZM  :  Zambia                        </Option>
+		  <Description Colonne="CODPAY" Label="LIBPAY" Table="COUNTRY"/>
+			<OnUpdate>
+				<Result>
+          <![CDATA[  
+             if (%THIS0119%.equals(""))
+             {
+             return;
+             }
+            if (%THIS0119%.equals("TN") && %THIS0113%.equals("2"))
+            {
+             %THIS0119% = "ERREUR: Incohérence entre nature de compte et nationalité";
+             return;
+            }
+            if (!%THIS0119%.equals("TN") && %THIS0113%.equals("0"))
+            {
+             %THIS0119% = "ERREUR: Incohérence entre nature de compte et nationalité";
+             return;
+            }
+            %THIS0123% = %THIS0101%;
+            %THIS0125% = %THIS0103%;
+          ]]> 
+				</Result>
+			</OnUpdate>
+		</List>
+
+<!--	<Text Position="NLigne" Label="Nationalité (client)" ColTable="CODPAY1030" Nom="CODPAY1030" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+		<Description Colonne="CODPAY" Label="LIBPAY" Table="FL5504"/>
+      <OnUpdate>
+			    <Requet Tables="FL5504" Where=" SU5504='0' and CODPAY='%THIS0119%' " >
+					  <Select Nom="NBRPAY" Type="Numerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				<Result>
+          <![CDATA[  
+             if (%THIS0119%.equals(""))
+             {
+             return;
+             }
+             if (Integer.parseInt(%NBRPAY%.trim())==0)
+							{
+                 %THIS0119%="ERREUR: Code Pays Inexistant" ;
+                 return;
+              }
+            if (%THIS0119%.equals("TN") && %THIS0113%.equals("2"))
+            {
+             %THIS0119% = "ERREUR: Incorerance entre nature de compte et nationalité";
+             return;
+            }
+            if (!%THIS0119%.equals("TN") && %THIS0113%.equals("0"))
+            {
+             %THIS0119% = "ERREUR: Incorerance entre nature de compte et nationalité";
+             return;
+            }
+            %THIS0123% = %THIS0101%;
+            %THIS0125% = %THIS0103%;
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text> -->
+
+	<Text Position="NLigne" Label="N° analytique / R-Commerce" ColTable="NUMANL10" Nom="NUMANL10" Type="Numerique" Longueur="6" Unique="Non" Obligatoire="Non" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+            %THIS0130% = "";
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+	<Text Position="2" Label="Matricule B.C.T" ColTable="MATBCT30" Nom="MATBCT30" Type="Numerique" Longueur="6" Unique="Non" Obligatoire="Non" />
+	
+  <Text Position="2" Label="Code PTT registre commerce" ColTable="PTTRGC30" Nom="PTTRGC30" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Non" >
+		<Description Colonne="CODPTT" Label="LIBPTT" Table="FL5501"/>
+      <OnUpdate>
+			    <Requet Tables="FL5501" Where=" CODPTT='%THIS0122%' " >
+					  <Select Nom="NBRPTT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if (%THIS0122%.equals(""))
+             {
+             return;
+             }
+             if(Integer.parseInt(%NBRPTT%.trim())==0)
+							{
+                 %THIS0122%="ERREUR: Code PTT Inexistant" ;
+              } 
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+
+	<Text Position="NLigne" Label="Ancien compte principal" ColTable="PPLAGC30" Nom="PPLAGC30" Type="AlphaNumerique" Longueur="2" Disabled="Oui" Unique="Non" Obligatoire="Non" />
+	<Text Position="2" Label="" ColTable="PPLNAT30" Nom="PPLNAT30" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+			    <Requet Tables="FL3034" Where=" CODNAT='%THIS0124%' " >
+					  <Select Nom="NBRNAT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				<Result>
+          <![CDATA[               
+             if (Integer.parseInt(%NBRNAT%.trim())==0)
+							{
+                 %THIS0124%="ERREUR: Nature Inexistante" ;
+                 return;
+              } 
+             if (%THIS0102%.equals("03") && !%THIS0124%.equals("10"))
+             {
+                 %THIS0124%="ERREUR: Nature doit etre = 10" ;
+                 return;
+              } 
+             if (%THIS0102%.equals("04") && !%THIS0124%.equals("20"))							
+             {
+                 %THIS0124%="ERREUR: Nature doit etre = 20" ;
+                 return;
+              } 
+             if (%THIS0102%.equals("06") && %THIS0124%.equals("10"))							
+             {
+                 %THIS0124%="ERREUR: Nature doit etre differente de 10, 20 et 30" ;
+                 return;
+              } 
+             if (%THIS0102%.equals("06") && %THIS0124%.equals("20"))							
+             {
+                 %THIS0124%="ERREUR: Nature doit etre differente de 10, 20 et 30" ;
+                 return;
+              } 
+             if (%THIS0102%.equals("06") && %THIS0124%.equals("30"))							
+             {
+                 %THIS0124%="ERREUR: Nature doit etre differente de 10, 20 et 30" ;
+                 return;
+              } 
+              %THIS0126% = "";
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="PPLORD30" Nom="PPLORD30" Type="Numerique" Longueur="5" Disabled="Oui" Unique="Non" Obligatoire="Oui" />
+	<Text Position="2" Label="" ColTable="PPLCLE30" Nom="PPLCLE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0123%',%THIS0124%,%THIS0125%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+             if(%THIS0126%.equals("") )
+             {
+             return;
+             }
+            if (!%THIS0126%.equals(%CLECPT%))
+            {
+             %THIS0126% = "ERREUR: Clé Invalide";
+             return;
+            }
+          ]]> 
+         </Result>         
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Adresse professionnelle" ColTable="ADRPRF30" Nom="ADRPRF30" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" />
+
+  <Text Position="NLigne" Label="Code PTT du profession" ColTable="CODPTT1030B" Nom="CODPTT1030B" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Non" >
+		<Description Colonne="CODPTT" Label="LIBPTT" Table="FL5501"/>
+      <OnUpdate>
+			    <Requet Tables="FL5501" Where=" CODPTT='%THIS0128%' " >
+					  <Select Nom="NBRPTT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>         
+				  <Result>          
+          <![CDATA[               
+             %THIS0130% = "";
+             if (%THIS0128%.equals(""))
+             {
+             return;
+             }
+             if(Integer.parseInt(%NBRPTT%.trim())==0)
+							{
+                 %THIS0128%="ERREUR: Code PTT Inexistant" ;
+                 return;
+              } 
+          ]]> 
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="Registre de commerce" ColTable="CHQCPT10" Nom="CHQCPT10" Type="AlphaNumerique" Longueur="12" Unique="Non" Obligatoire="Non" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             %THIS0130% = "";
+             if (%THIS0129%.equals(""))
+             {
+             return;
+             }
+             if (%THIS0129%.length() < 7)
+             { 
+               %THIS0129%="ERREUR: Longeur doir etre >= à 7";
+               return;
+             }
+             String P1, P2, P3, P4, P23;
+             P1 = %THIS0129%.substring(0,1);
+             P2 = %THIS0129%.substring(1,2);
+             P23 = %THIS0129%.substring(1,3);
+
+             P2F = %THIS0129%.substring(1);
+             if (!P1.equals("A") && !P1.equals("B") && !P1.equals("C"))
+             {
+              %THIS0129%="ERREUR: Le 1er caractère doit etre A, B, ou C";
+              return;
+             }
+             if (!P2.equals("0") && !P2.equals("1") && !P2.equals("2") && !P2.equals("3") && !P2.equals("4") && !P2.equals("5") && !P2.equals("6") && !P2.equals("7") && !P2.equals("8") && !P2.equals("9"))
+             {
+              %THIS0129%="ERREUR: Le 2eme caractère doit etre un chiffre entre 0 et 9";
+              return;
+             }
+
+             public boolean isNumeric(String input) {
+               try {
+                 //Integer.parseInt(input);
+                 Long.parseLong(input);
+                 return true;
+               }
+               catch (NumberFormatException e) {
+                 // s is not numeric
+                 return false;
+               }
+             }
+             if (isNumeric(P2F))
+             { if (Integer.parseInt(P23) == 0)
+               {
+                %THIS0129%="ERREUR: Les 2eme et 3eme caractères doivent etre differents de zéro";
+                return;
+               }
+             } else 
+             {
+              %THIS0129%="ERREUR: On doit saisir des numériques à partir du 2eme caractère";
+              return;
+             }
+            if (Integer.parseInt(%THIS0129%.substring(%THIS0129%.length()-4)) < 1995)
+            {
+             %THIS0129%="ERREUR: Les 4 derniers caractères (l'année) doivent etre >= à 1995";
+             return;
+            }
+            %THIS0132% = P1;           
+            %THIS0133% = P2;           
+            if (%THIS0129%.length() == 7)
+            { 
+              %THIS0134%=%THIS0129%.substring(2,7);
+              %THIS0135%="";
+            }
+            if (%THIS0129%.length() > 7)
+            { 
+              %THIS0134%=%THIS0129%.substring(2,8);
+              %THIS0135%=%THIS0129%.substring(8);
+            }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="Classe créance" ColTable="CLASSE30" Nom="CLASSE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             if (%THIS0120%.equals("") && !%THIS0128%.equals(""))							
+             {
+                 %THIS0120%="ERREUR: Saisie obligatoire du RC si le code PTT du profession est saisie" ;
+                 return;
+              } 
+             if (!%THIS0120%.equals("") && %THIS0128%.equals(""))							
+             {
+                 %THIS0128%="ERREUR: Saisie obligatoire du code PTT du profession si le RC est saisie" ;
+                 return;
+              } 
+             if (%THIS0120%.equals("") && %THIS0128%.equals("") && %THIS0129%.equals(""))							
+             {
+                 %THIS0129%="ERREUR: Saisie obligatoire du RC" ;
+                 return;
+              } 
+             if (!%THIS0130%.equals("4") )
+             {
+              %THIS0130%="ERREUR: Classe doit etre = 4";
+             }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+
+	<Text Position="NLigne" Label="Matricule Fiscale" ColTable="SLCCPT10" Nom="SLCCPT10" Type="AlphaNumerique" Longueur="12" Unique="Non" Obligatoire="Non" >
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             %THIS0151%=%THIS0131%;
+             if (%THIS0151%.equals(""))
+             {
+             return;
+             }
+             if (%THIS0151%.trim().length() != 12)
+             { 
+               %THIS0131%="ERREUR: Il faut saisir 12 caractères";
+               return;
+             }
+             public boolean isNumeric(String input) {
+               try {
+                 //Integer.parseInt(input);
+                 Long.parseLong(input);
+                 return true;
+               }
+               catch (NumberFormatException e) {
+                 // s is not numeric
+                 return false;
+               }
+             }
+             String P17;
+             P17 = %THIS0151%.substring(0,7);
+             if (!isNumeric(P17))
+             { 
+               %THIS0131%="ERREUR: Les 7 premiers caractères doivent etre numériques";
+               return;
+             }
+          ]]> 
+				</Result>
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLEMAT" Type="AlphaNumerique" ColTable="CLE_MAT_FISC('%THIS0131%')"/>
+				  </Requet>
+
+				<Result>
+          <![CDATA[  
+             if (%THIS0151%.equals(""))
+             {
+             return;
+             }
+             if (%THIS0151%.trim().length() != 12)
+             { 
+               %THIS0131%="ERREUR: Il faut saisir 12 caractères";
+               return;
+             }
+             public boolean isNumeric(String input) {
+               try {
+                 //Integer.parseInt(input);
+                 Long.parseLong(input);
+                 return true;
+               }
+               catch (NumberFormatException e) {
+                 // s is not numeric
+                 return false;
+               }
+             }
+             String P17, P8, P9, P10;
+             P17 = %THIS0151%.substring(0,7);
+             P8 = %THIS0151%.substring(7,8);
+             P9 = %THIS0151%.substring(8,9);
+             P10 = %THIS0151%.substring(9,10);
+             P11 = %THIS0151%.substring(10,12);
+             if (!isNumeric(P17))
+             { 
+               %THIS0131%="ERREUR: Les 7 premiers caractères doivent etre numériques";
+               return;
+             }
+             if (!P8.equals(%CLEMAT%))
+             {
+                %THIS0131%="ERREUR: Le 8eme caractère n'est pas correcte";
+              return;
+             }
+             if (!P9.equals("A") && !P9.equals("N") && !P9.equals("B") && !P9.equals("P") && !P9.equals("D"))
+             {
+              %THIS0131%="ERREUR: Le 9eme caractère doit etre A, N, B, P, ou D";
+              return;
+             }
+             if (!P10.equals("C") && !P10.equals("P") && !P10.equals("M") && !P10.equals("N"))
+             {
+              %THIS0131%="ERREUR: Le 10eme caractère doit etre C, P, M, ou N";
+              return;
+             }
+             if (!P11.equals("00"))
+             {
+              %THIS0131%="ERREUR: Les 2 derniers caractères doivent etre = 00";
+              return;
+             }
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <SimpleText Position="0" Class="Invisible" ColTable="INDRCS10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="INFRCS10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="NUMRCS10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="ANNRCS10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="DVSCPT1030" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CATCLT1030" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SGNSLD10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDCPT10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="NBCDVC10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="OUVCPT10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CODCLO10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDAMY10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMY10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMX10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMI10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="MVDMOI10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CODOPE29" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="INFCMP10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="EMPOUV10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+            %THIS0136% = "TND";           
+            %THIS0137% = "1";
+            %THIS0138% = "0";
+            %THIS0139% = "0";
+            %THIS0140% = "3";
+            %THIS0141% = %Journee%;
+            %THIS0142% = "0";
+            %THIS0143% = "0";
+            %THIS0144% = "0";
+            %THIS0145% = "0";
+            %THIS0146% = "0";
+            %THIS0147% = "0";
+            %THIS0148% = "T102";
+            %THIS0149% = "C";
+            %THIS0150% = %CODEUSER%;
+				</Result>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+</Entites>

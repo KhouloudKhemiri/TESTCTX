@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Création" Cible="T102C.xml" />
+		<Tab Nom="Modification" Cible="T102M.xml" />
+		<Tab Nom="Affichage" Cible="T102A.xml" />
+</TabPage>
+
+</Entites>

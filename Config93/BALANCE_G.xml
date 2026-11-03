@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Selection" Cible="BALANCE_CRE.xml" />
+		<Tab Nom="Liste" Cible="BALANCE_AFF.xml" />
+</TabPage>
+
+</Entites>

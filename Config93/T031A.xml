@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites> 
+<Tableau Label="Affichage" Titre="VALIDATION EFFET EN ENTREE AU CTX" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="VALIDATION EFFET EN ENTREE AU CTX"
+		Titre="VALIDATION EFFET EN ENTREE AU CTX"
+    Tables="FL1000"
+		 IndSuppression="SU3002"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+		Where =" CODOPE3002='T031'"
+			OrderBy=" CODAGC3002, DATOPE3002, CODOPE3002, AGCNUM3002, SERNUM3002, ORDNUM3002"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+  <Text Position="NLigne" Label="N° Effet " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="3" LabelCel="Agc Eff"/>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="3" LabelCel="Ser Eff"/>
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="6" LabelCel="Ordre Eff"/>
+
+       <Text Position="NLigne" Label="N° compte client" ColTable="AGYOPE3002" Nom="AGYOPE3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Non" PositionCel="4" LongueurCel="5" LabelCel="Agc cpt client"/>
+       <Text Position="2" Label="" ColTable="NAYOPE3002" Nom="NAYOPE3002" Type="Numerique" Longueur="2" Disabled="Oui" Unique="Non" PositionCel="5" LongueurCel="5" LabelCel="Nat cpt client"/>
+       <Text Position="2" Label="" ColTable="ORYOPE3002" Nom="ORYOPE3002" Type="Numerique" Longueur="5" Disabled="Oui" Unique="Non" PositionCel="6" LongueurCel="5" LabelCel="Ord cpt client"/>
+       <Text Position="2" Label="" ColTable="KLYOPE3002" Nom="KLYOPE3002" Type="Numerique" Longueur="1" Disabled="Oui" Unique="Non" PositionCel="7" LongueurCel="5" LabelCel="Cle cpt client"/>
+       <Text Position="NLigne" Label="Nom et Prénom ou R/S" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non" PositionCel="8" LongueurCel="20" LabelCel="Nom et Prénom ou R/S"/>
+       <Text Position="NLigne" Label="Montant de l'impayé" ColTable="MNTIMP3002" Nom="MNTIMP3002" Type="Float" Longueur="12" AprVirg="3" Disabled="Oui" Unique="Non" PositionCel="9" LongueurCel="11" LabelCel="Montant impayé"/>
+       <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE3002" Nom="ENGOPE3002" Type="AlphaNumerique" Longueur="3"  Disabled="Oui" Unique="Non" PositionCel="10" LongueurCel="4" LabelCel="ENG"/>
+       <Text Position="NLigne" Label="Date d'écheance" ColTable="ECHOPE3002" Nom="ECHOPE3002" Type="Date" Longueur="10"  Disabled="Oui" Unique="Non" PositionCel="11" LongueurCel="8" LabelCel="Echéance"/>
+
+       <Text Position="NLigne" Label="N° compte contentieux" ColTable="AGXOPE3002" Nom="AGXOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" />   			
+
+     <Text Position="2" Label="" ColTable="NAXOPE3002" Nom="NAXOPE3002" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="2" Label="" ColTable="ORXOPE3002" Nom="ORXOPE3002" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="2" Label="" ColTable="KLXOPE3002" Nom="KLXOPE3002" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" >
+
+      <OnInit>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS050015%' and CODNAT1030='%THIS050016%' and ORDCPT1030='%THIS050017%' and KLECPT1030='%THIS050018%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS050015%' and CODNAT1030='%THIS050016%' and ORDCPT1030='%THIS050017%' and KLECPT1030='%THIS050018%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>					           
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+          
+             //if(%THIS050018%.equals("") )
+             //{
+             //return;
+             //}
+         
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS050018%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS050018%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS050019%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS050019%="";
+                  }
+                             
+			      	       %THIS050020%= %NOMCPT%;
+               
+                }
+              }
+            
+               ]]> 
+         </Result>
+    </OnInit>
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <Text Position="NLigne" Label="Nom Compte" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non" Obligatoire="Non" /> 
+
+ 	<Text Position="NLigne" Label="Montant de l'effet" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+	<Text Position="NLigne" Label="Frait de protet" ColTable="FRAOPE3002" Nom="FRAOPE3002" Type="Float" Longueur="6" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="Intéréts années précédentes" ColTable="INTPRE3002" Nom="INTPRE3002" Type="Float" Longueur="9" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="Intéréts année courante" ColTable="INTCOU3002" Nom="INTCOU3002" Type="Float" Longueur="9" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="comissions et taxes" ColTable="COMOPE3002" Nom="COMOPE3002" Type="Float" Longueur="9" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+  <Text Position="NLigne" Label="Préréquation de change" ColTable="MNTCHG3002" Nom="MNTCHG3002" Type="Float" Longueur="9" AprVirg="3" Unique="Non" Obligatoire="Oui" />
+	<Text Position="NLigne" Label="Nature de l'effet" ColTable="PPLINT3002" Nom="PPLINT3002" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" />
+  <SimpleText Position="2" ColTable="" Label="(0: Principal, 1: Interet)" Valeur="" />
+
+   <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+   <Text Position="NLigne" Label="Effet physique" ColTable="RESEFF3002" Nom="RESEFF3002" Type="Numerique" Longueur="1" Disabled="Oui" Unique="Non" />   
+   <SimpleText Position="2" ColTable="" Label="(0: avec Effet, 1: sans Effet)" Valeur="" />
+
+   <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+<!--   <SimpleText Position="0" Class="Invisible"  ColTable="CREEFF3002" Label="" Valeur="" /> -->
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+        
+				 %THIS050001%="93";
+				 %THIS050002%=%Journee%;
+				 %THIS050003%="T031";
+         %THIS050032%=%CODEUSER%;
+         %THIS050033% = "4";
+         %THIS050034% = "12";
+         %THIS050035% = "3"; 
+         
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

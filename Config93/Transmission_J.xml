@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+		
+	<Formulaire Nom="Test"
+            Titre="Transmission "
+                                          
+            Tables=""
+            
+			Action=""
+						
+            >
+	
+		
+		<Text Position="0" Label="Journée du : " ColTable=""  Disabled="Oui" Type="Date" Index="Oui"  Obligatoire="Oui" Longueur="10"  PositionCel="3" LongueurCel="5" LabelCel="Année">
+							
+		</Text>
+		
+		<SimpleText Class="Invisible" Position="NLigne"  Label="" Valeur="" />
+		<SimpleText Class="Invisible" Position="NLigne"  Label="" Valeur="" />
+		<Bouton Position="130" Label="Valider" Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Annuler" Action="Accueil" />
+		
+	 <OnInit>
+								
+				<Result>
+						if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						else
+						if(Integer.parseInt(%Niveau%) > 3)
+						%THIS%="ERREUR: Transmission déjà lancée ";
+						else if(Integer.parseInt(%Niveau%) != 3)
+						{
+						%THIS%="ERREUR:Fin de journée non effectuée";
+						}
+						else
+						{
+						%THIS01%=%Journee%;
+						%THIS02%="MQ"+%Journee%.substring(0,2)+"93";
+						%THIS03%="MP"+%Journee%.substring(0,2)+"93";
+						}						
+				</Result>
+				
+		</OnInit>	
+		 <OnUpdate>
+
+		 <Procedure Nom="DATESTAT('TRANSMISSION', 'D')" />
+<!--
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >%THIS02%</Set>
+            <Set Nom="FTP_USER" >trs93</Set>
+            <Set Nom="FTP_PWD" >trs93</Set>
+            <Set Nom="FTP_HOST" >172.28.201.17</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >%THIS02%.semaphor</Set>
+            <Set Nom="FTP_USER" >trs93</Set>
+            <Set Nom="FTP_PWD" >trs93</Set>
+            <Set Nom="FTP_HOST" >172.28.201.17</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >%THIS03%</Set>
+            <Set Nom="FTP_USER" >trs93</Set>
+            <Set Nom="FTP_PWD" >trs93</Set>
+            <Set Nom="FTP_HOST" >172.28.70.201.17</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >%THIS03%.semaphor</Set>
+            <Set Nom="FTP_USER" >trs93</Set>
+            <Set Nom="FTP_PWD" >trs93</Set>
+            <Set Nom="FTP_HOST" >172.28.201.17</Set>
+        </WebService>
+-->
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR1000</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1000</Set>
+            <Set Nom="FTP_USER" >ctxconn</Set>
+            <Set Nom="FTP_PWD" >ctxconn123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR1019</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1019</Set>
+            <Set Nom="FTP_USER" >ctxconn</Set>
+            <Set Nom="FTP_PWD" >ctxconn123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR1030</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR3098</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR1003</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR4003</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR2910</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR3097</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >TR2999</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL3195</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1073</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1061</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1062</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1071</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1090</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1091</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1030</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+        <WebService Methode = "FtpPost" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1066</Set>
+            <Set Nom="FTP_USER" >crtctxin</Set>
+            <Set Nom="FTP_PWD" >ctxin123</Set>
+            <Set Nom="FTP_HOST" >172.28.201.10</Set>
+        </WebService>
+
+		 <Procedure Nom="DATESTAT('TRANSMISSION', 'F')" />
+		
+				<Result>
+						%Niveau%="4";
+						%THIS%="Confirmation: Transmission effectuée avec succès";
+				</Result>
+				
+		</OnUpdate>	
+	</Formulaire>
+	
+	
+</Entites>

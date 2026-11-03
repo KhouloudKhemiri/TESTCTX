@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<parameter name="NUMCPT" class="java.lang.String">
+		<parameterDescription><![CDATA[Saisir le Numéro du Compte sur 10 caractères]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select NOMRSC, ADRPRS from FL1030 where
+CODAGC1030=substr($P{NUMCPT},1,2) and
+CODNAT1030=substr($P{NUMCPT},3,2) and
+ORDCPT1030=substr($P{NUMCPT},5,5) and
+KLECPT1030=substr($P{NUMCPT},10,1)]]>
+	</queryString>
+	<field name="NOMRSC" class="java.lang.String"/>
+	<field name="ADRPRS" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="230">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="455" y="100" width="100" height="20" forecolor="#000000" uuid="de4a20e4-4fff-4ab3-b449-ec658a24fc49"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="135" width="126" height="20" forecolor="#000000" backcolor="#99CCFF" uuid="49583ef9-2d21-4cab-9e85-706704ac6487"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SITUATION CLIENT ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="97" width="149" height="23" forecolor="#000000" uuid="419d214e-37e5-484e-bf46-ecf4dce4e61e"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[B.I.A.T : CONTENTIEUX]]></text>
+			</staticText>
+			<image>
+				<reportElement x="225" y="0" width="132" height="100" uuid="7ac53a6f-eb2d-4145-8586-086f8db916ec"/>
+				<imageExpression><![CDATA["./biat-logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="166" width="150" height="20" uuid="45963a21-56c3-4da7-b4a8-c9bfb9b93dc0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numéro du Compte           :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="166" width="194" height="20" uuid="f7db40a8-d167-4ae8-b556-8e62d2e35f3d"/>
+				<textFieldExpression><![CDATA[$P{NUMCPT}.substring(0,2) + '-' + $P{NUMCPT}.substring(2,4) + '-' + $P{NUMCPT}.substring(4,9) + '-' + $P{NUMCPT}.substring(9)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="186" width="135" height="20" uuid="9f390aa4-17c3-4135-b0e2-7f69ad7ea6d7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom ou Raison Sociale     : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="186" width="194" height="20" uuid="7a127f67-696b-426a-9bf7-2d9dbc878485"/>
+				<textFieldExpression><![CDATA[$F{NOMRSC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="206" width="135" height="20" uuid="428e27d6-6911-4aac-885e-9311f9c44a9d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Adresse                              :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="206" width="194" height="20" uuid="f7c4556a-a28a-44c9-bf88-42b2611cd510"/>
+				<textFieldExpression><![CDATA[$F{ADRPRS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<subreport runToBottom="false">
+				<reportElement x="-17" y="0" width="40" height="40" uuid="72e2d031-0152-4ff4-8700-d8f89e9d12c3"/>
+				<subreportParameter name="NUMCPT">
+					<subreportParameterExpression><![CDATA[$P{NUMCPT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["P5CX071.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

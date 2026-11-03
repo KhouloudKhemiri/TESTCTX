@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+
+<Tableau Label="Modification" Titre="DEBIT COMPTE CLIENT" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+	
+	<Formulaire Nom="DEBIT COMPTE CLIENT"
+		Titre="DEBIT COMPTE CLIENT" 
+    Tables="FL1019"
+		IndSuppression="SU1019"
+    LigneClickEvent="MODIFICATION"
+		Action="MODIFICATION"
+		Where =" CODOPE19='T087'"
+			OrderBy=" CODAGC19, DATOPE19, CODOPE19, REFOPE19"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC19" Nom="CODAGC19" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE19" Nom="DATOPE19" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE19" Nom="CODOPE19" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+
+	<Text Position="NLigne" Label="Code Pointage" ColTable="REFOPE19" Nom="REFOPE19" Type="Numerique" Longueur="10" Unique="Oui" Obligatoire="Oui" PositionCel="1" LongueurCel="9" LabelCel="Code Pointage">
+      <OnInit>
+        <Result>
+                  <![CDATA[
+                     %THIS020019% = %THIS020011%;
+                     %THIS020020% = %THIS020005%;
+                     %THIS020021% = %THIS020006%;
+                     %THIS020022% = %THIS020007%;
+                     %THIS020023% = %THIS020008%;
+                  ]]>
+        </Result> 
+      </OnInit>
+  </Text>
+
+	<Text Position="NLigne" Label="N° Compte Client" ColTable="AGXOPE19" Nom="AGXOPE19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="2" LongueurCel="5" LabelCel="Agc Cpt">
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020005%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if (%THIS020005%=="")
+							{
+                 %THIS020005%="ERREUR: Code Agence invalide" ;
+                 return;
+              } 
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS020005%="ERREUR: Agence Inexistante" ;
+              } 
+              %THIS020008% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="NAXOPE19" Nom="NAXOPE19" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="3" LongueurCel="5" LabelCel="Nat Cpt">
+      <OnUpdate>
+				<Result>
+						 if ((%THIS020006%.compareTo("03")==0) || (%THIS020006%.compareTo("04")==0) || (%THIS020006%.compareTo("05")==0) || (%THIS020006%.compareTo("06")==0))
+             {
+             }else
+             { %THIS020006%="ERREUR: Nature doit etre = 03, 04, 05 ou 06";
+             }
+              %THIS020008% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="ORXOPE19" Nom="ORXOPE19" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="5" LabelCel="Ord Cpt">
+      <OnUpdate>
+				<Result>
+              %THIS020008% = "";
+              %THIS020009% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="KLXOPE19" Nom="KLXOPE19" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="5" LabelCel="Clé Cpt">
+      <OnInit>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020005%' and CODNAT1030='%THIS020006%' and ORDCPT1030='%THIS020007%' and KLECPT1030='%THIS020008%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020005%' and CODNAT1030='%THIS020006%' and ORDCPT1030='%THIS020007%' and KLECPT1030='%THIS020008%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="SLDCPT" Type="AlphaNumerique" ColTable="SLDCPT10"/>            
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+          
+             if(%THIS020008%.equals("") )
+             {
+             return;
+             }
+          
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS020008%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS020008%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS020009%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS020009%="";
+                  }
+                             
+			      	       %THIS020010%= %NOMCPT%;
+                     %THIS020015%= %SLDCPT%;
+                     %THIS020016%= %SLDCPT%;            
+                   
+                }
+              }
+               ]]> 
+         </Result>
+    </OnInit>
+
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020005%' and CODNAT1030=%THIS020006% and ORDCPT1030=%THIS020007% and KLECPT1030='%THIS020008%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020005%' and CODNAT1030=%THIS020006% and ORDCPT1030=%THIS020007% and KLECPT1030='%THIS020008%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="SLDCPT" Type="AlphaNumerique" ColTable="SLDCPT10"/>            
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS020005%',%THIS020006%,%THIS020007%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+          
+             if(%THIS020008%.equals("") )
+             {
+             return;
+             }
+            if (!%THIS020008%.equals(%CLECPT%))
+            {
+             %THIS020008% = "ERREUR: Clé Invalide";
+             return;
+            }
+          
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS020008%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS020008%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS020009%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS020009%="";
+                  }
+                             
+                     %THIS020011%=""; 
+			      	       %THIS020010%= %NOMCPT%;
+                     %THIS020015%= %SLDCPT%;
+                     %THIS020016%= %SLDCPT%;            
+                   
+                }
+              }
+               ]]> 
+         </Result>
+    </OnUpdate>
+
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+
+   <Text Position="NLigne" Label="Nom Compte" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non" Obligatoire="Non" /> 
+ 
+ 	<Text Position="NLigne" Label="Montant de l'opération" ColTable="MNTDBI19" Nom="MNTDBI19" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="12" LabelCel="Montant opération">
+      <OnInit>
+        <Result>
+                  <![CDATA[
+                     %THIS020017%="";
+                     //if (%THIS020016%.trim().substring(0, 1).equals("-"))
+                     //{
+                     // %THIS020017%="Compte en depassement";
+                     //}
+
+                     int m = %THIS020016%.indexOf("-");
+                     if (m != -1)
+                     {
+                      %THIS020017%="Compte en dépassement";
+                      return;
+                     }
+                  ]]>
+        </Result> 
+      </OnInit>
+
+      <OnUpdate>
+        <Result>
+                  <![CDATA[
+                     if(%THIS020011%.equals("") )
+                     {
+                      return;
+                     }
+                     int p = %THIS020011%.indexOf("+");
+                     int m = %THIS020011%.indexOf("-");
+                     int e = %THIS020011%.indexOf("*");
+                     int d = %THIS020011%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS020011%="ERREUR: Montant erroné";
+                      return;
+                     }
+    				         java.text.DecimalFormat df = new java.text.DecimalFormat( ) ; 
+                     df.setMaximumFractionDigits ( 3 ) ; //arrondi à 3 chiffres apres la virgules 
+	        			     df.setMinimumFractionDigits ( 3 ) ; 
+							       df.setGroupingUsed(false);
+	        			     df.setDecimalSeparatorAlwaysShown ( true ) ;
+
+                     if (%THIS020020%.equals(%THIS020005%) && %THIS020021%.equals(%THIS020006%) && %THIS020022%.equals(%THIS020007%) && %THIS020023%.equals(%THIS020008%))
+                     {
+                           %THIS020016%=df.format(df.parse(%THIS020015%.replaceAll(" ",""))+df.parse(%THIS020019%.replaceAll(" ",""))-df.parse(%THIS020011%.replaceAll(" ","")));
+                     } else
+                     {
+                       %THIS020016%=df.format(df.parse(%THIS020015%.replaceAll(" ",""))-df.parse(%THIS020011%.replaceAll(" ","")));
+                     }                   
+
+                     %THIS020017%="";
+                     if (%THIS020016%.trim().substring(0, 1).equals("-"))
+                     {
+                      %THIS020017%="Compte en dépassement";
+                     }
+                  ]]>
+        </Result> 
+    </OnUpdate>
+  </Text> 
+
+  <Text Position="NLigne" Label="Description de l'opération" ColTable="LIBOPE19" Nom="LIBOPE19" Type="AlphaNumerique" Longueur="19" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="19" LabelCel="Description opération"/>
+
+  <Text Position="NLigne" Label="Abrégé de l'opération" ColTable="ABROPE19" Nom="ABROPE19" Type="AlphaNumerique" Longueur="4" Unique="Non" Obligatoire="Oui" PositionCel="8" LongueurCel="5" LabelCel="Abrégé">
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             public boolean isAlpha(String name) {
+               return name.matches("[a-zA-Z]+");
+             }
+             
+             if (!isAlpha(%THIS020013%))
+              {
+               %THIS020013% = "ERREUR: Abrégé ne doit pas comporter des caractères numériques";
+               return;
+              }
+            
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Date valeur" ColTable="DATVAL19" Nom="DATVAL19" Type="Date" Longueur="10" Unique="Non" Obligatoire="Non" PositionCel="9" LongueurCel="10" LabelCel="Date Valeur"/>
+
+ 	<Text Position="NLigne" Label="Ancien Solde" ColTable="" Nom="" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Disabled="Oui" Obligatoire="Non" />
+ 	<Text Position="NLigne" Label="Nouveau Solde" ColTable="" Nom="" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Disabled="Oui" Obligatoire="Non" />
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+				 %THIS020001% = "93";
+				 %THIS020002% = %Journee%;
+				 %THIS020003% = "T087";
+         %THIS020018% = %CODEUSER%;
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

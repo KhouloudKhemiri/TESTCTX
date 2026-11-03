@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Reactivation" Titre="APUREMENT MEG RECU (CR)/REJET" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="APUREMENT MEG RECU (CR)/REJET"
+		Titre="APUREMENT MEG RECU (CR)/REJET" 
+    Tables="FL1000"
+    IndSuppression="SU3002"
+    LigneClickEvent="REACTIVATION"
+		Action="REACTIVATION"
+  	ValReact="0"
+		Where =" CODOPE3002='T040'"
+			OrderBy=" CODAGC3002, DATOPE3002, CODOPE3002, AGCNUM3002, SERNUM3002, ORDNUM3002"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+  <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="4" LongueurCel="5" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="5" LongueurCel="5" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="6" LongueurCel="7" LabelCel="Ordre Ref"/>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="15" LabelCel="Montant opération"/>
+
+  <Text Position="NLigne" Label="Agence ou service émetteur" ColTable="AGXOPE3002" Nom="AGXOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="8" LongueurCel="9" LabelCel="Agc/Srv Emet">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+  </Text>
+
+  <Text Position="NLigne" Label="Agence ou service récepteur" ColTable="MEGOPE3002" Nom="MEGOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="9" LongueurCel="9" LabelCel="Agc/Srv Recep">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+  </Text>
+
+  <Text Position="NLigne" Label="Description" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" PositionCel="10" LongueurCel="25" LabelCel="Description"/>
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+  
+  
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS040001%="93";
+				 %THIS040002%=%Journee%;
+				 %THIS040003%="T040";
+         %THIS040011%=%CODEUSER%;
+         %THIS040012% = "1";
+         %THIS040013% = "08";
+         %THIS040014% = "3"; 
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

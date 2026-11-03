@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="BALANCE DES COMPTES CONTENTIEUX"
+                                          
+            Tables=""
+          
+			Action="EDITION"
+			
+			FichierEdition="P5CX02"
+						
+            >
+		<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		<Bouton Position="120" Label="Valider"  Action="Edition" />
+		
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+
+		 <OnInit>
+        <Procedure Nom="CPT3099()" />
+ 		 </OnInit>	
+	   
+		
+		
+	</Formulaire>
+	
+</Entites>

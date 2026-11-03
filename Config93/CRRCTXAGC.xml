@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="Listing de courrier par agence"
+                                          
+            Tables=""
+          
+			Action="EDITION"
+			
+			FichierEdition="CRRCTXAGC"
+						
+            >
+
+       <Text Position="NLigne" Label="Agence réceptrice : "   Type="AlphaNumerique"   Obligatoire="Oui" Longueur="2"  >      
+         <OnUpdate>
+			      <Requet Tables="FL5503" Where=" CODAGC5503='%THIS0101%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				  <Result>          
+          <![CDATA[  
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS0101%="ERREUR: Agence Inexistante" ;
+              } 
+          ]]> 
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+
+			<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		<Bouton Position="120" Label="Valider"  Action="Edition" />
+		
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+
+		 <OnInit>
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+
+        <Procedure Nom="CTXFUS()" />
+
+ 		 </OnInit>	
+	   
+		
+		
+	</Formulaire>
+	
+</Entites>

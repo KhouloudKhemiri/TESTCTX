@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="72784152-ebb7-4eeb-9e47-d0a5f0cdce30"/>
+	<parameter name="PA_TMNTPPL" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PA_INTAGC" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="PA_TINTECH" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="NUMCPT" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[Saisir le Numéro du Compte sur 10 caractères]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[select ROWNUM, AGCNUM66 || ' ' || SERNUM66 || ' ' || lpad (ORDNUM66,7,'0'), ENGOPE66, MNTOPE66, ECHOPE66, PPLINT66, ECHU66, PFCAGC66, SANEFF66 from FL1066 where
+CPTAGC66=substr($P{NUMCPT},1,2) and
+CPTNAT66=substr($P{NUMCPT},3,2) and
+CPTORD66=substr($P{NUMCPT},5,5) and
+CPTCLE66=substr($P{NUMCPT},10,1) and
+SU1066=0]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="AGCNUM66||||SERNUM66||||LPAD(ORDNUM66,7,0)" class="java.lang.String"/>
+	<field name="ENGOPE66" class="java.lang.String"/>
+	<field name="MNTOPE66" class="java.lang.Double"/>
+	<field name="ECHOPE66" class="java.sql.Timestamp"/>
+	<field name="PPLINT66" class="java.math.BigDecimal"/>
+	<field name="ECHU66" class="java.math.BigDecimal"/>
+	<field name="PFCAGC66" class="java.math.BigDecimal"/>
+	<field name="SANEFF66" class="java.math.BigDecimal"/>
+	<variable name="MNTPPLA" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)))
+ && ($F{SANEFF66}.compareTo(1)!=0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="INTECHA" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+ && ($F{ECHU66}.compareTo(1)!=0)
+ && ($F{SANEFF66}.compareTo(1)!=0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="INTNECHA" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+ && ($F{ECHU66}.compareTo(1)==0)
+ && ($F{SANEFF66}.compareTo(1)!=0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="MNTPPLS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)))
+ && ($F{SANEFF66}.compareTo(1)==0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="INTECHS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+ && ($F{ECHU66}.compareTo(1)!=0)
+ && ($F{SANEFF66}.compareTo(1)==0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="INTNECHS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+ && ($F{ECHU66}.compareTo(1)==0)
+ && ($F{SANEFF66}.compareTo(1)==0)) ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="TMNTPPL" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+  (($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)) &&
+  (($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(0)!=0))))
+  ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="TINTECH" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+&& ($F{ECHU66}.compareTo(1)!=0))
+  ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="TINTNECH" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+  (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+&& ($F{ECHU66}.compareTo(1)==0))
+  ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<variable name="INTAGC" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[(((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+  (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+&& ($F{ECHU66}.compareTo(1)!=0))
+  ? $F{MNTOPE66} : 0]]></variableExpression>
+	</variable>
+	<group name="Group-Footer">
+		<groupFooter>
+			<band height="190">
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Opaque" x="305" y="0" width="77" height="20" backcolor="#FFFF00" uuid="c14901f7-0863-4953-a48f-defeeabe5060">
+						<printWhenExpression><![CDATA[$V{MNTPPLA}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{MNTPPLA}==null || $V{MNTPPLA}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{MNTPPLA})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="382" y="0" width="86" height="20" backcolor="#FFFF00" uuid="464992fe-dc8b-4fac-b501-269114f32e41">
+						<printWhenExpression><![CDATA[$V{INTECHA}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{INTECHA}==null || $V{INTECHA}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{INTECHA})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="468" y="0" width="88" height="20" backcolor="#FFFF00" uuid="f9cfee1e-bf48-4183-9a14-f93abb5f7cb5">
+						<printWhenExpression><![CDATA[$V{INTNECHA}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{INTNECHA}==null || $V{INTNECHA}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{INTNECHA})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="305" y="20" width="77" height="20" backcolor="#00FFFF" uuid="992080bc-1b0c-413a-88c4-94429e5eb747">
+						<printWhenExpression><![CDATA[$V{MNTPPLS}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{MNTPPLS}==null || $V{MNTPPLS}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{MNTPPLS})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="382" y="20" width="86" height="20" backcolor="#00FFFF" uuid="994a386c-0a81-4b5b-aba4-74429c03a9c5">
+						<printWhenExpression><![CDATA[$V{INTECHS}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{INTECHS}==null || $V{INTECHS}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{INTECHS})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="468" y="20" width="88" height="20" backcolor="#00FFFF" uuid="1d1455bd-0704-45db-bfd2-aef334e833db">
+						<printWhenExpression><![CDATA[$V{INTNECHS}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{INTNECHS}==null || $V{INTNECHS}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{INTNECHS})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="305" y="40" width="77" height="20" backcolor="#FF9999" uuid="d327a58c-3ff2-43f6-9d41-2967048c438c">
+						<printWhenExpression><![CDATA[$V{TMNTPPL}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TMNTPPL}==null || $V{TMNTPPL}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TMNTPPL})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="382" y="40" width="86" height="20" backcolor="#FF9999" uuid="a57d85c3-746d-434a-9f36-2cec6930eea8">
+						<printWhenExpression><![CDATA[$V{TINTECH}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TINTECH}==null || $V{TINTECH}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TINTECH})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="468" y="40" width="88" height="20" backcolor="#FF9999" uuid="4b079e6d-e2c0-4690-a49e-03486292a126">
+						<printWhenExpression><![CDATA[$V{TINTNECH}.compareTo(0)!=0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TINTNECH}==null || $V{TINTNECH}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TINTNECH})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="208" y="0" width="97" height="20" backcolor="#FFFF00" uuid="5538a526-bad4-4a6e-8006-533e3c9a75ae"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[AVEC   EFFETS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="208" y="20" width="97" height="20" backcolor="#00FFFF" uuid="d65c99cd-5aff-49de-be91-93de40349c5b"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SANS   EFFETS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="208" y="40" width="97" height="20" backcolor="#FF9999" uuid="f33989b6-e2c6-4769-a7cf-d0de54005da7"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL EFFETS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="109" y="81" width="82" height="20" backcolor="#99FF99" uuid="d1f4f079-9a44-4373-9a58-0137cc24e9d5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ABRIVEA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="193" y="81" width="82" height="20" backcolor="#99FF99" uuid="628c0968-cb85-440e-8b17-062e46ae2288"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[0]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="81" width="82" height="20" backcolor="#99FF99" uuid="0221104c-89dd-4b18-8634-c3033bfb74a6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="109" y="103" width="82" height="20" backcolor="#99FF99" uuid="93e064cf-e018-488a-9ad0-0d90923bc0e5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[PI]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="193" y="103" width="82" height="20" backcolor="#99FF99" uuid="fd2e16b5-e7f9-473a-861d-f8863794c011"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[PRINCIPAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="103" width="82" height="20" backcolor="#99FF99" uuid="9459e5df-efd3-4770-a941-1939f3f69976"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[INTERET]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="109" y="125" width="82" height="20" backcolor="#99FF99" uuid="66279ac7-3798-4128-959e-b6c186a1829f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ECH/NECH]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="193" y="125" width="82" height="20" backcolor="#99FF99" uuid="c858dadc-79e7-4d36-8d38-a83148b6fb03"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[ECHU]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="125" width="82" height="20" backcolor="#99FF99" uuid="8b23b127-8d93-4c78-96b7-1d110e00c6e8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NON ECHU]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="109" y="147" width="82" height="20" backcolor="#99FF99" uuid="23a9cf06-c5e8-4399-a177-4973776e15b2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[PFC/AGC]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="193" y="147" width="82" height="20" backcolor="#99FF99" uuid="34745f67-a2ee-4c61-9666-583fa63c8d58"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[AGENCE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="147" width="82" height="20" backcolor="#99FF99" uuid="f2be4482-f6e8-4245-9f51-0e6d04f2aae9"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[PORTEFEUILLE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="109" y="169" width="82" height="20" backcolor="#99FF99" uuid="e59a4137-06bb-4993-9c13-34cb99aa7fda"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[EFF PHY]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="193" y="169" width="82" height="20" backcolor="#99FF99" uuid="344d2cab-2a4c-47cb-a206-b51c35b27514"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[AVEC EFFET]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="277" y="169" width="82" height="20" backcolor="#99FF99" uuid="5d7c07cd-af27-4387-a91f-ae97a6d56209"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SANS EFFET]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="30">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="17" width="39" height="13" backcolor="#00FF00" uuid="4052c710-1103-4fcd-9ef5-adc5841d3d0a"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[EFFETS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="12"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="62">
+			<staticText>
+				<reportElement mode="Opaque" x="31" y="0" width="70" height="62" backcolor="#CCCCCC" uuid="deac2d57-01af-4ac7-b3d0-b9b2bc793e2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reference]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="103" y="0" width="30" height="62" backcolor="#CCCCCC" uuid="2a0b5548-e7f7-430d-b31d-fdd1305a2b1e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="135" y="0" width="40" height="62" backcolor="#CCCCCC" uuid="c794d533-e661-4dfd-8041-8896795c2c91"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ECH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="208" y="0" width="29" height="62" backcolor="#CCCCCC" uuid="b6f5e478-f239-44f3-bb4a-75bf11b18714"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ECH
+NEC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="239" y="0" width="29" height="62" backcolor="#CCCCCC" uuid="141893b6-995c-4f1a-9123-dda6856b97f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PFC
+AGC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="270" y="0" width="29" height="62" backcolor="#CCCCCC" uuid="4751a656-892c-46ac-8362-d924ed07ada9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EFF
+PHY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="475" y="22" width="85" height="40" backcolor="#CCCCCC" uuid="efda56af-fd3b-4e03-a286-8b6832ea9f1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[INTERETS NON ECHUS PORTEFEUILLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="388" y="22" width="85" height="40" backcolor="#CCCCCC" uuid="a774d90a-07e0-4f1a-a325-9ad4bb7c404b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INTERETS ECHUS PFC / AGC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="301" y="22" width="85" height="40" backcolor="#CCCCCC" uuid="46ec034f-defd-44a0-9ff5-6e5de905bdf1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRINCIPAL AGC & PPL PFC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="177" y="0" width="29" height="62" backcolor="#CCCCCC" uuid="6d4b88da-ebb6-49c9-803d-21669bddecf1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[P
+I]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="301" y="0" width="259" height="20" backcolor="#CCCCCC" uuid="47f75e9a-f627-4bd5-98b9-22cdea844750"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTANT]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="61" width="560" height="1" forecolor="#666666" uuid="7c707c7d-832b-499c-b758-f0afcea8983b"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="29" height="61" backcolor="#CCCCCC" uuid="bac8e988-0477-4d9c-8b0f-ecfc834f76c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NUM]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="103" y="0" width="30" height="20" uuid="4a7d4fa4-b4a6-421e-8068-dee7689d62ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ENGOPE66}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yy">
+				<reportElement x="135" y="0" width="40" height="20" uuid="43d4f94a-52ff-404f-91f8-92db0e2d75a1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ECHOPE66}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="0" width="29" height="20" uuid="d4ad55b0-911a-4c14-be3d-cce7158975e2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PPLINT66}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="208" y="0" width="29" height="20" uuid="14238453-fca8-4e11-8fc9-f677ad5f2017"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ECHU66}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="0" width="29" height="20" uuid="086e5a88-a5c3-4235-9e5e-ff3a8e7f633b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{PFCAGC66}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="29" height="20" uuid="36ff7f22-1094-425f-adf3-676ed7913dc1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SANEFF66}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="479" y="0" width="77" height="20" uuid="93294e77-b7ac-4a2c-b4a9-da6a4e06950c">
+					<printWhenExpression><![CDATA[((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+ (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+ (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+ (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+&& ($F{ECHU66}.compareTo(1)==0)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{MNTOPE66}==null || $F{MNTOPE66}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{MNTOPE66})]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="391" y="0" width="77" height="20" uuid="280b8970-8c30-40ad-9429-861c2e39656b">
+					<printWhenExpression><![CDATA[((($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+ (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(1)==0)) ||
+ (($F{PPLINT66}.compareTo(1)==0) && ($F{PFCAGC66}.compareTo(0)==0)) ||
+ (($F{PPLINT66}.compareTo(2)==0) && ($F{PFCAGC66}.compareTo(0)==0)))
+&& ($F{ECHU66}.compareTo(1)!=0)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{MNTOPE66}==null || $F{MNTOPE66}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{MNTOPE66})]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="305" y="0" width="77" height="20" uuid="77e762c2-36f6-4d65-ab03-e98869bcc775">
+					<printWhenExpression><![CDATA[(($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+(($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(1)!=0)) &&
+(($F{PPLINT66}.compareTo(1)!=0) || ($F{PFCAGC66}.compareTo(0)!=0)) &&
+(($F{PPLINT66}.compareTo(2)!=0) || ($F{PFCAGC66}.compareTo(0)!=0))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{MNTOPE66}==null || $F{MNTOPE66}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{MNTOPE66})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="560" height="1" uuid="f76dbadf-3f4c-4cbb-b6a8-0db0445f08ed"/>
+			</line>
+			<textField>
+				<reportElement x="31" y="0" width="70" height="20" uuid="c6917d53-7e8f-4ca4-85ca-09ecff73056f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AGCNUM66||||SERNUM66||||LPAD(ORDNUM66,7,0)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="29" height="20" uuid="3ca64d36-2164-4229-aac8-05a0da995ff5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20"/>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<subreport>
+				<reportElement x="-21" y="0" width="40" height="40" uuid="843e835c-773a-4379-a35e-f3d31cef0aaa"/>
+				<subreportParameter name="NUMCPT">
+					<subreportParameterExpression><![CDATA[$P{NUMCPT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PA_TMNTPPL">
+					<subreportParameterExpression><![CDATA[$V{TMNTPPL}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PA_INTAGC">
+					<subreportParameterExpression><![CDATA[$V{INTAGC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PA_TINTECH">
+					<subreportParameterExpression><![CDATA[$V{TINTECH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["P5CX073.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

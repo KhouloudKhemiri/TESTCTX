@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Groupes>
+
+	<Groupe Nom="ADMN" >
+			<Menu Nom="Les Procédures" >
+				<Menu Nom="Récéption" Cible="Reception_J.xml"/>
+				<Menu Nom="Début de Journée" Cible="Debut_J.xml"  />
+				<Menu Nom="Conformité" Cible="CNF1019E.xml"  />			
+				<Menu Nom="Fin de Journée"  Cible="Fin_J.xml" />
+				<Menu Nom="Transmission"  Cible="Transmission_J.xml" />
+				<Menu Nom="Clôture"   Cible="Cloture_J.xml" />
+				<Menu Nom="Jours Férriers"   Cible="JOUR_FERRIE_G.xml" />
+				<Menu Nom="Param"   Cible="Param-MAJ.xml" />
+			</Menu>
+
+	        <Menu Nom="Les Opérations" >		
+     	        <Menu Nom="Ouverture de comptes contentieux" >
+                   <Menu Nom="Personne Physique" Cible="T101G.xml" />
+                   <Menu Nom="Personne Physique Commerçante" Cible="T102G.xml" />
+                   <Menu Nom="Personne Morale" Cible="T103G.xml" />
+                   <Menu Nom="Clôture de Compte" Cible="T044G.xml" />
+                   <Menu Nom="Ouverture AUTOMATIQUE des Comptes" Cible="OUV_CPT_CTX_G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations Comptabilité Manuelle" >
+                   <Menu Nom="Débit Client" Cible="T087G.xml" />
+                   <Menu Nom="Crédit Client" Cible="T088G.xml" />
+                   <Menu Nom="Débit Compte Général" Cible="T089G.xml" />
+                   <Menu Nom="Crédit Compte Général" Cible="T090G.xml" />
+                   <Menu Nom="Apurement MEG Débit reçu en TND" Cible="T007G.xml" />
+                   <Menu Nom="Apurement MEG Crédit reçu en TND" Cible="T008G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations Comptabilité Manuelle par LOT" >
+                   <Menu Nom="Débit  Client + Crédit Compte Général" Cible="CTX_DEBIT_CLIENT_G.xml" />
+                   <Menu Nom="Crédit Client + Débit  Compte Général" Cible="CTX_CREDIT_CLIENT_G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations des Apurements" >
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Crédit à régulariser" Cible="T035G.xml" />
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Crédit Compte Client" Cible="T036G.xml" />
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Rejet" Cible="T037G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Débit à régulariser" Cible="T038G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Débit Compte Client" Cible="T039G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Rejet" Cible="T040G.xml" />
+                   <Menu Nom="Apur Crédit à régulariser : Par Crédit Compte Client" Cible="T009G.xml" />
+                   <Menu Nom="Apur Crédit à régulariser : Par MEG Agence" Cible="T013G.xml" />
+                   <Menu Nom="Apur Débit à régulariser : Par Débit Compte Client" Cible="T010G.xml" />
+                   <Menu Nom="Apur Débit à régulariser : Par MEG Agence" Cible="T011G.xml" />
+    	        </Menu>
+         	       <Menu Nom="Opérations des Engagements reçus" >
+                      <Menu Nom="Validation des Effets en entrée de l'Agence au CTX" Cible="APUR1061G.xml" />
+                      <Menu Nom="Validation des Effets en entrée du PFC au CTX" Cible="APUR1062G.xml" />
+                      <Menu Nom="Validation Apurement des Effets Impayés par Débit de Compte" Cible="APUR1066G96.xml" />
+                      <Menu Nom="Validation Apurement des Effets en Intérêts non échus au CTX" Cible="APUR1066G64.xml" />
+                      <Menu Nom="ENG par Signature : Validation Engagement/Signature" Cible="T021G.xml" />
+                      <Menu Nom="ENG par Signature : Main Levée sur Engagement/Signature" Cible="T092G.xml" />
+    	        </Menu>		
+                <Menu Nom="EXTRAIT de Compte" Cible="EXTRAIT.xml" />
+	        </Menu>
+
+			<Menu Nom="Les Editions (Imprimante)" >
+             	<Menu Nom="Etats de Réception" >
+				  <Menu Nom="Etat de Reception des Effets et des ENG/SIGN" Cible="TL1003.xml"  />
+				  <Menu Nom="Liste des MEGS Automatiques" Cible="JFFL4003.xml"  />
+			    </Menu>
+             	<Menu Nom="Journal de fonds" >
+				  <Menu Nom="J.F Mouvement Effet AG/CTX" Cible="LST10001.xml"  />
+				  <Menu Nom="J.F Comptabilité Manuelle" Cible="LST1019.xml"  />
+				  <Menu Nom="Modifications des Comptes Contentieux" Cible="TLME1030.xml"  />
+			    </Menu>
+             	<Menu Nom="Courrier" >
+    			  <Menu Nom="Listing de courrier" Cible="CRRCTX.xml"  />			
+    			  <Menu Nom="Listing de courrier par agence" Cible="CRRCTXAGC.xml"  />			
+			    </Menu>
+	     		<Menu Nom="Les Etats d'Instances" >
+			        <Menu Nom="Instances DEBIT à régulariser" Cible="TL1091.xml"  />
+				    <Menu Nom="Instances CREDIT à régulariser" Cible="TL1090.xml"  />
+				    <Menu Nom="Instances ENGAGEMENTS par SIGNATURE" Cible="TL10731.xml"  />			
+				    <Menu Nom="Liste des MEG DEBIT reçus en TND"   Cible="TL3195A.xml" />
+				    <Menu Nom="Liste des MEG CREDIT reçus en TND"   Cible="TL3195B.xml" />
+				    <Menu Nom="Liste des ENG par SIGN en entrée"   Cible="TL1071.xml" />
+				    <Menu Nom="Balance des comptes contentieux"   Cible="P5CX02.xml" />
+				    <Menu Nom="Situation client"   Cible="P5CX070.xml" />
+				    <Menu Nom="Mouvements client"   Cible="P5MVMT.xml" />
+			    </Menu>
+			</Menu>
+
+	   <Menu Nom="Affichage des Instances" >		
+                <Menu Nom="Instances CREDIT à régulariser (FL1090)" Cible="FL1090A.xml" />
+                <Menu Nom="Instances DEBIT à régulariser (FL1091)" Cible="FL1091A.xml" />
+                <Menu Nom="Instances ENGAGEMENTS par SIGNATURE (FL1073)" Cible="FL1073A.xml" />
+                <Menu Nom="Meg reçus à apurer en TND (DEBIT) (FL3195)" Cible="FL3195AA.xml" />
+                <Menu Nom="Meg reçus à apurer en TND (CREDIT) (FL3195)" Cible="FL3195BA.xml" />
+                <Menu Nom="Eng par signature en entrée au CTX (FL1071)" Cible="FL1071A.xml" />
+                <Menu Nom="Effets Impayés (FL1066)" Cible="FL1066A.xml" />
+                <Menu Nom="Effets à entrer Reçus des agences (FL1061)" Cible="FL1061A.xml" />
+                <Menu Nom="Effets à entrer Reçus du PFC (FL1062)" Cible="FL1062A.xml" />
+                <Menu Nom="Comptes Personnes Physiques (FL1030)" Cible="FL1030PA.xml" />
+                <Menu Nom="Comptes Personnes Physiques Commerçantes (FL1030)" Cible="FL1030CA.xml" />
+                <Menu Nom="Comptes Personnes Morales (FL1030)" Cible="FL1030MA.xml" />
+                <Menu Nom="STATISTIQUES (FLSTAT)" Cible="FLSTATA.xml" />
+                <Menu Nom="Génération BALANCE" Cible="BALANCE_G.xml" />
+	   </Menu>
+	</Groupe>	
+
+	<Groupe Nom="CTX" >
+			<Menu Nom="Les Procédures" >
+				<Menu Nom="Récéption" Cible="Reception_J.xml"/>
+				<Menu Nom="Début de Journée" Cible="Debut_J.xml"  />
+				<Menu Nom="Conformité" Cible="CNF1019E.xml"  />			
+				<Menu Nom="Fin de Journée"  Cible="Fin_J.xml" />
+				<Menu Nom="Transmission"  Cible="Transmission_J.xml" />
+				<Menu Nom="Clôture"   Cible="Cloture_J.xml" />
+				<Menu Nom="Jours Férriers"   Cible="JOUR_FERRIE_G.xml" />
+			</Menu>
+
+	        <Menu Nom="Les Opérations" >		
+     	        <Menu Nom="Ouverture de comptes contentieux" >
+                   <Menu Nom="Personne Physique" Cible="T101G.xml" />
+                   <Menu Nom="Personne Physique Commerçante" Cible="T102G.xml" />
+                   <Menu Nom="Personne Morale" Cible="T103G.xml" />
+                   <Menu Nom="Clôture de Compte" Cible="T044G.xml" />
+                   <Menu Nom="Ouverture AUTOMATIQUE des Comptes" Cible="OUV_CPT_CTX_G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations Comptabilité Manuelle" >
+                   <Menu Nom="Débit Client" Cible="T087G.xml" />
+                   <Menu Nom="Crédit Client" Cible="T088G.xml" />
+                   <Menu Nom="Débit Compte Général" Cible="T089G.xml" />
+                   <Menu Nom="Crédit Compte Général" Cible="T090G.xml" />
+                   <Menu Nom="Apurement MEG Débit reçu en TND" Cible="T007G.xml" />
+                   <Menu Nom="Apurement MEG Crédit reçu en TND" Cible="T008G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations Comptabilité Manuelle par LOT" >
+                   <Menu Nom="Débit  Client + Crédit Compte Général" Cible="CTX_DEBIT_CLIENT_G.xml" />
+                   <Menu Nom="Crédit Client + Débit  Compte Général" Cible="CTX_CREDIT_CLIENT_G.xml" />
+    	        </Menu>
+     	        <Menu Nom="Opérations des Apurements" >
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Crédit à régulariser" Cible="T035G.xml" />
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Crédit Compte Client" Cible="T036G.xml" />
+                   <Menu Nom="Apurement MEG reçu (DEBIT) : Par Rejet" Cible="T037G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Débit à régulariser" Cible="T038G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Débit Compte Client" Cible="T039G.xml" />
+                   <Menu Nom="Apurement MEG reçu (CREDIT) : Par Rejet" Cible="T040G.xml" />
+                   <Menu Nom="Apur Crédit à régulariser : Par Crédit Compte Client" Cible="T009G.xml" />
+                   <Menu Nom="Apur Crédit à régulariser : Par MEG Agence" Cible="T013G.xml" />
+                   <Menu Nom="Apur Débit à régulariser : Par Débit Compte Client" Cible="T010G.xml" />
+                   <Menu Nom="Apur Débit à régulariser : Par MEG Agence" Cible="T011G.xml" />
+    	        </Menu>
+         	       <Menu Nom="Opérations des Engagements reçus" >
+                      <Menu Nom="Validation des Effets en entrée de l'Agence au CTX" Cible="APUR1061G.xml" />
+                      <Menu Nom="Validation des Effets en entrée du PFC au CTX" Cible="APUR1062G.xml" />
+                      <Menu Nom="Validation Apurement des Effets Impayés par Débit de Compte" Cible="APUR1066G96.xml" />
+                      <Menu Nom="Validation Apurement des Effets en Intérêts non échus au CTX" Cible="APUR1066G64.xml" />
+                      <Menu Nom="ENG par Signature : Validation Engagement/Signature" Cible="T021G.xml" />
+                      <Menu Nom="ENG par Signature : Main Levée sur Engagement/Signature" Cible="T092G.xml" />
+    	        </Menu>		
+                <Menu Nom="EXTRAIT de Compte" Cible="EXTRAIT.xml" />
+	        </Menu>
+
+			<Menu Nom="Les Editions (Imprimante)" >
+             	<Menu Nom="Etats de Réception" >
+				  <Menu Nom="Etat de Reception des Effets et des ENG/SIGN" Cible="TL1003.xml"  />
+				  <Menu Nom="Liste des MEGS Automatiques" Cible="JFFL4003.xml"  />
+			    </Menu>
+             	<Menu Nom="Journal de fonds" >
+				  <Menu Nom="J.F Mouvement Effet AG/CTX" Cible="LST10001.xml"  />
+				  <Menu Nom="J.F Comptabilité Manuelle" Cible="LST1019.xml"  />
+				  <Menu Nom="Modifications des Comptes Contentieux" Cible="TLME1030.xml"  />
+			    </Menu>
+             	<Menu Nom="Courrier" >
+    			  <Menu Nom="Listing de courrier" Cible="CRRCTX.xml"  />			
+    			  <Menu Nom="Listing de courrier par agence" Cible="CRRCTXAGC.xml"  />			
+			    </Menu>
+	     		<Menu Nom="Les Etats d'Instances" >
+			        <Menu Nom="Instances DEBIT à régulariser" Cible="TL1091.xml"  />
+				    <Menu Nom="Instances CREDIT à régulariser" Cible="TL1090.xml"  />
+				    <Menu Nom="Instances ENGAGEMENTS par SIGNATURE" Cible="TL10731.xml"  />			
+				    <Menu Nom="Liste des MEG DEBIT reçus en TND"   Cible="TL3195A.xml" />
+				    <Menu Nom="Liste des MEG CREDIT reçus en TND"   Cible="TL3195B.xml" />
+				    <Menu Nom="Liste des ENG par SIGN en entrée"   Cible="TL1071.xml" />
+				    <Menu Nom="Balance des comptes contentieux"   Cible="P5CX02.xml" />
+				    <Menu Nom="Situation client"   Cible="P5CX070.xml" />
+				    <Menu Nom="Mouvements client"   Cible="P5MVMT.xml" />
+			    </Menu>
+			</Menu>
+
+	   <Menu Nom="Affichage des Instances" >		
+                <Menu Nom="Instances CREDIT à régulariser (FL1090)" Cible="FL1090A.xml" />
+                <Menu Nom="Instances DEBIT à régulariser (FL1091)" Cible="FL1091A.xml" />
+                <Menu Nom="Instances ENGAGEMENTS par SIGNATURE (FL1073)" Cible="FL1073A.xml" />
+                <Menu Nom="Meg reçus à apurer en TND (DEBIT) (FL3195)" Cible="FL3195AA.xml" />
+                <Menu Nom="Meg reçus à apurer en TND (CREDIT) (FL3195)" Cible="FL3195BA.xml" />
+                <Menu Nom="Eng par signature en entrée au CTX (FL1071)" Cible="FL1071A.xml" />
+                <Menu Nom="Effets Impayés (FL1066)" Cible="FL1066A.xml" />
+                <Menu Nom="Effets à entrer Reçus des agences (FL1061)" Cible="FL1061A.xml" />
+                <Menu Nom="Effets à entrer Reçus du PFC (FL1062)" Cible="FL1062A.xml" />
+                <Menu Nom="Comptes Personnes Physiques (FL1030)" Cible="FL1030PA.xml" />
+                <Menu Nom="Comptes Personnes Physiques Commerçantes (FL1030)" Cible="FL1030CA.xml" />
+                <Menu Nom="Comptes Personnes Morales (FL1030)" Cible="FL1030MA.xml" />
+                <Menu Nom="Génération BALANCE" Cible="BALANCE_G.xml" />
+	   </Menu>
+	</Groupe>	
+
+	
+	</Groupes>

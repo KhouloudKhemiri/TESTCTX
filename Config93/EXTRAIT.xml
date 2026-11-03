@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="EXTRAIT DU COMPTE"
+            Tables=""
+			Action="EDITION"
+			FichierEdition="EXTRAIT"
+            >
+      
+       <Text Position="NLigne" Label="Compte: "   Type="AlphaNumerique"   Obligatoire="Oui" Longueur="10"  >      
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" (lpad(CODAGC1030,2,'0') || lpad(CODNAT1030,2,'0') || lpad(ORDCPT1030,5,'0') || KLECPT1030)='%THIS01%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS01%="ERREUR: Compte Inexistant  ";
+                return;
+              }
+              //%THIS01%="NUMCPT:" + %THIS01%;
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Date Départ" ColTable="" Nom="" Type="AlphaNumerique" Longueur="10" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				  <Result>
+          <![CDATA[  
+              //%THIS02%="DATEXT:" + %THIS02%;
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+		
+		<SimpleText Position="2"   Label="" Valeur="saisir la Date sous le format JJ/MM/AAAA" />
+		<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		
+		<Bouton Position="120" Label="Valider"  Action="Edition" >	
+		 <OnUpdate>
+				<Result>
+          <![CDATA[  
+              //%THIS01%="NUMCPT:" + %THIS01%;
+              //%THIS02%="DATEXT:" + %THIS02%;
+               ]]> 
+				</Result>
+ 		 </OnUpdate>
+   </Bouton>
+   
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+
+		 <OnInit>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+		    
+	</Formulaire>
+	
+</Entites>

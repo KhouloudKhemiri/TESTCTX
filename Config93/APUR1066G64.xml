@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Sélection" Cible="APUR1066CR64.xml" />
+		<Tab Nom="Liste" Cible="APUR1066AF64.xml" />
+		<Tab Nom="Validation" Cible="APUR1066AP64.xml" />
+</TabPage>
+
+</Entites>

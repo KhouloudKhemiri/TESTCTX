@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="SELECTION DES EFFETS EN INTERETS NON ECHUS AU CTX A APURER"
+		Titre="SELECTION DES EFFETS EN INTERETS NON ECHUS AU CTX A APURER"
+    Tables="FL1066_AAPUR_64"
+		IndSuppression="SU1066A"
+		Action="CREATION"
+>
+        
+  <Text Position="0" Label="N° Compte contentieux : " ColTable="CPTAGC66A" Nom="CPTAGC66A" Type="AlphaNumerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS0101%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS0101%="ERREUR: Agence Inexistante" ;
+              } 
+              %THIS0104% = "";
+              %THIS0105% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="2" Label="" ColTable="CPTNAT66A" Nom="CPTNAT66A" Type="Numerique" Longueur="2" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+				<Result>
+						 if ((%THIS0102%.compareTo("03")==0) || (%THIS0102%.compareTo("04")==0) || (%THIS0102%.compareTo("05")==0) || (%THIS0102%.compareTo("06")==0))
+             {
+             }else
+             { %THIS0102%="ERREUR: Nature doit etre = 03, 04, 05 ou 06";
+               return;
+             }
+              %THIS0104% = "";
+              %THIS0105% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <Text Position="2" Label="" ColTable="CPTORD66A" Nom="CPTORD66A" Type="Numerique" Longueur="5" Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+				    <Result>
+               <![CDATA[  
+                  %THIS0104%="";
+                  %THIS0105% = "";
+               ]]> 
+           </Result>
+         </OnUpdate>
+  </Text>
+
+  <Text Position="2" Label="" ColTable="CPTCLE66A" Nom="CPTCLE66A" Type="Numerique" Longueur="1" Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0101%' and CODNAT1030=%THIS0102% and ORDCPT1030=%THIS0103% and KLECPT1030='%THIS0104%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0101%' and CODNAT1030=%THIS0102% and ORDCPT1030=%THIS0103% and KLECPT1030='%THIS0104%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>					           
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0101%',%THIS0102%,%THIS0103%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+             if(%THIS0104%.equals("") )
+             {
+             return;
+             }
+            if (!%THIS0104%.equals(%CLECPT%))
+            {
+             %THIS0104% = "ERREUR: Clé Invalide";
+             return;
+            }
+         
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS0104%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS0104%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS0105%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS0105%="";
+                  }
+                             
+			      	       %THIS0106%= %NOMCPT%;               
+                }
+              }
+            
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <Text Position="NLigne" Label="Nom et Prénom ou R/S" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non"/>
+
+  <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE66A" Nom="ENGOPE66A" Type="AlphaNumerique" Longueur="3"  Unique="Oui" Obligatoire="Oui">
+         <OnUpdate>
+			    <Requet Tables="FL1066_AAPUR_64" Where=" CPTAGC66A='%THIS0101%' and CPTNAT66A=%THIS0102% and CPTORD66A=%THIS0103% and CPTCLE66A='%THIS0104%' and ENGOPE66A='%THIS0107%' and SU1066A=0" >
+					  <Select Nom="NBRAAP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+  			    <Requet Tables="FL1066_TEMP_64" Where=" SU1066T=0" >
+	  				  <Select Nom="NBRTMP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+		  		  </Requet>
+  			    <Requet Tables="FL1066" Where=" CPTAGC66='%THIS0101%' and CPTNAT66=%THIS0102% and CPTORD66=%THIS0103% and CPTCLE66='%THIS0104%' and ENGOPE66='%THIS0107%' and SU1066=0 and PPLINT66=1 and ECHU66=1 and PFCAGC66=1" >
+	  				  <Select Nom="NBRINS" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+		  		  </Requet>
+
+				    <Result>
+               <![CDATA[  
+             if(Integer.parseInt(%NBRTMP%.trim())!=0)
+							{
+                 %THIS0107%="ERREUR: Veuillez finaliser l'opération de validation antérieure" ;
+                 return;
+              }
+             if(Integer.parseInt(%NBRAAP%.trim())!=0)
+							{
+                 %THIS0107%="ERREUR: Instances déja apurées" ;
+                 return;
+              } 
+             if(Integer.parseInt(%NBRINS%.trim())==0)
+							{
+                 %THIS0107%="ERREUR: Aucune instance ne correspond à ces critères" ;
+                 return;
+              }
+             %THIS0108%="Nombre d'Instances selectionnés = " + %NBRINS%;
+             %THIS0109%=%NBRINS%;
+               ]]> 
+           </Result>
+         </OnUpdate>
+       </Text>
+
+    <SimpleText Position="NLigne" Label="" Valeur="" />
+
+    <SimpleText Position="0" Class="Invisible"  ColTable="NBRINS66A" Label="" Valeur="" />
+		
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+		 <OnUpdate>
+        <Procedure Nom="SELECT_FL1066('%THIS0101%',%THIS0102%,%THIS0103%,%THIS0104%,'%THIS0107%','T064')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+		
+	</Formulaire>
+	
+</Entites>

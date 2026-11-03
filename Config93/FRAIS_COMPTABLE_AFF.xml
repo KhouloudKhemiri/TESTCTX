@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Modification" Titre="LISTE DES FRAIS COMPTABLE TELEGRAMME" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE DES FRAIS COMPTABLE TELEGRAMME"
+		Titre="LISTE DES FRAIS COMPTABLE TELEGRAMME"
+    Tables="WBT_FRAIS_COMPTABLE"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" REFERENCE"
+    >
+
+    <Text Position="0" Label="COMPTE" ColTable="COMPTE_CTX" Nom="COMPTE_CTX" Type="AlphaNumerique" Longueur="20"   Unique="Non" PositionCel="1" LongueurCel="23" LabelCel="NUM COMPTE"/>
+    <Text Position="NLigne" Label="REFERENCE" ColTable="REFERENCE" Nom="REFERENCE" Type="AlphaNumerique" Longueur="20" Unique="Non" PositionCel="2" LongueurCel="22" LabelCel="REFERENCE"/>
+	<Text Position="NLigne" Label="MONTANT" ColTable="MONTANT" Nom="MONTANT" Type="AlphaNumerique" Longueur="20"   Unique="Non" PositionCel="3" LongueurCel="20" LabelCel="MONTANT"/>
+	<Text Position="NLigne" Label="ABREVIATION" ColTable="ABREVIATION" Nom="ABREVIATION" Type="AlphaNumerique" Longueur="20" Unique="Non" PositionCel="4" LongueurCel="10" LabelCel="ABREVIATION"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

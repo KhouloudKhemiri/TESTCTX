@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Suppression" Titre="APUREMENT DEBIT A REGULARISER/MEG AGENCE" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="APUREMENT DEBIT A REGULARISER/MEG AGENCE"
+		Titre="APUREMENT DEBIT A REGULARISER/MEG AGENCE"
+    Tables="FL1000"
+		IndSuppression="SU3002"
+    LigneClickEvent="SUPPRESSION"
+		Action="SUPPRESSION"
+  	ValSupp="1"
+		Where =" CODOPE3002='T011'"
+			OrderBy=" CODAGC3002, DATOPE3002, CODOPE3002, AGCNUM3002, SERNUM3002, ORDNUM3002"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+  <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="7" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="6" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="9" LabelCel="Ordre Ref"/>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="15" LabelCel="Montant opération"/>
+
+  <Text Position="NLigne" Label="Agence ou service concerné" ColTable="MEGOPE3002" Nom="MEGOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="12" LabelCel="Agc concerné">
+  		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+  </Text>
+
+   <Text Position="NLigne" Label="Description" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="26" LabelCel="Description"/>
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGXOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGYOPE3002" Label="" Valeur="" />
+
+   <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+    
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS030001%="93";
+				 %THIS030002%=%Journee%;
+				 %THIS030003%="T011";
+         %THIS030012%=%CODEUSER%;
+         %THIS030013% = "1";
+         %THIS030014% = "01";
+         %THIS030015% = "0"; 
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

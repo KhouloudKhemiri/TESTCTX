@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="OUVERTURE AUTOMATIQUE DES COMPTES CONTENTIEUX"
+		Titre="OUVERTURE AUTOMATIQUE DES COMPTES CONTENTIEUX"
+    Tables="COMPTES_DATE"
+		IndSuppression="SUDATEC"
+		Action="CREATION" >
+        		
+    <Text Position="0" Label="Date : " ColTable="DATOPEC" Nom="DATOPEC" Type="Date" Index="Oui" Longueur="10" Unique="Oui" Disabled="Non" Obligatoire="Oui" >
+			<OnUpdate>
+			  <Requet Tables="ALL_NEW_CTX_ACC" >
+					  <Select Nom="NBRTRT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+			</Requet>		
+			<Result>
+          <![CDATA[  
+             if(%THIS0201%.equals("") )
+             {
+             return;
+             }
+
+           java.text.SimpleDateFormat dateStandard = new java.text.SimpleDateFormat("dd/MM/yyyy");
+					 java.util.Date DATJOU=dateStandard.parse(%Journee%);
+					 java.util.Date DATSAI=dateStandard.parse(%THIS0201%);
+
+						 if (DATSAI.compareTo(DATJOU) !=0)
+             { 
+               %THIS0201%="ERREUR: Date saisie doit etre egale à la date du jour "+ %Journee%;
+			   return;
+             }
+               %THIS0202%="Nombre total de lignes à traiter = " + %NBRTRT%;
+
+          ]]> 
+				 </Result>
+
+			</OnUpdate>			
+
+	  </Text>
+
+   <SimpleText Position="NLigne" Label="" Valeur="" />
+	  
+		<Bouton Position="NLigne" Label="valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+    	<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+		    	<Result>
+				</Result>
+ 		 </OnInit>	
+		
+		 <OnUpdate>
+             <Procedure Nom="OUV_AUTO_CPT_CTX()" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+	
+	</Formulaire>
+	
+</Entites>

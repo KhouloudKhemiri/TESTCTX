@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Parametres>
+  <Param Nom="Nom Application" Valeur="Contentieux (93) devctx"/>
+  <Param Nom="ID" Valeur="02"/>
+  <Param Nom="IP_Aut_Server" Valeur="172.28.70.101"/>
+  <Param Nom="Port_Aut_Server" Valeur="7777"/>
+  <Param Nom="URL_Aut_Server" Valeur="/Identification/Identification?invoke=Identify"/>
+  <Param Nom="URLConfig" Valeur="/opt/apache-tomcat/webapps/DEVCTX/Config93/"/>
+  <Param Nom="URLHTML" Valeur="/opt/apache-tomcat/webapps/DEVCTX/ModelHTML/"  />
+  <Param Nom="URLFILE" Valeur="/opt/apache-tomcat/webapps/DEVCTX/Data/"  />
+  <Param Nom="URLEtat" Valeur="/opt/apache-tomcat/webapps/DEVCTX/Etat/"  />
+  <Param Nom="URLImage" Valeur="/opt/apache-tomcat/webapps/DEVCTX/Images/"  />
+  <Param Nom="ServerEtat" Valeur="rep_biatnet"  />
+ <Param Nom="EtatSystem" Valeur="0"  Global="Oui" />
+  <Param Nom="Niveau" Valeur="1"  Global="Oui" />
+  <Param Nom="Journee" Libelle="Journée comptable" Valeur="08/06/2008" Header="Oui" Global="Oui" />
+  <Param Nom="EtatGen" Valeur="0" Global="Oui" />
+ 
+  <Param Nom="ConnexionDB" Valeur="test" />
+  <Param Nom="IPDB" Valeur="172.28.70.62:1521"  />
+  <Param Nom="UserDB" Valeur="devctx" />
+  <Param Nom="PWDDB" Valeur="devctx123"  />
+  
+</Parametres>
+

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+
+	<Formulaire Nom="APUREMENT DEBIT A REGULARISER/MEG AGENCE"
+		Titre="APUREMENT DEBIT A REGULARISER/MEG AGENCE" Tables="FL1000"
+		 IndSuppression="SU3002"
+		Action="CREATION" >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+
+  <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0107%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0107%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	>
+      <OnUpdate>
+			    <!--<Requet Tables="FL1000" Where=" CODAGC3002 = '%THIS0101%' and DATOPE3002 = '%THIS0102%' and CODOPE3002 = '%THIS0103%' and AGCNUM3002='%THIS0104%' and SERNUM3002='%THIS0105%' and ORDNUM3002=%THIS0106% " >
+					  <Select Nom="NBR1000" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet> -->
+				  <Result>    
+             //if(Integer.parseInt(%NBR1000%.trim())!=0)
+						//	{
+            //     %THIS0106%="ERREUR: Enregistrement existe" ;
+            //     return;
+            //  } 
+            %THIS0107%=""; 
+				  </Result>
+      </OnUpdate>
+  </Text>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Oui" Obligatoire="Oui" >
+      <OnUpdate>
+			    <Requet Tables="FL1091" Where=" SU1091 = 0 and (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE91=REPLACE(REPLACE(REPLACE('%THIS0107%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1091" Where=" SU1091 = 1 and (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE91=REPLACE(REPLACE(REPLACE('%THIS0107%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+        <Result>
+          <![CDATA[
+                     int p = %THIS0107%.indexOf("+");
+                     int m = %THIS0107%.indexOf("-");
+                     int e = %THIS0107%.indexOf("*");
+                     int d = %THIS0107%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS0107%="ERREUR: Montant erroné";
+                      return;
+                     }
+
+             if (Integer.parseInt(%INSACT%.trim())==0)
+							 { 
+                if (Integer.parseInt(%INSSUP%.trim())==0)
+                { 
+                 %THIS0107%="ERREUR: Instance Inexistante dans  les DEBIT  A REGULARISER (FL1091)" ;
+                } else
+                {
+                 %THIS0106%="ERREUR: Instance existe et supprimée dans les DEBIT  A REGULARISER (FL1091)" ;
+                }
+               }
+               %THIS0108%="";
+           ]]>
+              </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Agence ou service concerné" ColTable="MEGOPE3002" Nom="MEGOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+  		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+      <OnUpdate>     
+			   <Requet Tables="FL1091" Where=" SU1091 = 0 and (AGCNUM91 || SERNUM91 || ORDNUM91) = ('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE91=REPLACE('%THIS0107%',' ','')" >
+					  <Select Nom="CPTAGC" Type="AlphaNumerique" ColTable="CPTAGC91"/>
+					  <Select Nom="AGYOPE" Type="AlphaNumerique" ColTable="AGYOPE91"/>
+				  </Requet>
+				  <Result>          
+             if(%THIS0108%.equals(""))
+             {
+             return;
+             }
+                if (%THIS0108%.equals("93"))
+                {
+                 %THIS0108%="ERREUR: Agence doit être différente de 93" ;
+                 return;
+                }
+                if (%THIS0108%.equals(%CPTAGC%))
+                {
+                  %THIS0110% = %CPTAGC%; 
+                  %THIS0111% = %AGYOPE%; 
+                } else
+                {
+                  %THIS0108%="ERREUR: Agence doit être = " + %CPTAGC%;
+                }
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+   <Text Position="NLigne" Label="Description" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGXOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="AGYOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+
+   <!-- DEB projet MEG API (THIS0116) -->
+   <SimpleText Position="0" Class="Invisible"  ColTable="" Label="" Valeur="" />  
+   <!-- FIN projet MEG API (THIS0116)-->
+
+    
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" >
+
+
+		 <OnUpdate>
+				<Result>
+				</Result>
+
+                <Procedure Nom="CALLAPIMEG('%THIS0102%','%THIS0103%','%THIS0107%','93','%THIS0108%','%THIS0104%','%THIS0105%','%THIS0106%','%THIS0109%','45020')" />
+
+			    <Requet Tables="API_TRACE" Where=" CODAGC='93' and DATOPE='%THIS0102%' and CODOPE='%THIS0103%' and AGCNUM='%THIS0104%' and SERNUM='%THIS0105%' and ORDNUM='%THIS0106%' ">
+					  <Select Nom="NBRREF" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+		
+			    <Requet Tables="API_TRACE" Where=" CODAGC='93' and DATOPE='%THIS0102%' and CODOPE='%THIS0103%' and AGCNUM='%THIS0104%' and SERNUM='%THIS0105%' and ORDNUM='%THIS0106%' " >
+					  <Select Nom="LIBREP" Type="AlphaNumerique" ColTable="REPONSE"/>
+				  </Requet>
+      
+				  <Result>          
+
+             if(Integer.parseInt(%NBRREF%.trim())==0)
+							{
+                 %THIS0116%="ERREUR: Probleme API MEG" ;
+                 return;
+              }
+
+			 %LIBREP%= %LIBREP%.substring(0,2);
+		 
+             if (!%LIBREP%.equals("FT"))
+							{
+                 %THIS0116%="ERREUR: Probleme generation FT via API MEG" ;
+                 return;
+              }
+
+				  </Result>
+ 		 </OnUpdate>
+
+		</Bouton>
+
+
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS0101%="93";
+				 %THIS0102%=%Journee%;
+				 %THIS0103%="T011";
+         %THIS0112%=%CODEUSER%;
+         %THIS0113% = "1";
+         %THIS0114% = "01";
+         %THIS0115% = "0"; 
+				</Result>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+</Entites>

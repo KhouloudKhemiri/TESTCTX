@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="Listing de courrier"
+                                          
+            Tables=""
+          
+			Action="EDITION"
+			
+			FichierEdition="CRRCTX"
+						
+            >
+		<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		<Bouton Position="120" Label="Valider"  Action="Edition" />
+		
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+
+		 <OnInit>
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+
+        <Procedure Nom="CTXFUS()" />
+
+ 		 </OnInit>	
+	   
+		
+		
+	</Formulaire>
+	
+</Entites>

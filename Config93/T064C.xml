@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites> 
+
+	<Formulaire Nom="APUREMENT EFFET INT NON ECHU RECU DU PFC"
+		Titre="APUREMENT EFFET INT NON ECHU RECU DU PFC" Tables="FL1000"
+		 IndSuppression="SU3002"
+		Action="CREATION" >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+
+  <Text Position="NLigne" Label="Reference " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0105%=""; 
+            %THIS0106%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0106%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	>
+      <OnUpdate>
+			    <Requet Tables="FL1000" Where=" CODAGC3002 = '%THIS0101%' and DATOPE3002 = '%THIS0102%' and CODOPE3002 = '%THIS0103%' and AGCNUM3002='%THIS0104%' and SERNUM3002='%THIS0105%' and ORDNUM3002=%THIS0106% " >
+					  <Select Nom="NBR1000" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+			    <Requet Tables="FL1066" Where=" SU1066 = 0 and (AGCNUM66 || SERNUM66 || ORDNUM66)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) " >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1066" Where=" SU1066 = 1 and (AGCNUM66 || SERNUM66 || ORDNUM66)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) " >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+           <Requet Tables="FL1066" Where=" SU1066 = 0 and (AGCNUM66 || SERNUM66 || ORDNUM66)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) " >
+            <Select Nom="ENGOPE" Type="AlphaNumerique" ColTable="ENGOPE66"/>
+ 	          <Select Nom="CPTAGC" Type="AlphaNumerique" ColTable="CPTAGC66"/>
+            <Select Nom="CPTNAT" Type="Numerique" ColTable="CPTNAT66"/>
+            <Select Nom="CPTORD" Type="Numerique" ColTable="CPTORD66"/>
+            <Select Nom="CPTCLE" Type="Numerique" ColTable="CPTCLE66"/>
+            <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMCPT66"/>
+            <Select Nom="ECHOPE" Type="Date" ColTable="ECHOPE66"/>
+            <Select Nom="PPLINT" Type="Numerique" ColTable="PPLINT66"/>
+            <Select Nom="SANEFF" Type="AlphaNumerique" ColTable="SANEFF66"/>
+            <Select Nom="ECHU" Type="Numerique" ColTable="ECHU66"/>
+            <Select Nom="PFCAGC" Type="AlphaNumerique" ColTable="PFCAGC66"/>
+            <Select Nom="MNTOPE" Type="AlphaNumerique" ColTable="MNTOPE66"/>
+				  </Requet>
+    
+        <Result>
+            
+          <![CDATA[  				    
+             if(Integer.parseInt(%NBR1000%.trim())!=0)
+							{
+                 %THIS0104%="ERREUR: Enregistrement existe" ;
+                 return;
+              } 
+              
+            if (Integer.parseInt(%INSACT%.trim())==0)
+							 { 
+                if (Integer.parseInt(%INSSUP%.trim())==0)
+                { 
+                 %THIS0106%="ERREUR: Instance Inexistante dans le fichier des effets impayés (FL1066)" ;
+                 
+                } else
+                {
+                 %THIS0105%="ERREUR: Instance existe et supprimée dans le fichier des effets impayés (FL1066)" ;
+                } 
+               } else
+               { 
+                 if ((%PPLINT% != 1))
+    						 if ((%PPLINT%.compareTo("1")!=0) || (%ECHU%.compareTo("1")!=0) || (%PFCAGC%.compareTo("1")!=0))
+                 {
+                   %THIS0106%="ERREUR: L'Effet correspondant n'est pas intérêt non échu reçu du PFC" ;
+                 } else
+                 {
+                   %THIS0114%= %ENGOPE%;                 
+                   %THIS0107%= %CPTAGC%;
+                   %THIS0108%= %CPTNAT%;
+                   %THIS0109%= %CPTORD%;
+                   %THIS0110%= %CPTCLE%;
+                   %THIS0111%= %NOMCPT%;
+                   %THIS0112% = %MNTOPE%;
+                   %THIS0113%= %ECHOPE%;
+                   %THIS0115%= %PPLINT%;
+                   %THIS0117%= %SANEFF%;
+                   %THIS0119%= %ECHU%;
+                   %THIS0120%= %PFCAGC%;
+                 }
+                } 
+           ]]> 
+				  </Result>
+      </OnUpdate>
+  </Text>
+
+
+       <Text Position="NLigne" Label="Compte concerné" ColTable="AGXOPE3002" Nom="AGXOPE3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Non" />
+       <Text Position="2" Label="" ColTable="NAXOPE3002" Nom="NAXOPE3002" Type="Numerique" Longueur="2" Disabled="Oui" Unique="Non" />
+       <Text Position="2" Label="" ColTable="ORXOPE3002" Nom="ORXOPE3002" Type="Numerique" Longueur="5" Disabled="Oui" Unique="Non" />
+       <Text Position="2" Label="" ColTable="KLXOPE3002" Nom="KLXOPE3002" Type="Numerique" Longueur="1" Disabled="Oui" Unique="Non" />
+       <Text Position="NLigne" Label="Nom / Raison Sociale" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non"/>
+
+  <Text Position="NLigne" Label="Montant" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Disabled="Oui" Unique="Non" Obligatoire="Oui"/>
+   <Text Position="NLigne" Label="Date d'écheance" ColTable="ECHOPE3002" Nom="ECHOPE3002" Type="Date" Longueur="10"  Disabled="Oui" Unique="Non" />
+   <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE3002" Nom="ENGOPE3002" Type="AlphaNumerique" Longueur="3"  Disabled="Oui" Unique="Non" />
+   <Text Position="NLigne" Label="Code Effet" ColTable="PPLINT3002" Nom="PPLINT3002" Type="Numerique" Longueur="1" Disabled="Oui" Unique="Non" />
+   <SimpleText Position="2" ColTable="" Label="(0: Principal, 1: Interet)" Valeur="" />
+   <Text Position="NLigne" Label="Effet physique" ColTable="RESEFF3002" Nom="RESEFF3002" Type="Numerique" Longueur="1" Disabled="Oui" Unique="Non" />   
+   <SimpleText Position="2" ColTable="" Label="(0: avec Effet, 1: sans Effet)" Valeur="" />
+
+   <SimpleText Position="0" Class="Invisible"  ColTable="ECHU3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="PFCAGC3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+   <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+ 
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+
+				 %THIS0101%="93";
+				 %THIS0102%=%Journee%;
+				 %THIS0103%="T064";
+         %THIS0121%=%CODEUSER%;
+         %THIS0122% = "1";
+         %THIS0123% = "9";
+         %THIS0124% = "3"; 
+				</Result>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+</Entites>

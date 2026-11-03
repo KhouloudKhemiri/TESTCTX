@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Subreport-TL1073" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="59919009-0a07-40fa-b98c-2177acf31041">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT  ENGOPE73, count(ENGOPE73), sum(MNTOPE73) FROM FL1073 group by ENGOPE73 order by ENGOPE73]]>
+	</queryString>
+	<field name="ENGOPE73" class="java.lang.String"/>
+	<field name="COUNT(ENGOPE73)" class="java.math.BigDecimal"/>
+	<field name="SUM(MNTOPE73)" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="314" height="20" uuid="9c92efc3-c4e2-43aa-b792-eec128ba1a15"/>
+				<text><![CDATA[ETAT RECAPITULATIF DES ENGAGEMENTS PAR SIGNATURE]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="130" y="0" width="56" height="20" backcolor="#CCCCCC" uuid="e811b5ff-b094-4e44-ade5-471bf298f930"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="187" y="0" width="79" height="20" backcolor="#CCCCCC" uuid="7c963f23-2e86-4ab3-872a-92ff7a089c9a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code ENG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="267" y="0" width="100" height="20" backcolor="#CCCCCC" uuid="632cd46e-797a-4465-b909-c4a693d20ca7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total / Engagement]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="203" y="0" width="50" height="20" uuid="2792ca23-26c7-4b92-816a-cece30ef8e77"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ENGOPE73}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="0" width="102" height="20" uuid="0c57845a-ec85-4fb0-bc17-a39b25b78d34"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COUNT(ENGOPE73)}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;(#,##0.000)">
+				<reportElement x="253" y="0" width="104" height="20" uuid="53b9ff88-5b5f-43aa-8e73-0fddb8e53530"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{SUM(MNTOPE73)}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="130" y="19" width="237" height="1" forecolor="#666666" uuid="fa2d98ec-7e22-4be3-81ee-dd3eee4d61b8"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

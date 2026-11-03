@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+<Tableau Label="Modification" Titre="DEBIT COMPTE GENERAL" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="DEBIT COMPTE GENERAL"
+		Titre="DEBIT COMPTE GENERAL"
+    Tables="FL1019"
+		IndSuppression="SU1019"
+    LigneClickEvent="MODIFICATION"
+		Action="MODIFICATION"
+		Where =" CODOPE19='T089' and CGLOPE19 !='45020'"
+			OrderBy=" CODAGC19, DATOPE19, CODOPE19, REFOPE19"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC19" Nom="CODAGC19" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE19" Nom="DATOPE19" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE19" Nom="CODOPE19" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+	<Text Position="NLigne" Label="Code Pointage" ColTable="REFOPE19" Nom="REFOPE19" Type="Numerique" Longueur="10" Unique="Oui" Obligatoire="Oui"	PositionCel="1" LongueurCel="9" LabelCel="Code Pointage"/>
+
+	<Text Position="NLigne" Label="Code Compte Général" ColTable="CGLOPE19" Nom="CGLOPE19" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="2" LongueurCel="8" LabelCel="Cpt Général">
+		<Description Colonne="CODCGL1041" Label="LIBDGL" Table="FL1041"/>
+      <OnUpdate>
+			    <Requet Tables="FL1041" Where=" CODCGL1041='%THIS020005%' " >
+					  <Select Nom="NBRCGL" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+         <![CDATA[
+             %THIS020016%="";
+             if(%THIS020005%.equals("") )
+             {
+             return;
+             }
+
+             if(Integer.parseInt(%NBRCGL%.trim())==0)
+							{
+                 %THIS020005%="ERREUR: Code Compte Général Inexistant" ;
+              } else
+              {
+			  
+                if (%THIS020005%.equals("42000") || %THIS020005%.equals("43049") || %THIS020005%.equals("43300") || %THIS020005%.equals("45020") || %THIS020005%.equals("44318") || %THIS020005%.equals("45070") || %THIS020005%.equals("50034") || %THIS020005%.equals("53629") || %THIS020005%.equals("57050") || %THIS020005%.equals("74442")) 
+                { 
+                } else
+                {
+                 %THIS020005%="ERREUR: Code Compte Général erroné" ;
+                }
+              }
+             %THIS020014%="";
+             %THIS020015%="";
+          ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="N° Compte Client Contentieux" ColTable="AGYOPE19" Nom="AGYOPE19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Non" PositionCel="3" LongueurCel="5" LabelCel="Agc Cpt">
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020006%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if(%THIS020006%.equals("") )
+             {
+              %THIS020007% = "";
+              %THIS020008% = "";
+              %THIS020009% = "";
+              %THIS020010% = "";
+              %THIS020011% = "";
+              %THIS020012% = "";
+              return;
+             }
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS020006%="ERREUR: Agence Inexistante" ;
+              } 
+              %THIS020009% = "";
+              %THIS020012% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="NAYOPE19" Nom="NAYOPE19" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Non" PositionCel="4" LongueurCel="5" LabelCel="Nat Cpt">
+      <OnUpdate>
+				<Result>
+             if(%THIS020007%.equals("") )
+             {
+              %THIS020008% = "";
+              %THIS020009% = "";
+              %THIS020010% = "";
+              %THIS020011% = "";
+              %THIS020012% = "";
+             return;
+             }
+						 if ((%THIS020007%.compareTo("03")==0) || (%THIS020007%.compareTo("04")==0) || (%THIS020007%.compareTo("05")==0) || (%THIS020007%.compareTo("06")==0))
+             {
+             }else
+             { %THIS020007%="ERREUR: Nature doit etre = 03, 04, 05 ou 06";
+             }
+              %THIS020009% = "";
+              %THIS020012% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="ORYOPE19" Nom="ORYOPE19" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Non" PositionCel="5" LongueurCel="5" LabelCel="Ord Cpt">
+      <OnUpdate>
+				<Result>
+             if(%THIS020008%.equals("") )
+             {
+              %THIS020009% = "";
+              %THIS020010% = "";
+              %THIS020011% = "";
+              %THIS020012% = "";
+             return;
+             }
+              %THIS020009% = "";
+              %THIS020010% = "";
+              %THIS020012% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+  
+	<Text Position="2" Label="" ColTable="KLYOPE19" Nom="KLYOPE19" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Non" PositionCel="6" LongueurCel="5" LabelCel="Clé Cpt">
+      <OnInit>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020006%' and CODNAT1030='%THIS020007%' and ORDCPT1030='%THIS020008%' and KLECPT1030='%THIS020009%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020006%' and CODNAT1030='%THIS020007%' and ORDCPT1030='%THIS020008%' and KLECPT1030='%THIS020009%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+
+             if(%THIS020009%.equals("") )
+             {
+             return;
+             }
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS020009%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS020009%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS020010%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS020010%="";
+                  }
+                             
+			      	       %THIS020011%= %NOMCPT%;
+                   
+                }
+              }
+               ]]> 
+         </Result>
+    </OnInit>
+
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020006%' and CODNAT1030='%THIS020007%' and ORDCPT1030='%THIS020008%' and KLECPT1030='%THIS020009%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020006%' and CODNAT1030='%THIS020007%' and ORDCPT1030='%THIS020008%' and KLECPT1030='%THIS020009%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS020006%',%THIS020007%,%THIS020008%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+
+             if(%THIS020009%.equals("") )
+             {
+              %THIS020010% = "";
+              %THIS020011% = "";
+              %THIS020012% = "";
+             return;
+             }
+            if (!%THIS020009%.equals(%CLECPT%))
+            {
+             %THIS020009% = "ERREUR: Clé Invalide";
+             return;
+            }
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS020009%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS020009%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS020010%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS020010%="";
+                  }
+                             
+			      	       %THIS020011%= %NOMCPT%;
+                     %THIS020012% = "";
+                   
+                }
+              }
+               ]]> 
+         </Result>
+    </OnUpdate>
+
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <SimpleText Position="NLigne" Label="Nom / Prénom ou R.S" Valeur="" />
+
+  <Text Position="NLigne" Label="Agence concernée par l'opération" ColTable="AGXOPE19" Nom="AGXOPE19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="8" LabelCel="Ag Concernée">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+    <OnUpdate>
+    
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS020006%' and CODNAT1030='%THIS020007%' and ORDCPT1030='%THIS020008%' and KLECPT1030='%THIS020009%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020012%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				  <Result>          
+         <![CDATA[
+              String CPT;
+              CPT = %THIS020006% + %THIS020007% + %THIS020008% + %THIS020009%;
+              %THIS020010% = CPT;
+              if ((Integer.parseInt(%NBRCPT%.trim())==0) && (!CPT.equals("")))
+							{
+                %THIS020009%="ERREUR: Compte Inexistant  ";
+                return;
+              } 
+
+             if (%THIS020012%=="" && CPT.equals(""))
+							{
+                 %THIS020012%="ERREUR: Code Agence invalide" ;
+                 return;
+              } 
+
+             if ((Integer.parseInt(%NBRAGC%.trim())==0) && (CPT.equals("")))
+							{
+                 %THIS020012%="ERREUR: Agence Inexistante" ;
+                 return;
+              } else
+              { if ((!%THIS020006%.equals("")) && (!%THIS020012%.equals(%THIS020006%)))
+                {
+                 %THIS020012%="ERREUR: Code agence concernée doit etre égal au code agence client" ;
+                }
+              }
+          ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+ 	<Text Position="NLigne" Label="Montant de l'opération" ColTable="MNTDBI19" Nom="MNTDBI19" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="8" LongueurCel="12" LabelCel="Montant opération">
+      <OnUpdate>
+        <Result>
+                  <![CDATA[
+                     if(%THIS020013%.equals("") )
+                     {
+                      return;
+                     }
+                     int p = %THIS020013%.indexOf("+");
+                     int m = %THIS020013%.indexOf("-");
+                     int e = %THIS020013%.indexOf("*");
+                     int d = %THIS020013%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS020013%="ERREUR: Montant erroné";
+                      return;
+                     }
+                  ]]>
+        </Result> 
+    </OnUpdate>
+  </Text> 
+
+	<Text Position="NLigne" Label="Agence emettrice" ColTable="MEGOPE19" Nom="MEGOPE19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Non" PositionCel="9" LongueurCel="6" LabelCel="Ag Emet">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020014%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+         <![CDATA[
+     				 %THIS020016% = "";
+             //if(%THIS020014%.equals("") )
+             //{
+             //return;
+             //}
+             if ((Integer.parseInt(%NBRAGC%.trim())==0) && (%THIS020005%.equals("45070")) && (!%THIS020014%.equals("")))
+							{
+                 %THIS020014%="ERREUR: Agence Inexistante" ;
+                 return;
+              } else
+              { if ((%THIS020005%.equals("45020")) && (!%THIS020014%.equals("93")))
+                { %THIS020014%="ERREUR: L'agence emettrice doit etre = 93" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("45070")) && (%THIS020014%.equals(""))) 
+                { %THIS020014%="ERREUR: Saisie Obligatoire" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("42000") || %THIS020005%.equals("43049") || %THIS020005%.equals("43300") || %THIS020005%.equals("44318") || %THIS020005%.equals("50034") || %THIS020005%.equals("53629") || %THIS020005%.equals("57050") || %THIS020005%.equals("74442")) && (!%THIS020014%.equals("")))
+                { %THIS020014%="ERREUR: Saisie Interdite" ;
+                  return;
+                }
+              }
+          ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="Agence receptrice" ColTable="MEGMEG19" Nom="MEGMEG19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Non" PositionCel="10" LongueurCel="6" LabelCel="Ag Recep">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020015%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+         <![CDATA[
+     				 %THIS020016% = "";
+             //if(%THIS020015%.equals("") )
+             //{
+             //return;
+             //}
+             if ((Integer.parseInt(%NBRAGC%.trim())==0) && (%THIS020005%.equals("45020") || %THIS020005%.equals("45070")) && (!%THIS020015%.equals("")))
+							{
+                 %THIS020015%="ERREUR: Agence Inexistante" ;
+                 return;
+              } else
+              { if ((%THIS020005%.equals("45020")) && (%THIS020015%.equals("93")))
+                { %THIS020015%="ERREUR: L'agence emettrice doit etre differente de 93" ;
+                  return;
+                }
+                if (%THIS020005%.equals("45070") && %THIS020015%.equals("")) 
+                { %THIS020015%="ERREUR: Saisie Obligatoire" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("42000") || %THIS020005%.equals("43049") || %THIS020005%.equals("43300") || %THIS020005%.equals("44318") || %THIS020005%.equals("50034") || %THIS020005%.equals("53629") || %THIS020005%.equals("57050") || %THIS020005%.equals("74442")) && (!%THIS020015%.equals("")))
+                { %THIS020015%="ERREUR: Saisie Interdite" ;
+                  return;
+                }
+              }
+          ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Description de l'opération" ColTable="LIBOPE19" Nom="LIBOPE19" Type="AlphaNumerique" Longueur="19" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				  <Result>          
+         <![CDATA[
+                if ((%THIS020005%.equals("45020")) && (!%THIS020014%.equals("93")))
+                { %THIS020014%="ERREUR: L'agence emettrice doit etre = 93" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("45070")) && (%THIS020014%.equals(""))) 
+                { %THIS020014%="ERREUR: Saisie Obligatoire de'agence emettrice" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("45020")) && (%THIS020015%.equals("")))
+                { %THIS020015%="ERREUR: Saisie obligatoire de l'agence receptrice" ;
+                  return;
+                }
+                if ((%THIS020005%.equals("45070")) && (%THIS020015%.equals(""))) 
+                { %THIS020015%="ERREUR: Saisie obligatoire de l'agence receptrice" ;
+                  return;
+                }
+              
+          ]]>
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Abrégé de l'opération" ColTable="ABROPE19" Nom="ABROPE19" Type="AlphaNumerique" Longueur="4" Unique="Non" Obligatoire="Oui" PositionCel="11" LongueurCel="6" LabelCel="Abrégé">
+      <OnUpdate>
+				<Result>
+          <![CDATA[  
+             public boolean isAlpha(String name) {
+               return name.matches("[a-zA-Z]+");
+             }
+             
+             if (!isAlpha(%THIS020017%))
+              {
+               %THIS020017% = "ERREUR: Abrégé ne doit pas comporter des caractères numériques";
+               return;
+              }
+            
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="AGCOPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SEROPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="ORDOPE19" Label="" Valeur="" />
+  
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+				 %THIS020001% = "93";
+				 %THIS020002% = %Journee%;
+				 %THIS020003% = "T089";
+         %THIS020018% = %CODEUSER%;
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

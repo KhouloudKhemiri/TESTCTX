@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="VALIDATION DES EFFETS EN ENTREE DE L'AGENCE AU CTX"
+		Titre="VALIDATION DES EFFETS EN ENTREE DE L'AGENCE AU CTX"
+    Tables="FL1061_APURE"
+		IndSuppression="SU1061P"
+		Action="CREATION" >
+        
+  <Text Position="0" Label="N° Compte Agence : " ColTable="CPTAGC61P" Nom="CPTAGC61P" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1061_TEMP" >
+					 <Select Nom="AGC" Type="AlphaNumerique" ColTable="distinct CPTAGC61T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0301%=%AGC%;
+               %THIS0306%=%AGC%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTNAT61P" Nom="CPTNAT61P" Type="Numerique" Longueur="2" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1061_TEMP" >
+					 <Select Nom="NAT" Type="Numerique" ColTable="distinct CPTNAT61T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0302%=%NAT%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTORD61P" Nom="CPTORD61P" Type="Numerique" Longueur="5" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1061_TEMP" >
+					 <Select Nom="ORD" Type="Numerique" ColTable="distinct CPTORD61T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0303%=%ORD%;
+               %THIS0308%=%ORD%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTCLE61P" Nom="CPTCLE61P" Type="Numerique" Longueur="1" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1061_TEMP" >
+					 <Select Nom="CLE" Type="Numerique" ColTable="distinct CPTCLE61T"/>
+				  </Requet>
+				  <Result>
+          <![CDATA[  
+               %THIS0304%=%CLE%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE61P" Nom="ENGOPE61P" Type="AlphaNumerique" Longueur="3" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1061_TEMP" >
+					 <Select Nom="ENG" Type="Numerique" ColTable="distinct ENGOPE61T"/>
+				  </Requet>
+				  <Result>
+          <![CDATA[  
+               %THIS0305%=%ENG%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="NLigne" Label="N° Compte contentieux : " ColTable="AGCCTX61P" Nom="AGCCTX61P" Type="AlphaNumerique" Longueur="2" Disabled="Oui" Unique="Oui" />
+
+  <Text Position="2" Label="" ColTable="NATCTX61P" Nom="NATCTX61P" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL3034" Where=" CODNAT='%THIS0307%' " >
+					  <Select Nom="NBRNAT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				<Result>
+          <![CDATA[               
+             if (Integer.parseInt(%NBRNAT%.trim())==0)
+							{
+                 %THIS0307%="ERREUR: Nature Inexistante" ;
+                 return;
+              } 
+             if (!%THIS0307%.equals("03") && %THIS0302%.equals("10"))
+             {
+                 %THIS0307%="ERREUR: Nature doit etre = 03" ;
+                 return;
+              } 
+             if (!%THIS0307%.equals("04") && %THIS0302%.equals("20"))							
+             {
+                 %THIS0307%="ERREUR: Nature doit etre = 04" ;
+                 return;
+              } 
+             if (!%THIS0307%.equals("05") && %THIS0302%.equals("30"))							
+             {
+                 %THIS0307%="ERREUR: Nature doit etre = 05" ;
+                 return;
+              } 
+             if (!%THIS0307%.equals("06") && !%THIS0302%.equals("10") && !%THIS0302%.equals("20") && !%THIS0302%.equals("30"))							
+             {
+                 %THIS0307%="ERREUR: Nature doit etre = 06" ;
+                 return;
+              } 
+              %THIS0309% = "";
+              %THIS0310% = "";
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+  <Text Position="2" Label="" ColTable="ORDCTX61P" Nom="ORDCTX61P" Type="Numerique" Longueur="5" Disabled="Oui" Unique="Oui" />
+
+  <Text Position="2" Label="" ColTable="CLECTX61P" Nom="CLECTX61P" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui">
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0306%' and CODNAT1030=%THIS0307% and ORDCPT1030=%THIS0308% and KLECPT1030='%THIS0309%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0306%' and CODNAT1030=%THIS0307% and ORDCPT1030=%THIS0308% and KLECPT1030='%THIS0309%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>					           
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0306%',%THIS0307%,%THIS0308%)"/>
+				  </Requet>
+
+  			    <Requet Tables="FL1061_AAPUR" Where=" CPTAGC61A='%THIS0301%' and CPTNAT61A=%THIS0302% and CPTORD61A=%THIS0303% and CPTCLE61A='%THIS0304%' and ENGOPE61A='%THIS0305%' and SU1061A=0" >
+					    <Select Nom="NBRINS" Type="AlphaNumerique" ColTable="NBRINS61A"/>            
+		  		  </Requet>
+
+				  <Result>
+          <![CDATA[  
+             if(%THIS0309%.equals("") )
+             {
+             return;
+             }
+            if (!%THIS0309%.equals(%CLECPT%))
+            {
+             %THIS0309% = "ERREUR: Clé Invalide";
+             return;
+            }
+         
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS0309%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS0309%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS0310%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS0310%="";
+                  }
+                             
+			      	       %THIS0311%= %NOMCPT%;               
+                     %THIS0312%="Nombre d'Instances à valider = " + %NBRINS%;
+                }
+              }
+            
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <Text Position="NLigne" Label="Nom et Prénom ou R/S" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non"/>
+   <SimpleText Position="NLigne" Label="" Valeur="" />
+   <SimpleText Position="NLigne" Label="" Class="Invisible" Valeur="" />
+	
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" >
+		 <OnUpdate>
+				<Result>
+           %THIS0313%="Valider";
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Annuler" Action="Annuler" >
+				<Result>
+           %THIS0313%="";
+				</Result>
+		 <OnUpdate>
+           <Procedure Nom="INIT_FL1061_TEMP()" />
+           <Procedure Nom="DELETE_FL1061_AAPUR('%THIS0301%',%THIS0302%,%THIS0303%,%THIS0304%,'%THIS0305%')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+ 		 </OnInit>	
+
+		 <OnUpdate>
+        <Procedure Nom="VALID_FL1061('%THIS0301%',%THIS0302%,%THIS0303%,%THIS0304%,'%THIS0305%','%THIS0306%',%THIS0307%,%THIS0308%,%THIS0309%,'%CODEUSER%','%THIS0313%')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+		
+	</Formulaire>
+	
+</Entites>

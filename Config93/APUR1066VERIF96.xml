@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="VERIFICATION DES SOLDES DES COMPTES A APURER" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE DES EFFETS IMPAYES A APURER"
+		Titre="LISTE DES EFFETS IMPAYES A APURER"
+    Tables="FL1066_VERIF_REF_96"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy="CPTAGC66T,CPTNAT66T,CPTORD66T,CPTCLE66T"
+    >
+
+	<Text Position="NLigne" Label="N° Compte " ColTable="CPTAGC66T" Nom="CPTAGC66T" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="1" LongueurCel="6" LabelCel="Agc Cpt" />
+	<Text Position="2" Label="" ColTable="CPTNAT66T" Nom="CPTNAT66T" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="2" LongueurCel="6" LabelCel="Nat Cpt" />
+	<Text Position="2" Label="" ColTable="CPTORD66T" Nom="CPTORD66T" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="3" LongueurCel="6" LabelCel="Ord Cpt" />
+	<Text Position="2" Label="" ColTable="CPTCLE66T" Nom="CPTCLE66T" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="6" LabelCel="Clé Cpt"/>
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE66T" Nom="MNTOPE66T" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="20" LabelCel="Montant"/>
+ 	<Text Position="NLigne" Label="SLDCPT10" ColTable="MNTOPE1030T" Nom="MNTOPE1030T" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="20" LabelCel="SLDCPT10"/>
+ 	<Text Position="NLigne" Label="Diff mnt" ColTable="MNT103066" Nom="MNT103066" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="20" LabelCel="Diff Mnt"/>
+
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

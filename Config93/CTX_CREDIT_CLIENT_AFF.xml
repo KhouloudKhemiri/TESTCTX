@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Modification" Titre="LISTE OPE (Crédit Client et Débit Compte Général) par LOT" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE OPE (Crédit Client et Débit Compte Général) par LOT"
+		Titre="LISTE OPE (Crédit Client et Débit Compte Général) par LOT"
+    Tables="CTX_CREDIT_CLIENT"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" REFERENCE"
+    >
+
+    <Text Position="0" Label="REFERENCE" ColTable="REFERENCE" Nom="REFERENCE" Type="AlphaNumerique" Longueur="10" Unique="Non" PositionCel="1" LongueurCel="10" LabelCel="REFERENCE"/>
+    <Text Position="NLigne" Label="COMPTE" ColTable="COMPTE_CTX" Nom="COMPTE" Type="AlphaNumerique" Longueur="8"   Unique="Non" PositionCel="2" LongueurCel="8" LabelCel="COMPTE"/>
+	<Text Position="NLigne" Label="CPT GENERAL" ColTable="COMPTE_GENERAL" Nom="CPT GENERAL" Type="AlphaNumerique" Longueur="10" Unique="Non" PositionCel="3" LongueurCel="10" LabelCel="CPT GENERAL"/>
+	<Text Position="NLigne" Label="EMET" ColTable="AGENCE_EMETRICE" Nom="EMET" Type="AlphaNumerique" Longueur="5" Unique="Non" PositionCel="4" LongueurCel="5" LabelCel="EMET"/>
+	<Text Position="NLigne" Label="RECEP" ColTable="AGENCE_RECEPTRICE" Nom="RECEP" Type="AlphaNumerique" Longueur="5" Unique="Non" PositionCel="5" LongueurCel="5" LabelCel="RECEP"/>
+	<Text Position="NLigne" Label="MONTANT" ColTable="MONTANT" Nom="MONTANT" Type="AlphaNumerique" Longueur="15"   Unique="Non" PositionCel="6" LongueurCel="15" LabelCel="MONTANT"/>
+	<Text Position="NLigne" Label="ABREV" ColTable="ABREVIATION" Nom="ABREV" Type="AlphaNumerique" Longueur="5" Unique="Non" PositionCel="7" LongueurCel="5" LabelCel="ABREV"/>
+	<Text Position="NLigne" Label="DESCRIPTION" ColTable="DESCRIPTION" Nom="DESCRIPTION" Type="AlphaNumerique" Longueur="17" Unique="Non" PositionCel="8" LongueurCel="17" LabelCel="DESCRIPTION"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

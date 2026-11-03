@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<parameter name="PA_TMNTPPL" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PA_INTAGC" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PA_TINTECH" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NUMCPT" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[Saisir le Numéro du Compte sur 10 caractères]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[(select DATOPE98, ABROPE98, AGCNUM98 || ' ' || SERNUM98 || ' ' || lpad (ORDNUM98,7,'0'), SMNTOPE98, MNTOPE98, SLDCPT10
+from FL3098, FL1030 where
+CODAGC1030=substr($P{NUMCPT},1,2) and CODNAT1030=substr($P{NUMCPT},3,2) and ORDCPT1030=substr($P{NUMCPT},5,5) and KLECPT1030=substr($P{NUMCPT},10,1) and
+AGCCPT98=substr($P{NUMCPT},1,2) and NATCPT98=substr($P{NUMCPT},3,2) and ORDCPT98=substr($P{NUMCPT},5,5) and KLECPT98=substr($P{NUMCPT},10,1)
+and SU3098=0)
+union
+(select DATOPE99, ABROPE99, AGCNUM99 || ' ' || SERNUM99 || ' ' || lpad (ORDNUM99,7,'0'), SMNTOPE99, MNTOPE99, SLDCPT10
+from FL3099, FL1030 where
+CODAGC1030=substr($P{NUMCPT},1,2) and CODNAT1030=substr($P{NUMCPT},3,2) and ORDCPT1030=substr($P{NUMCPT},5,5) and KLECPT1030=substr($P{NUMCPT},10,1) and
+AGCCPT99=substr($P{NUMCPT},1,2) and NATCPT99=substr($P{NUMCPT},3,2) and ORDCPT99=substr($P{NUMCPT},5,5) and KLECPT99=substr($P{NUMCPT},10,1)
+and SU3099=0)
+union
+(select null, '', '', '', 0, SLDCPT10 from FL1030
+where CODAGC1030=substr($P{NUMCPT},1,2) and CODNAT1030=substr($P{NUMCPT},3,2) and ORDCPT1030=substr($P{NUMCPT},5,5) and KLECPT1030=substr($P{NUMCPT},10,1) and not exists (select * from FL3099 where AGCCPT99=substr($P{NUMCPT},1,2) and NATCPT99=substr($P{NUMCPT},3,2) and ORDCPT99=substr($P{NUMCPT},5,5) and KLECPT99=substr($P{NUMCPT},10,1)
+and SU3099=0) and  SU1030=0 and CODCLO10<>1)]]>
+	</queryString>
+	<field name="DATOPE98" class="java.sql.Timestamp"/>
+	<field name="ABROPE98" class="java.lang.String"/>
+	<field name="AGCNUM98||||SERNUM98||||LPAD(ORDNUM98,7,0)" class="java.lang.String"/>
+	<field name="SMNTOPE98" class="java.lang.String"/>
+	<field name="MNTOPE98" class="java.math.BigDecimal"/>
+	<field name="SLDCPT10" class="java.lang.Double"/>
+	<variable name="VA_MONTPE98" class="java.lang.Double">
+		<variableExpression><![CDATA[Math.abs($F{MNTOPE98})]]></variableExpression>
+	</variable>
+	<variable name="TOTDBI" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SMNTOPE98}.compareTo("-")==0 ? $V{VA_MONTPE98} : 0]]></variableExpression>
+	</variable>
+	<variable name="TOTCRE" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SMNTOPE98}.compareTo("0")==0 ? $V{VA_MONTPE98} : 0]]></variableExpression>
+	</variable>
+	<variable name="VA_SLDCPT10" class="java.lang.Double">
+		<variableExpression><![CDATA[Math.abs($F{SLDCPT10})]]></variableExpression>
+	</variable>
+	<variable name="SLDPRO" class="java.lang.Double">
+		<variableExpression><![CDATA[($F{SLDCPT10}.compareTo(0)<0) ?
+($P{PA_TMNTPPL} + $P{PA_INTAGC} - $F{SLDCPT10}) :
+( (  ($F{SLDCPT10}.compareTo(0)>0  || $F{SLDCPT10}.compareTo(0)==0) && ($F{SLDCPT10}.compareTo($P{PA_TMNTPPL} + $P{PA_INTAGC})>0)) ?
+  ($F{SLDCPT10} - $P{PA_TMNTPPL} - $P{PA_INTAGC}) :
+   ( (($F{SLDCPT10}.compareTo(0)>0 || $F{SLDCPT10}.compareTo(0)==0) && ($F{SLDCPT10}.compareTo($P{PA_TMNTPPL} + $P{PA_INTAGC})<0 || $F{SLDCPT10}.compareTo($P{PA_TMNTPPL} + $P{PA_INTAGC})==0)) ?
+     ($P{PA_TMNTPPL} + $P{PA_INTAGC} - $F{SLDCPT10}) : 0 ) )]]></variableExpression>
+	</variable>
+	<variable name="INTPFC" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{PA_TINTECH} - $P{PA_INTAGC}]]></variableExpression>
+	</variable>
+	<variable name="SLDPRO_1" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{PA_TMNTPPL} + $P{PA_INTAGC} - $F{SLDCPT10}]]></variableExpression>
+	</variable>
+	<variable name="TSGNSLD" class="java.lang.String">
+		<variableExpression><![CDATA[(($F{SLDCPT10}.compareTo(0)>0  || $F{SLDCPT10}.compareTo(0)==0) && ($F{SLDCPT10}.compareTo($P{PA_TMNTPPL} + $P{PA_INTAGC})>0)) ?
+  "CREDITEUR" : ""]]></variableExpression>
+	</variable>
+	<group name="Group-Footer">
+		<groupFooter>
+			<band height="120">
+				<staticText>
+					<reportElement mode="Opaque" x="266" y="0" width="114" height="20" backcolor="#FF9999" uuid="69183e9c-8797-4c29-8379-a89f37f4ba99"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL MOUVEMENTS]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="380" y="0" width="90" height="20" backcolor="#FF9999" uuid="a614a80c-5d57-4427-a5af-d0c0320d0849"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TOTDBI}==null || $V{TOTDBI}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTDBI})]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="470" y="0" width="90" height="20" backcolor="#FF9999" uuid="0bcaa638-fed2-418b-8a65-4db295b9cf28"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TOTCRE}==null || $V{TOTCRE}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTCRE})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="266" y="20" width="114" height="20" backcolor="#FFFF00" uuid="8df6d25e-7f89-42ff-b874-f50895da2c19"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SOLDE DU COMPTE]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="470" y="20" width="90" height="20" backcolor="#FFFF00" uuid="34fe1bf1-e459-4ce8-ab32-0375e7935961"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{SLDCPT10}.compareTo(0)>0 ? ($V{VA_SLDCPT10}==null || $V{VA_SLDCPT10}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{VA_SLDCPT10}) : ""]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Opaque" x="380" y="20" width="90" height="20" backcolor="#FFFF00" uuid="c1f9fd68-858a-4bca-96cc-55eef206d86a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{SLDCPT10}.compareTo(0)<0 ? ($V{VA_SLDCPT10}==null || $V{VA_SLDCPT10}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{VA_SLDCPT10}) : ""]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="211" y="60" width="114" height="20" backcolor="#CCFFFF" uuid="dd3a45cf-d14a-4ad5-8b3c-b36ad1de482d"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[SOLDE  PROVISOIRE]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="325" y="60" width="100" height="20" backcolor="#CCFFFF" uuid="13ca6d52-7ff7-4d3a-903c-46ea21b879e2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{SLDPRO}==null || $V{SLDPRO}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{SLDPRO})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="211" y="80" width="114" height="20" backcolor="#00FFFF" uuid="aa8ea4c2-1d54-459c-b6bb-1a466707af91"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[INTERETS AGENCE]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="325" y="80" width="100" height="20" backcolor="#00FFFF" uuid="af468a6b-5aa7-4c10-b142-910eaa673889"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($P{PA_INTAGC}==null || $P{PA_INTAGC}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($P{PA_INTAGC})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="211" y="100" width="114" height="20" backcolor="#00CCCC" uuid="26a28e81-984c-42a3-8f73-2db4f5f3ee86"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[INTERETS PFC  ]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="325" y="100" width="100" height="20" backcolor="#00CCCC" uuid="d752cc9a-93f3-4600-85bf-12a43ec0ec4a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{INTPFC}==null || $V{INTPFC}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{INTPFC})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="428" y="60" width="101" height="20" backcolor="#CCFFFF" uuid="36b43e9e-c6bf-470e-9318-d9a173d0e30d">
+						<printWhenExpression><![CDATA[$V{TSGNSLD}.compareTo("CREDITEUR")==0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{TSGNSLD}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="30">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="17" width="75" height="13" backcolor="#00FF00" uuid="4052c710-1103-4fcd-9ef5-adc5841d3d0a"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[MOUVEMENTS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="12"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="47" height="20" backcolor="#CCCCCC" uuid="ed4ccfd5-6db9-439a-8a7f-e721d5a52bd7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="0" width="124" height="20" backcolor="#CCCCCC" uuid="cee47769-0ef6-4952-aa83-ca2490a327e9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Libellé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="378" y="0" width="90" height="20" backcolor="#CCCCCC" uuid="c5975ca2-9376-4c3a-9146-7ca235bba3cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Débit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="470" y="0" width="90" height="20" backcolor="#CCCCCC" uuid="c95ec6f6-07c5-4cef-a2db-6c0eb6f555ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Credit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="175" y="0" width="34" height="20" backcolor="#CCCCCC" uuid="4a2afae1-2159-44e8-91ba-02244be06fce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N AFF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="211" y="0" width="87" height="20" backcolor="#CCCCCC" uuid="edec1bf8-4aba-4c4c-827c-9480870ee341"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom Prestataire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="300" y="0" width="76" height="20" backcolor="#CCCCCC" uuid="72d924b6-e06c-4e13-bbf3-ea01a9e48a64"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="560" height="1" uuid="f76dbadf-3f4c-4cbb-b6a8-0db0445f08ed"/>
+			</line>
+			<textField pattern="dd/MM/yy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="47" height="20" uuid="9d8ab6a8-84cc-4020-bfa8-1e8148d345c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DATOPE98}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="0" width="41" height="20" uuid="f1a80efc-8735-4d19-be32-f0f2ca5ddb59"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ABROPE98}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000" isBlankWhenNull="false">
+				<reportElement x="378" y="0" width="90" height="20" uuid="269daa51-15fa-400a-a814-92d9bd6b96c5">
+					<printWhenExpression><![CDATA[$F{SMNTOPE98}.compareTo("-")==0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($V{VA_MONTPE98}==null || $V{VA_MONTPE98}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{VA_MONTPE98})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000" isBlankWhenNull="false">
+				<reportElement x="470" y="0" width="90" height="20" uuid="eef1e381-757d-412c-b730-b9648ee64f8b">
+					<printWhenExpression><![CDATA[$F{SMNTOPE98}.compareTo("0")==0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($V{VA_MONTPE98}==null || $V{VA_MONTPE98}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{VA_MONTPE98})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="65" height="20" uuid="cb48fcae-e4b7-41e6-959f-be1a6011429b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{AGCNUM98||||SERNUM98||||LPAD(ORDNUM98,7,0)}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

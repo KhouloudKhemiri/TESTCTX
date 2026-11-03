@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="VALIDATION APUREMENT DES EFFETS IMPAYES PAR DEBIT DE COMPTE"
+		Titre="VALIDATION APUREMENT DES EFFETS IMPAYES PAR DEBIT DE COMPTE"
+    Tables="FL1066_APURE_96"
+		IndSuppression="SU1066P"
+		Action="CREATION" >
+        
+  <Text Position="0" Label="N° Compte contentieux : " ColTable="CPTAGC66P" Nom="CPTAGC66P" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1066_TEMP_96" >
+					 <Select Nom="AGC" Type="AlphaNumerique" ColTable="distinct CPTAGC66T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0301%=%AGC%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTNAT66P" Nom="CPTNAT66P" Type="Numerique" Longueur="2" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1066_TEMP_96" >
+					 <Select Nom="NAT" Type="Numerique" ColTable="distinct CPTNAT66T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0302%=%NAT%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTORD66P" Nom="CPTORD66P" Type="Numerique" Longueur="5" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1066_TEMP_96" >
+					 <Select Nom="ORD" Type="Numerique" ColTable="distinct CPTORD66T"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               %THIS0303%=%ORD%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+  <Text Position="2" Label="" ColTable="CPTCLE66P" Nom="CPTCLE66P" Type="Numerique" Longueur="1" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1066_TEMP_96" >
+					 <Select Nom="CLE" Type="Numerique" ColTable="distinct CPTCLE66T"/>
+				  </Requet>
+				  <Result>
+          <![CDATA[  
+               %THIS0304%=%CLE%;
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+
+  <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE66P" Nom="ENGOPE66P" Type="AlphaNumerique" Longueur="3" Disabled="Oui"  Unique="Oui" >
+      <OnInit>
+			    <Requet Tables="FL1066_TEMP_96" >
+					 <Select Nom="ENG" Type="Numerique" ColTable="distinct ENGOPE66T"/>
+				  </Requet>
+          <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0301%' and CODNAT1030='%THIS0302%' and ORDCPT1030='%THIS0303%' and KLECPT1030='%THIS0304%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>					           
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+  			    <Requet Tables="FL1066_AAPUR_96" Where=" CPTAGC66A='%THIS0301%' and CPTNAT66A='%THIS0302%' and CPTORD66A='%THIS0303%' and CPTCLE66A='%THIS0304%' and SU1066A=0" >
+					    <Select Nom="NBRINS" Type="AlphaNumerique" ColTable="NBRINS66A"/>            
+		  		  </Requet>
+
+				  <Result>
+          <![CDATA[  
+               int SRV;
+               if (%SRVCPT%.compareTo("null")==0)
+               {
+                    SRV = 0;
+               }
+               if (%SRVCPT%.compareTo("0")==0)
+               {
+                    SRV = 0;
+               }
+               if (%SRVCPT%.compareTo("1")==0)
+               {
+                    SRV = 1;
+               }
+               if (SRV !=  0)
+               {
+                 %THIS0306%="Attention le compte du client CTX est sous code surveillance";
+               } else
+               {
+                  %THIS0306%="";
+               }
+               %THIS0305%=%ENG%;
+               %THIS0307%=%NOMCPT%;
+               if (%THIS0305%.compareTo("")!=0)
+               {
+               %THIS0308%="Nombre d'Instances à valider = " + %NBRINS%;
+               }
+
+               ]]> 
+         </Result>
+    </OnInit>
+</Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <Text Position="NLigne" Label="Nom et Prénom ou R/S" ColTable="" Nom="" Type="AlphaNumerique" Longueur="30" Disabled="Oui" Unique="Non"/> 
+   <SimpleText Position="NLigne" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" >
+		 <OnUpdate>
+           <Procedure Nom="APUR_AUT0_T096('%THIS0301%',%THIS0302%,%THIS0303%,%THIS0304%,'%THIS0305%','%CODEUSER%')" />
+           <Procedure Nom="INIT_FL1066_TEMP('T096')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Annuler" Action="Annuler" >
+		 <OnUpdate>
+           <Procedure Nom="INIT_FL1066_TEMP('T096')" />
+           <Procedure Nom="DELETE_FL1066_AAPUR('%THIS0301%',%THIS0302%,%THIS0303%,%THIS0304%,'%THIS0305%','T096')" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+ 		 </OnInit>	
+
+		 <OnUpdate>
+				<Result>
+				</Result>
+ 		 </OnUpdate>	
+		
+	</Formulaire>
+	
+</Entites>

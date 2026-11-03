@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Génération BALANCE"
+		Titre="Génération BALANCE"
+    Tables=""
+		IndSuppression=""
+		Action="CREATION" >
+        		
+   <SimpleText Position="NLigne" Label="" Valeur="" />
+
+  
+		<Bouton Position="NLigne" Label="valider"  Action="Valider" MsgConfirm="" >
+		 <OnUpdate>
+             <Procedure Nom="BALANCE_TABLE_PROC()" />
+
+    		 <Requet Tables="BALANCE_TABLE2" >
+					  <Select Nom="NBRTRT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+			 </Requet>		
+
+			<Result>
+          <![CDATA[  
+               %THIS0101%="Nombre total de lignes = " + %NBRTRT%;
+          ]]> 
+		     </Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+    	<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+             <Procedure Nom="BALANCE_TABLE_VIDE()" />
+		    	<Result>
+				</Result>
+ 		 </OnInit>	
+		
+		 <OnUpdate>
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+	
+	</Formulaire>
+	
+</Entites>

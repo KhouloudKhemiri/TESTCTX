@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="JOURNAL DE FOND"
+                                          
+            Tables=""
+          
+			Action="EDITION"
+			
+			FichierEdition="TLME1030"
+						
+            >
+		<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		<Bouton Position="120" Label="Valider"  Action="Edition" />
+		
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+
+	   
+		
+		
+	</Formulaire>
+	
+</Entites>

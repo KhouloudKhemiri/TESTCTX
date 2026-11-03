@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="Test"
+            Titre="SITUATION CLIENT "
+                                          
+            Tables=""
+          
+			Action="EDITION"
+			
+			FichierEdition="P5CX070"
+						
+            >
+        
+       <Text Position="0" Label="Compte: "   Type="AlphaNumerique"   Obligatoire="Oui" Longueur="10"  >      
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" (lpad(CODAGC1030,2,'0') || lpad(CODNAT1030,2,'0') || lpad(ORDCPT1030,5,'0') || KLECPT1030)='%THIS0101%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS0101%="ERREUR: Compte Inexistant  ";
+                return;
+              }
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+		
+		<SimpleText Position="NLigne"   Label="NB: " Valeur=" Cliquer sur le bouton Valider pour déclancher l'éditon." />
+		
+		<Bouton Position="120" Label="Valider"  Action="Edition" />
+		
+		<Bouton Position="Auto" Label="Quitter" Action="Accueil" />
+		
+		
+	</Formulaire>
+	
+</Entites>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="COMPTES PERSONNES MORALES" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="COMPTES PERSONNES MORALES"
+		Titre="COMPTES PERSONNES MORALES"
+    Tables="FL1030"
+		IndSuppression="SU1030"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+		Where =" CODCLO10 != 1 and INFCMP10='M'"
+			OrderBy=" CODAGC1030, CODNAT1030, ORDCPT1030, KLECPT1030"
+    >
+
+	<Text Position="NLigne" Label="N° Compte " ColTable="CODAGC1030" Nom="CODAGC1030" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="1" LongueurCel="6" LabelCel="Agc Cpt" />
+	<Text Position="2" Label="" ColTable="CODNAT1030" Nom="CODNAT1030" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="2" LongueurCel="6" LabelCel="Nat Cpt" />
+	<Text Position="2" Label="" ColTable="ORDCPT1030" Nom="ORDCPT1030" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="3" LongueurCel="6" LabelCel="Ord Cpt" />
+	<Text Position="2" Label="" ColTable="KLECPT1030" Nom="KLECPT1030" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="6" LabelCel="Clé Cpt"/>
+  <Text Position="NLigne" Label="Raison Sociale" ColTable="NOMRSC" Nom="NOMRSC" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" PositionCel="5" LongueurCel="30" LabelCel="Raison Sociale"/>
+	<Text Position="NLigne" Label="Nom du représentant" ColTable="NOMRPR10" Nom="NOMRPR10" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="30" LabelCel="Nom du représentant"/>
+	<Text Position="NLigne" Label="Code PTT" ColTable="CODPTT1030A" Nom="CODPTT1030A" Type="Numerique" Longueur="4" Unique="Oui" Obligatoire="Oui"	PositionCel="7" LongueurCel="9" LabelCel="PTT"/>
+	<Text Position="NLigne" Label="N° analyt" ColTable="NUMANL10" Nom="NUMANL10" Type="Numerique" Longueur="6" Unique="Non" Obligatoire="Non" PositionCel="8" LongueurCel="9" LabelCel="N° analyt"/>
+  <Text Position="NLigne" Label="PTT R.C" ColTable="PTTRGC30" Nom="PTTRGC30" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Non" PositionCel="9" LongueurCel="9" LabelCel="PTT R.C"/>
+	<Text Position="NLigne" Label="Registre de commerce" ColTable="INDRCS10" Nom="INDRCS10" Type="AlphaNumerique" Longueur="1" Unique="Non" Obligatoire="Non" PositionCel="10" LongueurCel="6" LabelCel="IND RC"/>
+	<Text Position="0" Label="" ColTable="INFRCS10" Nom="INFRCS10" Type="AlphaNumerique" Longueur="1" Unique="Non" Obligatoire="Non" PositionCel="11" LongueurCel="6" LabelCel="INF RC"/>
+	<Text Position="0" Label="" ColTable="NUMRCS10" Nom="NUMRCS10" Type="AlphaNumerique" Longueur="6" Unique="Non" Obligatoire="Non" PositionCel="12" LongueurCel="6" LabelCel="NUM RC"/>
+	<Text Position="0" Label="" ColTable="ANNRCS10" Nom="ANNRCS10" Type="AlphaNumerique" Longueur="4" Unique="Non" Obligatoire="Non" PositionCel="13" LongueurCel="6" LabelCel="ANN RC"/>
+	<Text Position="NLigne" Label="N° Compte Agence " ColTable="PPLAGC30" Nom="PPLAGC30" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="14" LongueurCel="6" LabelCel="Ag Cpt Agc" />
+	<Text Position="2" Label="" ColTable="PPLNAT30" Nom="PPLNAT30" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="15" LongueurCel="6" LabelCel="Nat Cpt Agc" />
+	<Text Position="2" Label="" ColTable="PPLORD30" Nom="PPLORD30" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="16" LongueurCel="6" LabelCel="Ord Cpt Agc" />
+	<Text Position="2" Label="" ColTable="PPLCLE30" Nom="PPLCLE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="17" LongueurCel="6" LabelCel="Clé Cpt Agc"/>
+  <Text Position="NLigne" Label="Date Ouverture" ColTable="OUVCPT10" Nom="OUVCPT10" Type="Date" Longueur="10" Unique="Oui" PositionCel="18" LongueurCel="10" LabelCel="Date Ouverture"/>
+	<Text Position="NLigne" Label="Classe" ColTable="CLASSE30" Nom="CLASSE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="19" LongueurCel="6" LabelCel="Classe"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

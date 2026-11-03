@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="LISTE DES CREDITS A REGULARISER" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE DES CREDITS A REGULARISER"
+		Titre="LISTE DES CREDITS A REGULARISER"
+    Tables="FL1090"
+		IndSuppression="SU1090"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" AGCNUM90, SERNUM90, ORDNUM90, MNTOPE90"
+    >
+
+  <Text Position="NLigne" Label="Ag Concernée" ColTable="CPTAGC90" Nom="CPTAGC90" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="10" LabelCel="Ag Concernée"/>
+  <Text Position="NLigne" Label="Reference" ColTable="AGCNUM90" Nom="AGCNUM90" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="2" LongueurCel="7" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM90" Nom="SERNUM90" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="3" LongueurCel="6" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM90" Nom="ORDNUM90" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="4" LongueurCel="9" LabelCel="Ordre Ref"/>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE90" Nom="MNTOPE90" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="12" LabelCel="Montant opération"/>
+  <Text Position="NLigne" Label="Date Création" ColTable="DATFLC90" Nom="DATFLC90" Type="Date" Longueur="10" Unique="Oui" PositionCel="6" LongueurCel="10" LabelCel="Date Création"/>
+  <Text Position="NLigne" Label="Description" ColTable="DSCOPE90" Nom="DSCOPE90" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" PositionCel="7" LongueurCel="21" LabelCel="Libellé"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

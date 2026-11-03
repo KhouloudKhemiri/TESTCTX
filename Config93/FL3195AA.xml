@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="LISTE DES MEG RECUS A APURER EN DINARS (DEBIT)" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE DES MEG RECUS A APURER EN DINARS (DEBIT)"
+		Titre="LISTE DES MEG RECUS A APURER EN DINARS (DEBIT)"
+    Tables="FL3195"
+		IndSuppression="SU3195"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+		Where =" NATOPE95='DBI'"
+			OrderBy=" AGCNUM95, SERNUM95, ORDNUM95, MNTOPE95"
+    >
+
+  <Text Position="NLigne" Label="Date Création" ColTable="DATMEG95" Nom="DATMEG95" Type="Date" Longueur="10" Unique="Oui" PositionCel="1" LongueurCel="10" LabelCel="Date Création"/>
+  <Text Position="NLigne" Label="Reference" ColTable="AGCNUM95" Nom="AGCNUM95" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="2" LongueurCel="5" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM95" Nom="SERNUM95" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="3" LongueurCel="5" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM95" Nom="ORDNUM95" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="4" LongueurCel="7" LabelCel="Ordre Ref"/>
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE95" Nom="MNTOPE95" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="12" LabelCel="Montant"/>
+  <Text Position="NLigne" Label="Description" ColTable="DSCOPE95" Nom="DSCOPE95" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" PositionCel="6" LongueurCel="21" LabelCel="Description"/>
+  <Text Position="NLigne" Label="Ag Emetteur" ColTable="AGCEMT95" Nom="AGCEMT95" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="7" LongueurCel="7" LabelCel="Agc EMT"/>
+  <Text Position="NLigne" Label="Ref de Base" ColTable="REFBAS95" Nom="REFBAS95" Type="AlphaNumerique" Longueur="10" Unique="Non" Obligatoire="Non" PositionCel="8" LongueurCel="8" LabelCel="Ref de Base"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

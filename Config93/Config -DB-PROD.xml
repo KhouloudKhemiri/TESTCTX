@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Parametres>
+  <Param Nom="Nom Application" Valeur="Plateforme Contentieux"/>
+  <Param Nom="ID" Valeur="02"/>
+  <Param Nom="IP_Aut_Server" Valeur="APPSRV"/>
+  <Param Nom="Port_Aut_Server" Valeur="7777"/>
+  <Param Nom="URL_Aut_Server" Valeur="/Identification/Identification?invoke=Identify"/>
+  
+  <Param Nom="URLConfig" Valeur="/opt/apache-tomcat/webapps/PRODCTX/Config93/"/>
+  <Param Nom="URLHTML" Valeur="/opt/apache-tomcat/webapps/PRODCTX/ModelHTML/"  />
+  <Param Nom="URLFILE" Valeur="/opt/apache-tomcat/webapps/PRODCTX/Data/"  />
+  <Param Nom="URLEtat" Valeur="/opt/apache-tomcat/webapps/PRODCTX/Etat/"  />
+  <Param Nom="URLImage" Valeur="/opt/apache-tomcat/webapps/PRODCTX/Images/"  />
+  
+  <Param Nom="ServerEtat" Valeur="rep_biatnet"  />
+  <Param Nom="EtatSystem" Valeur="0"  Global="Oui" />
+  <Param Nom="Niveau" Valeur="4"  Global="Oui" />
+  <Param Nom="Journee" Libelle="Journée comptable" Valeur="23/10/2015" Header="Oui" Global="Oui" />
+  <Param Nom="EtatGen" Valeur="0" Global="Oui" />
+  <Param Nom="ConnexionDB" Valeur="exploit" />
+  <Param Nom="IPDB" Valeur="DBCTX:1521"  />
+  <Param Nom="UserDB" Valeur="USR_CTX" />
+  <Param Nom="PWDDB" Valeur="USRCTX12345"  />
+</Parametres>

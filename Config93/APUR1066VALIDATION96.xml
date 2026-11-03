@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+	
+	<Formulaire Nom="VALIDATION APUREMENT DES EFFETS IMPAYES"
+		Titre="VALIDATION APUREMENT DES EFFETS IMPAYES"
+>
+
+
+   <SimpleText Position="2" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" >
+		 <OnUpdate>
+		   <Procedure Nom="FL1066_APURE_96_REF_PROC('%CODEUSER%')"  />
+         
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Annuler" Action="Annuler" >
+		 <OnUpdate>
+           <Procedure Nom="INIT_FL1066_TEMP_REF('T096')" />
+           <Procedure Nom="DELETE_FL1066_REF_AAPUR()" />
+				<Result>
+				</Result>
+ 		 </OnUpdate>
+    </Bouton>
+
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+ 		 </OnInit>	
+
+		 <OnUpdate>
+				<Result>
+				</Result>
+ 		 </OnUpdate>	
+		
+	</Formulaire>
+	
+</Entites>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Liste" Cible="OUV_CPT_CTX_AFF.xml" />
+		<Tab Nom="Ouverture" Cible="OUV_CPT_CTX_CRE.xml" />
+</TabPage>
+
+</Entites>

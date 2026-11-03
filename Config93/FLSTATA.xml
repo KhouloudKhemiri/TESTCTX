@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="STATISTIQUES" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="STATISTIQUES"
+		Titre="STATISTIQUES"
+    Tables="STATOPE"
+		IndSuppression="SUSTAT"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" DATOPE, FICHIER, TYPFICH, CODOPE"
+    >
+
+  <Text Position="NLigne" Label="DATOPE" ColTable="DATOPE" Nom="DATOPE" Type="Date" Longueur="15" Unique="Oui" PositionCel="1" LongueurCel="15" LabelCel="DATOPE"/>
+  <Text Position="NLigne" Label="FICHIER" ColTable="FICHIER" Nom="FICHIER" Type="AlphaNumerique" Longueur="15"   Unique="Oui" PositionCel="2" LongueurCel="14" LabelCel="FICHIER"/>
+  <Text Position="NLigne" Label="TYPFICH" ColTable="TYPFICH" Nom="TYPFICH" Type="AlphaNumerique" Longueur="1" Unique="Oui"  PositionCel="3" LongueurCel="8" LabelCel="TYPFICH" />
+  <Text Position="NLigne" Label="CODOPE" ColTable="CODOPE" Nom="CODOPE" Type="AlphaNumerique" Longueur="4" Unique="Oui"  PositionCel="4" LongueurCel="8" LabelCel="CODOPE" />
+  <Text Position="NLigne" Label="NBROPE" ColTable="NBROPE" Nom="NBROPE" Type="Numerique" Longueur="10" unique="Non" PositionCel="5" LongueurCel="15" LabelCel="NBROPE"/>
+  <Text Position="NLigne" Label="NBRTOT" ColTable="NBRTOT" Nom="NBRTOT" Type="Numerique" Longueur="10" unique="Non" PositionCel="6" LongueurCel="15" LabelCel="NBRTOT"/>
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

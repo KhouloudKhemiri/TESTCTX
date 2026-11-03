@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="31"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<queryString>
+		<![CDATA[(select CODAGC1030, CODAGC1030 || '-' || lpad (CODNAT1030,2,'0') || '-' || lpad (ORDCPT1030,5,'0') || '-' || KLECPT1030, NOMRSC,
+sum(CASE  WHEN (SMNTOPE99='-') THEN (MNTOPE99*(-1)) ELSE 0 END), sum(CASE  WHEN (SMNTOPE99='0') THEN MNTOPE99 ELSE 0 END), sum(SLDCPT10)/(count(CODAGC1030 || '-' || lpad (CODNAT1030,2,'0') || '-' || lpad (ORDCPT1030,5,'0') || '-' || KLECPT1030)),
+(sum(SLDCPT10)/(count(CODAGC1030 || '-' || lpad (CODNAT1030,2,'0') || '-' || lpad (ORDCPT1030,5,'0') || '-' || KLECPT1030)) - sum(CASE  WHEN (SMNTOPE99='-') THEN (MNTOPE99*(-1)) ELSE 0 END) - sum(CASE  WHEN (SMNTOPE99='0') THEN MNTOPE99 ELSE 0 END))
+from FL1030, FL3099
+where AGCCPT99=CODAGC1030 and NATCPT99=CODNAT1030 and ORDCPT99=ORDCPT1030 and KLECPT99=KLECPT1030 and SU1030=0
+and CODCLO10<>1 and DATOPE99 >= (select ('01' || (substr((select max(DATOPE) from FLDATE),3))) from DUAL)
+group by CODAGC1030, CODNAT1030, ORDCPT1030, KLECPT1030, NOMRSC)
+union
+(select CODAGC1030, CODAGC1030 || '-' || lpad (CODNAT1030,2,'0') || '-' || lpad (ORDCPT1030,5,'0') || '-' || KLECPT1030, NOMRSC,
+0, 0, SLDCPT10,SLDCPT10 from FL1030
+where COUNT_CPT(CODAGC1030 || lpad (CODNAT1030,2,'0') || lpad (ORDCPT1030,5,'0') || KLECPT1030)=0 and SU1030=0
+and CODCLO10<>1)]]>
+	</queryString>
+	<field name="CODAGC1030" class="java.lang.String"/>
+	<field name="CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030" class="java.lang.String"/>
+	<field name="NOMRSC" class="java.lang.String"/>
+	<field name="SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)" class="java.math.BigDecimal"/>
+	<field name="SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)" class="java.math.BigDecimal"/>
+	<field name="SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))" class="java.math.BigDecimal"/>
+	<field name="(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))" class="java.math.BigDecimal"/>
+	<variable name="MNTDBI" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)} * (-1)]]></variableExpression>
+	</variable>
+	<variable name="SGN_ANCSLD" class="java.lang.String">
+		<variableExpression><![CDATA[$F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<variable name="SGNSLD" class="java.lang.String">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<variable name="ANCSLD" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))} < 0 ? $F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))} * (-1) : $F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))}]]></variableExpression>
+	</variable>
+	<variable name="SLDCPT" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} < 0 ? $F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} * (-1) : $F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))}]]></variableExpression>
+	</variable>
+	<variable name="TOT_ANCSLD" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))}]]></variableExpression>
+	</variable>
+	<variable name="TOTDBI" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$V{MNTDBI}]]></variableExpression>
+	</variable>
+	<variable name="TOTCRE" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)}]]></variableExpression>
+	</variable>
+	<variable name="TOT_SLDCPT" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))}]]></variableExpression>
+	</variable>
+	<variable name="SGN_TOT_ANCSLD" class="java.lang.String">
+		<variableExpression><![CDATA[$V{TOT_ANCSLD} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<variable name="SGN_TOT_SLDCPT" class="java.lang.String">
+		<variableExpression><![CDATA[$V{TOT_SLDCPT} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<variable name="TOTSLDDBI" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} < 0 ? $F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} *(-1) : 0]]></variableExpression>
+	</variable>
+	<variable name="ABS_TOT_ANCSLD" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOT_ANCSLD} < 0 ? $V{TOT_ANCSLD} * (-1) : $V{TOT_ANCSLD}]]></variableExpression>
+	</variable>
+	<variable name="ABS_TOT_SLDCPT" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOT_SLDCPT} < 0 ? $V{TOT_SLDCPT} *(-1) : $V{TOT_SLDCPT}]]></variableExpression>
+	</variable>
+	<variable name="TOTSLDCRE" class="java.lang.Double" resetType="Group" resetGroup="Groupe_Agence" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))} < 0 ? 0 : $F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))}]]></variableExpression>
+	</variable>
+	<variable name="TOTDBIG" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{MNTDBI}]]></variableExpression>
+	</variable>
+	<variable name="TOTCREG" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)}]]></variableExpression>
+	</variable>
+	<variable name="TOT_SLDCPTG" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))}]]></variableExpression>
+	</variable>
+	<variable name="ABS_TOT_SLDCPTG" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOT_SLDCPTG} < 0 ? $V{TOT_SLDCPTG} *(-1) : $V{TOT_SLDCPTG}]]></variableExpression>
+	</variable>
+	<variable name="SGN_TOT_SLDCPTG" class="java.lang.String">
+		<variableExpression><![CDATA[$V{TOT_SLDCPTG} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<variable name="TOT_ANCSLDG" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{(SUM(SLDCPT10)/(COUNT(CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030))-SUM(CASEWHEN(SMNTOPE99=-)THEN(MNTOPE99*(-1))ELSE0END)-SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END))}]]></variableExpression>
+	</variable>
+	<variable name="ABS_TOT_ANCSLDG" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TOT_ANCSLDG} < 0 ? $V{TOT_ANCSLDG} * (-1) : $V{TOT_ANCSLDG}]]></variableExpression>
+	</variable>
+	<variable name="SGN_TOT_ANCSLDG" class="java.lang.String">
+		<variableExpression><![CDATA[$V{TOT_ANCSLDG} < 0 ? "DB" : ""]]></variableExpression>
+	</variable>
+	<group name="Group-Footer">
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement mode="Opaque" x="52" y="0" width="133" height="20" backcolor="#00FF00" uuid="50ee7d62-d56d-4f15-b67d-4a7c4ddd1d51"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Général]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="290" y="0" width="86" height="20" backcolor="#00FF00" uuid="1e8f78f9-ee32-4ef5-8ba6-c1f69e201f99"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTDBIG}==null || $V{TOTDBIG}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTDBIG})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="379" y="0" width="86" height="20" backcolor="#00FF00" uuid="42337d4e-04ea-4ecc-b965-cc44c58dd4c6"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTCREG}==null || $V{TOTCREG}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTCREG})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="482" y="0" width="87" height="20" backcolor="#00FF00" uuid="b4ebc3c9-c12c-4ff8-9fe8-4f68da77b3c5"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{ABS_TOT_SLDCPTG}==null || $V{ABS_TOT_SLDCPTG}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{ABS_TOT_SLDCPTG})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="468" y="0" width="14" height="20" backcolor="#00FF00" uuid="3ccd446a-7e6b-4e94-aabd-97c14bb5c3da"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{SGN_TOT_SLDCPTG}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="201" y="0" width="86" height="20" backcolor="#00FF00" uuid="1034da25-2998-4ddb-bdf9-9d93b97eb5b9"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{ABS_TOT_ANCSLDG}==null || $V{ABS_TOT_ANCSLDG}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{ABS_TOT_ANCSLDG})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="187" y="0" width="14" height="20" backcolor="#00FF00" uuid="d8e73e52-f71b-493f-9bdb-928967a995bd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{SGN_TOT_ANCSLDG}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="52" y="0" width="518" height="1" uuid="06444b11-7428-41a7-831c-835cc58324e2"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="Groupe_Agence">
+		<groupExpression><![CDATA[$F{CODAGC1030}]]></groupExpression>
+		<groupHeader>
+			<band height="131">
+				<staticText>
+					<reportElement mode="Opaque" x="-10" y="90" width="70" height="40" backcolor="#CCCCCC" uuid="ed4ccfd5-6db9-439a-8a7f-e721d5a52bd7"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[N° Compte]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="62" y="90" width="123" height="40" backcolor="#CCCCCC" uuid="cee47769-0ef6-4952-aa83-ca2490a327e9"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NOM ou R.S]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="187" y="90" width="101" height="40" backcolor="#CCCCCC" uuid="edec1bf8-4aba-4c4c-827c-9480870ee341"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ancien
+Solde]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="290" y="111" width="87" height="19" backcolor="#CCCCCC" uuid="72d924b6-e06c-4e13-bbf3-ea01a9e48a64"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Débit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="379" y="111" width="87" height="19" backcolor="#CCCCCC" uuid="c5975ca2-9376-4c3a-9146-7ca235bba3cf"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Crédit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="468" y="90" width="102" height="40" backcolor="#CCCCCC" uuid="c95ec6f6-07c5-4cef-a2db-6c0eb6f555ed"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nouveau
+Solde]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="290" y="90" width="176" height="19" backcolor="#CCCCCC" uuid="2fdc45fb-70f3-4b7b-b24c-c817a0102db2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Mouvements]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="152" y="50" width="239" height="20" forecolor="#000000" backcolor="#99CCFF" uuid="3407667c-7bbb-4906-9a56-33b46aa0b852"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BALANCE DES COMPTES CONTENTIEUX]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="50" width="44" height="23" forecolor="#000000" uuid="a9349bfb-8255-43d3-a01a-cf2b380c67c2"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[B.I.A.T ]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="460" y="50" width="100" height="20" forecolor="#000000" uuid="75d21cfd-1aab-4a91-b661-7d6bcd8d2571"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="55">
+				<staticText>
+					<reportElement mode="Opaque" x="52" y="0" width="81" height="20" backcolor="#00FFFF" uuid="69183e9c-8797-4c29-8379-a89f37f4ba99"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL Agence ]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="133" y="0" width="32" height="20" backcolor="#00FFFF" uuid="e09757b5-14af-4222-96b8-3ce94aa8cf76"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{CODAGC1030}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="290" y="0" width="86" height="20" backcolor="#00FFFF" uuid="87fce099-6821-49ad-a844-922876d5e162"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTDBI}==null || $V{TOTDBI}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTDBI})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="379" y="0" width="86" height="20" backcolor="#00FFFF" uuid="4aa59642-e87d-4b00-8e98-f92a9bbacdb3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTCRE}==null || $V{TOTCRE}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTCRE})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="187" y="0" width="14" height="20" backcolor="#00FFFF" uuid="37b3bde2-3766-465d-923a-9faf876ba610"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{SGN_TOT_ANCSLD}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="468" y="0" width="14" height="20" backcolor="#00FFFF" uuid="f7d43a5d-5c44-4306-9161-b5d38cc831f7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{SGN_TOT_SLDCPT}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="201" y="0" width="86" height="20" backcolor="#00FFFF" uuid="624387b7-d2e4-4070-8753-5f02d7033a7d"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{ABS_TOT_ANCSLD}==null || $V{ABS_TOT_ANCSLD}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{ABS_TOT_ANCSLD})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="482" y="0" width="87" height="20" backcolor="#00FFFF" uuid="54999de4-917a-4b3a-b5da-521601a9656a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{ABS_TOT_SLDCPT}==null || $V{ABS_TOT_SLDCPT}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{ABS_TOT_SLDCPT})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="-10" y="0" width="580" height="1" uuid="2f392e1a-3107-4520-bd5a-b47b909f9bdb"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="52" y="22" width="78" height="20" backcolor="#FF9999" uuid="8df6d25e-7f89-42ff-b874-f50895da2c19"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Debit ]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="130" y="22" width="100" height="20" backcolor="#FF9999" uuid="377d4395-9dd2-44b2-be30-8a1d1cf3e864"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTSLDDBI}==null || $V{TOTSLDDBI}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTSLDDBI})]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="282" y="22" width="78" height="20" backcolor="#FF9999" uuid="3e9dfdf6-3ff8-4125-98a8-d23674b24b50"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total Crédit]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="360" y="22" width="100" height="20" backcolor="#FF9999" uuid="7e19dd82-308b-43fc-8254-33a709c54d7e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{TOTSLDCRE}==null || $V{TOTSLDCRE}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTSLDCRE})]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="110">
+			<image>
+				<reportElement x="228" y="0" width="132" height="100" uuid="9ea6ac4d-c791-4d67-b711-d9c60a928760"/>
+				<imageExpression><![CDATA["./biat-logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="15">
+			<textField>
+				<reportElement x="-10" y="0" width="70" height="15" uuid="e563ccf5-3e26-430d-904e-1663fa18276a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CODAGC1030||-||LPAD(CODNAT1030,2,0)||-||LPAD(ORDCPT1030,5,0)||-||KLECPT1030}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="0" width="86" height="15" uuid="37922b19-9dc1-41f5-9d34-77d8ad0b91b4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($V{MNTDBI}==null || $V{MNTDBI}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{MNTDBI})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="0" width="14" height="15" uuid="d7a4250c-da82-4c9e-aafd-5a5a8279e82e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SGNSLD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="0" width="123" height="15" uuid="03c057f6-c717-473a-b466-6042cc88ccd3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NOMRSC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="0" width="14" height="15" uuid="cf544657-5720-4f83-b708-62886775d41f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SGN_ANCSLD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="201" y="0" width="86" height="15" uuid="46d79da3-5fef-4253-9744-f8e02b2c80a7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($V{ANCSLD}==null || $V{ANCSLD}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{ANCSLD})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="0" width="87" height="15" uuid="36998fa0-de66-4a00-996a-2b76ec08e9ee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($V{SLDCPT}==null || $V{SLDCPT}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{SLDCPT})]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="379" y="0" width="86" height="15" uuid="05b33055-2fc1-47be-b5cf-a25c2c938e09"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)}==null || $F{SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)}==0) ? "0,000" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{SUM(CASEWHEN(SMNTOPE99=0)THENMNTOPE99ELSE0END)})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26">
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="520" y="10" width="40" height="13" backcolor="#E6E6E6" uuid="679e4099-a273-42cf-8ab5-58d2ddb57909"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="10" width="520" height="13" backcolor="#E6E6E6" uuid="faf6a974-a30c-4c7b-a028-4e939cb48f27"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="3" y="10" width="100" height="13" uuid="86c6aacb-f7b8-4306-9c00-a6b14f9b4cc7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

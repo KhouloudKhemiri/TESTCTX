@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Affichage" Titre="LISTE DES EFFETS EN ENTREE DU PFC AU CTX" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="LISTE DES EFFETS EN ENTREE DU PFC AU CTX"
+		Titre="LISTE DES EFFETS EN ENTREE DU PFC AU CTX"
+    Tables="FL1062_TEMP"
+		IndSuppression="SU1062T"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+			OrderBy=" AGCNUM62T, SERNUM62T, ORDNUM62T, MNTOPE62T,ENGOPE62T"
+    >
+
+  <Text Position="NLigne" Label="Reference" ColTable="AGCNUM62T" Nom="AGCNUM62T" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="7" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SERNUM62T" Nom="SERNUM62T" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="6" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDNUM62T" Nom="ORDNUM62T" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="9" LabelCel="Ordre Ref"/>
+	<Text Position="NLigne" Label="N° Compte " ColTable="CPTAGC62T" Nom="CPTAGC62T" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="6" LabelCel="Agc Cpt" />
+	<Text Position="2" Label="" ColTable="CPTNAT62T" Nom="CPTNAT62T" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="6" LabelCel="Nat Cpt" />
+	<Text Position="2" Label="" ColTable="CPTORD62T" Nom="CPTORD62T" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="6" LabelCel="Ord Cpt" />
+	<Text Position="2" Label="" ColTable="CPTCLE62T" Nom="CPTCLE62T" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="6" LabelCel="Clé Cpt"/>
+  <Text Position="NLigne" Label="Nom Client" ColTable="NOMCPT62T" Nom="NOMCPT62T" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Non" PositionCel="8" LongueurCel="21" LabelCel="Nom Client"/>
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTOPE62T" Nom="MNTOPE62T" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="9" LongueurCel="12" LabelCel="Montant"/>
+  <Text Position="NLigne" Label="Date Création" ColTable="DATCRE62T" Nom="DATCRE62T" Type="Date" Longueur="10" Unique="Oui" PositionCel="10" LongueurCel="10" LabelCel="Date Création"/>
+  <Text Position="NLigne" Label="Echéance" ColTable="ECHOPE62T" Nom="ECHOPE62T" Type="Date" Longueur="10" Unique="Oui" PositionCel="11" LongueurCel="10" LabelCel="Echéance"/>
+	<Text Position="NLigne" Label="ENG" ColTable="ENGOPE62T" Nom="ENGOPE62T" Type="Numerique" Longueur="3" Unique="Non" Obligatoire="Oui" PositionCel="12" LongueurCel="3" LabelCel="ENG" />
+	<Text Position="NLigne" Label="Nat Eff" ColTable="PPLINT62T" Nom="PPLINT62T" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" PositionCel="13" LongueurCel="6" LabelCel="Nat Eff (0: P, 1:I)" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

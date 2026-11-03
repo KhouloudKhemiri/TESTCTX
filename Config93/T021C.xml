@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+
+	<Formulaire Nom="VALIDATION ENG/SGN PARVENU DE L'AGENCE"
+		Titre="VALIDATION ENG/SGN PARVENU DE L'AGENCE"
+    Tables="FL1000"
+		IndSuppression="SU3002"
+		Action="CREATION" >
+
+  <Text Position="0" Label="" ColTable="CODAGC3002" Nom="CODAGC3002" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE3002" Nom="DATOPE3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE3002" Nom="CODOPE3002" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+  <Text Position="NLigne" Label="Numéro Caution " ColTable="AGCNUM3002" Nom="AGCNUM3002" Type="AlphaNumerique" Longueur="2"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0107%=""; 
+            %THIS0108%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+	<Text Position="2" Label="" ColTable="SERNUM3002" Nom="SERNUM3002" Type="AlphaNumerique" Longueur="1"   Unique="Oui" >
+    <OnUpdate>
+       <Result>
+            %THIS0107%=""; 
+            %THIS0108%=""; 
+       </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="ORDNUM3002" Nom="ORDNUM3002" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	>
+      <OnUpdate>
+			    <!--<Requet Tables="FL1000" Where=" CODAGC3002 = '%THIS0101%' and DATOPE3002 = '%THIS0102%' and CODOPE3002 = '%THIS0103%' and AGCNUM3002='%THIS0104%' and SERNUM3002='%THIS0105%' and ORDNUM3002=%THIS0106% " >
+					  <Select Nom="NBR1000" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>-->
+				  <Result>    
+             //if(Integer.parseInt(%NBR1000%.trim())!=0)
+						//	{
+            //     %THIS0106%="ERREUR: Enregistrement existe" ;
+            //     return;
+            //  } 
+            %THIS0107%=""; 
+            %THIS0108%=""; 
+				  </Result>
+      </OnUpdate>
+  </Text>
+
+ 	<Text Position="NLigne" Label="Montant Caution" ColTable="MNTOPE3002" Nom="MNTOPE3002" Type="Float" Longueur="12" AprVirg="3" Unique="Oui" Obligatoire="Oui" >
+    <OnUpdate>
+       <Result>
+          <![CDATA[
+            %THIS0108%=""; 
+                     int p = %THIS0107%.indexOf("+");
+                     int m = %THIS0107%.indexOf("-");
+                     int e = %THIS0107%.indexOf("*");
+                     int d = %THIS0107%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS0107%="ERREUR: Montant erroné";
+                      return;
+                     }
+           ]]>
+       </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Code engagement" ColTable="ENGOPE3002" Nom="ENGOPE3002" Type="AlphaNumerique" Longueur="3"  Unique="Oui" Obligatoire="Oui">
+      <OnUpdate>
+       <Result>
+             if(%THIS0108%.equals("") )
+             {
+             return;
+             }
+       </Result>
+			    <Requet Tables="FL1071" Where=" SU1071 = 0 and (AGCNUM71 || SERNUM71 || ORDNUM71)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE71=REPLACE(REPLACE(REPLACE('%THIS0107%','+',''),'-',''),' ','') and ENGOPE71=%THIS0108%" >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1071" Where=" SU1071 = 0 and (AGCNUM71 || SERNUM71 || ORDNUM71)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE71=REPLACE(REPLACE(REPLACE('%THIS0107%','+',''),'-',''),' ','') and ENGOPE71=%THIS0108%" >
+					  <Select Nom="CPTAGC" Type="AlphaNumerique" ColTable="CPTAGC71"/>
+					  <Select Nom="CPTNAT" Type="Numerique" ColTable="CPTNAT71"/>
+					  <Select Nom="CPTORD" Type="Numerique" ColTable="CPTORD71"/>
+					  <Select Nom="CPTCLE" Type="Numerique" ColTable="CPTCLE71"/>
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMCPT71"/>
+					  <Select Nom="PPLINT" Type="Numerique" ColTable="PPLINT71"/>
+					  <Select Nom="DATREC" Type="Date" ColTable="DATREC71"/>
+				  </Requet>
+
+			    <Requet Tables="FL1071" Where=" SU1071 = 1 and (AGCNUM71 || SERNUM71 || ORDNUM71)=('%THIS0104%' || '%THIS0105%' || %THIS0106%) and MNTOPE71=REPLACE(REPLACE(REPLACE('%THIS0107%','+',''),'-',''),' ','') and ENGOPE71=%THIS0108%" >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+        <Result>
+         <![CDATA[
+             if(%THIS0108%.equals("") )
+             {
+             return;
+             }
+
+             if (Integer.parseInt(%INSACT%.trim())==0)
+							 { 
+                if (Integer.parseInt(%INSSUP%.trim())==0)
+                { 
+                 %THIS0108%="ERREUR: Instance Inexistante dans les engagements par signature en entrée au contentieux (FL1071)" ;
+                } else
+                {
+                 %THIS0106%="ERREUR: Instance existe et supprimée dans les engagements par signature en entrée au contentieux (FL1071)" ;
+                }
+               } else
+               { if ((Integer.parseInt(%THIS0108%.trim()) > 200) && (Integer.parseInt(%THIS0108%.trim()) < 300))
+                 {
+  	      	       %THIS0109%= %CPTAGC%;
+  	      	       %THIS0110%= %CPTNAT%;
+  	      	       %THIS0111%= %CPTORD%;
+  	      	       %THIS0112%= %CPTCLE%;
+  	      	       %THIS0113%= %NOMCPT%;
+  	      	       %THIS0121%= %PPLINT%;
+  	      	       %THIS0114%= %DATREC%;
+                 } else
+                 {
+                   %THIS0108%="ERREUR: Code engagement erroné";
+                 }
+               }
+          ]]>
+              </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="NLigne" Label="N° Compte Agence" ColTable="AGYOPE3002" Nom="AGYOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Disabled="Oui" />
+	<Text Position="2" Label="" ColTable="NAYOPE3002" Nom="NAYOPE3002" Type="Numerique" Longueur="2" Unique="Non" Disabled="Oui" />
+	<Text Position="2" Label="" ColTable="ORYOPE3002" Nom="ORYOPE3002" Type="Numerique" Longueur="5" Unique="Non" Disabled="Oui" />
+	<Text Position="2" Label="" ColTable="KLYOPE3002" Nom="KLYOPE3002" Type="Numerique" Longueur="1" Unique="Non" Disabled="Oui" />
+  <Text Position="NLigne" Label="Nom Prénom / R.S" ColTable="DSCOPE3002" Nom="DSCOPE3002" Type="AlphaNumerique" Longueur="30" Unique="Non" Disabled="Oui" />
+  <Text Position="NLigne" Label="Date de création" ColTable="CREEFF3002" Nom="CREEFF3002" Type="Date" Longueur="10" Disabled="Oui" Unique="Non" />
+
+	<Text Position="NLigne" Label="N° Compte contentieux" ColTable="AGXOPE3002" Nom="AGXOPE3002" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS0115%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+          
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS0115%="ERREUR: Agence Inexistante" ;
+              } 
+              %THIS0118% = "";
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="NAXOPE3002" Nom="NAXOPE3002" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+						 if ((%THIS0116%.compareTo("03")==0) || (%THIS0116%.compareTo("04")==0) || (%THIS0116%.compareTo("05")==0) || (%THIS0116%.compareTo("06")==0))
+             {
+             }else
+             { %THIS0116%="ERREUR: Nature doit etre = 03, 04, 05 ou 06";
+             }
+              %THIS0118% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="ORXOPE3002" Nom="ORXOPE3002" Type="Numerique" Longueur="5" Unique="Non" Obligatoire="Oui" >
+      <OnUpdate>
+				<Result>
+              %THIS0118% = "";
+              %THIS0119% = "";
+				</Result>
+ 		  </OnUpdate>
+  </Text>
+
+	<Text Position="2" Label="" ColTable="KLXOPE3002" Nom="KLXOPE3002" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" >
+
+      <OnUpdate>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0115%' and CODNAT1030=%THIS0116% and ORDCPT1030=%THIS0117% and KLECPT1030='%THIS0118%' " >
+					  <Select Nom="NBRCPT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS0115%' and CODNAT1030=%THIS0116% and ORDCPT1030=%THIS0117% and KLECPT1030='%THIS0118%' " >
+					  <Select Nom="NOMCPT" Type="AlphaNumerique" ColTable="NOMRSC"/>
+					  <Select Nom="CODCLO" Type="AlphaNumerique" ColTable="CODCLO10"/>            
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+          <Requet Tables="DUAL"   >
+  					<Select Nom="CLECPT" Type="AlphaNumerique" ColTable="CALC_CLE_CPT('%THIS0115%',%THIS0116%,%THIS0117%)"/>
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+          
+             if(%THIS0118%.equals("") )
+             {
+             return;
+             }
+            if (!%THIS0118%.equals(%CLECPT%))
+            {
+             %THIS0118% = "ERREUR: Clé Invalide";
+             return;
+            }
+          
+              if (Integer.parseInt(%NBRCPT%.trim())==0)
+							{
+                %THIS0118%="ERREUR: Compte Inexistant  ";
+              } else
+              {
+                public static String replaceNull(String input) {
+                return input == null ? "" : input;
+                }
+                int CLO, SRV;
+ 
+                if (replaceNull(%CODCLO%) == "")
+                {
+                  CLO = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%CODCLO%).trim()) == 0)
+                  {
+                    CLO = 0;
+                  } else
+                  {
+                    CLO = 1;
+                  }
+                }                 
+
+                if (replaceNull(%SRVCPT%) == "")
+                {
+                  SRV = 0;
+                } else
+                {             
+                  if (Integer.parseInt(replaceNull(%SRVCPT%).trim()) == 0)
+                  {
+                    SRV = 0;
+                  } else
+                  {
+                    SRV = 1;
+                  }
+                }                 
+
+                if (CLO !=  0)
+                {
+                  %THIS0118%="ERREUR: Compte cloturé";
+                } else
+                {
+                  if (SRV !=  0)
+                  {
+                    %THIS0119%="Attention le compte du client CTX est sous code surveillance";
+                  } else
+                  {
+                     %THIS0119%="";
+                  }
+			      	       %THIS0120%= %NOMCPT%;
+                }
+              }
+               ]]> 
+         </Result>
+    </OnUpdate>
+  </Text>
+
+   <SimpleText Position="2" Label="" Valeur="" />
+   <SimpleText Position="NLigne" Label="Nom Prénom / R.S : " Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="PPLINT3002" Label="" Valeur="" />
+  
+
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="CATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="NATOPE3002" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="TYPOPE3002" Label="" Valeur="" />
+  
+		<Bouton Position="NLigne" Label="Valider"  Action="Valider" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS0101%="93";
+				 %THIS0102%=%Journee%;
+				 %THIS0103%="T021";
+         %THIS0122%=%CODEUSER%;
+         %THIS0123% = "4";
+         %THIS0124% = "08";
+         %THIS0125% = "3"; 
+				</Result>
+        <Procedure Nom="MAJCNF(1)" />
+				<Result>
+            if(Integer.parseInt(%EtatSystem%)== 1)
+						%THIS01%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+						if(Integer.parseInt(%Niveau%) > 2)
+						%THIS01%="ERREUR: Fin de journée déjà lancée ";
+						else
+						if(Integer.parseInt(%Niveau%) != 2)
+						%THIS01%="ERREUR: Début de journée non effectuée ";						
+				</Result>
+        <OnError>
+           %THIS01%="ERREUR: Erreur Fatale :"+%ErrorMsg%;
+        </OnError>
+ 		 </OnInit>	
+     
+	</Formulaire>
+
+</Entites>

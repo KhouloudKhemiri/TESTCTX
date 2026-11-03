@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<queryString>
+		<![CDATA[SELECT CODOPE3002, AGCNUM3002 || ' ' || SERNUM3002 || ' ' ||
+lpad (ORDNUM3002,7,'0'), AGZREC3002 || '-' || '00' || '-' || '00000', AGXOPE3002, MNTOPE3002, DSCOPE3002, USROPE3002, LIBOPE
+FROM FL1000, FL5520 WHERE SU3002=0 and
+(CODOPE3002='T035' or CODOPE3002='T038') and CODOPE3002=CODOPE
+ORDER BY DATOPE3002, CATOPE3002, CODOPE3002, AGZREC3002]]>
+	</queryString>
+	<field name="CODOPE3002" class="java.lang.String"/>
+	<field name="AGCNUM3002||||SERNUM3002||||LPAD(ORDNUM3002,7,0)" class="java.lang.String"/>
+	<field name="AGZREC3002||-||00||-||00000" class="java.lang.String"/>
+	<field name="AGXOPE3002" class="java.lang.String"/>
+	<field name="MNTOPE3002" class="java.lang.Double"/>
+	<field name="DSCOPE3002" class="java.lang.String"/>
+	<field name="USROPE3002" class="java.lang.String"/>
+	<field name="LIBOPE" class="java.lang.String"/>
+	<variable name="LIBOPE" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[$F{LIBOPE}]]></variableExpression>
+	</variable>
+	<variable name="TOTMNT" class="java.lang.Double" resetType="Group" resetGroup="Groupe_OPE" calculation="Sum">
+		<variableExpression><![CDATA[$F{MNTOPE3002}]]></variableExpression>
+	</variable>
+	<variable name="TOTOPE" class="java.lang.Integer" resetType="Group" resetGroup="Groupe_OPE" calculation="Count">
+		<variableExpression><![CDATA[$V{REPORT_COUNT}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<group name="Groupe_OPE">
+		<groupExpression><![CDATA[$F{CODOPE3002}]]></groupExpression>
+		<groupHeader>
+			<band height="71">
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="124" y="23" width="306" height="15" backcolor="#00FF00" uuid="34406658-bd23-406d-97a5-5ff56f5b2b05"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{LIBOPE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="51" width="70" height="20" backcolor="#CCCCCC" uuid="2cce7d79-96ac-41d8-81eb-163d89b00a75"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Référence]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="72" y="51" width="100" height="20" backcolor="#CCCCCC" uuid="64866fc0-f1ef-4e4e-a38c-73e9180732a1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[N° Compte]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="293" y="51" width="85" height="20" backcolor="#CCCCCC" uuid="61351d63-fafd-45e4-803d-6685d41b9210"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Montant]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="174" y="51" width="117" height="20" backcolor="#CCCCCC" uuid="ba059f6f-d4bd-4cf4-aa2d-9a0f152db772"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Intitulé du Compte]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="525" y="51" width="30" height="20" backcolor="#CCCCCC" uuid="1b81cba8-1706-4946-95d9-5f832cac3624"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[EMP]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="380" y="51" width="40" height="20" backcolor="#CCCCCC" uuid="1cd37a53-d6b9-41fd-8d42-b018785fc72a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[EMT]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="57" y="23" width="53" height="15" forecolor="#000000" uuid="de4a20e4-4fff-4ab3-b449-ec658a24fc49"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="23" width="57" height="15" uuid="b81cae15-fc5d-44bf-8966-2284dbf32c79"/>
+					<text><![CDATA[Journée du : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="422" y="51" width="101" height="20" backcolor="#CCCCCC" uuid="ace303fe-5458-4ce8-84e6-c6c5c99f1a25"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Decription]]></text>
+				</staticText>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="0" y="70" width="555" height="1" uuid="08c696c3-396e-46e9-8c40-9849be558061"/>
+				</line>
+				<staticText>
+					<reportElement x="487" y="23" width="68" height="15" uuid="6942c8e2-f22b-4b23-a24d-791f22aef9ab"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<text><![CDATA[Agence : 93]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="40">
+				<staticText>
+					<reportElement mode="Opaque" x="235" y="5" width="51" height="15" backcolor="#FF9999" uuid="5c104c5a-5762-4dce-ae30-d2d81b04b58b"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL   :]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="286" y="5" width="90" height="15" backcolor="#FF9999" uuid="9c5691e9-37d4-4e16-ba84-013b6393e99a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{TOTMNT}==null || $V{TOTMNT}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($V{TOTMNT})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="FixRelativeToBottom" x="2" y="0" width="588" height="1" uuid="50ca59e8-fa7b-42b2-be4b-d486e85d5f8a"/>
+				</line>
+				<staticText>
+					<reportElement mode="Opaque" x="152" y="5" width="70" height="15" backcolor="#FF9999" uuid="87f43850-66c1-4e9a-b55b-2d423c73c62a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[OPERATION(S)]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="122" y="5" width="30" height="15" backcolor="#FF9999" uuid="c9be81c8-90db-4ec7-a671-dbd6212b6569"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTOPE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="0e47ed39-425e-4fc3-8107-07da0898d631"/>
+			</line>
+			<textField pattern="">
+				<reportElement x="293" y="0" width="83" height="20" uuid="fdaa9ae6-0487-46ee-a17b-909510af0aab"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{MNTOPE3002}==null || $F{MNTOPE3002}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{MNTOPE3002})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="70" height="20" uuid="78f77c16-5bfa-43f7-8b2a-8dc56c75f62b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{AGCNUM3002||||SERNUM3002||||LPAD(ORDNUM3002,7,0)}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="525" y="0" width="30" height="20" uuid="7a67481b-135c-4e55-b087-aa5e45acb58c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{USROPE3002}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="0" width="100" height="20" uuid="9d4e7139-83d7-4d86-8442-9c56720f532f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{AGZREC3002||-||00||-||00000}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="40" height="20" uuid="bba1f732-2f31-4e85-ac39-0f704281fc98"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{AGXOPE3002}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="0" width="101" height="20" uuid="cc3e2cac-3810-4275-acc8-9aadc8994afc"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DSCOPE3002}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="174" y="0" width="117" height="20" uuid="4717e4ce-8cc4-4762-a878-009046bf3c0b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[INEXISTANT]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<subreport>
+				<reportElement x="-17" y="0" width="40" height="40" uuid="b87b24c2-5148-44f0-9f5a-48e522b49f78"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["LST10006.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

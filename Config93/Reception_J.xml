@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+		
+	<Formulaire Nom="Test"
+            Titre=" Récéption"
+            Tables=""
+      			Action=""
+            > 
+	
+		<SimpleText Position="NLigne"  Label="" Valeur="" />
+		<SimpleText Position="NLigne"  Label="" Valeur="" />
+
+		<SimpleText Position="NLigne"  Label="" Valeur="" />
+		<SimpleText Position="NLigne"  Label="" Valeur="" />
+							
+		<SimpleText Position="NLigne"  Label=" NB : " Valeur="Cliquer sur le bouton Valider pour déclancher la Récéption." />
+
+		<Bouton Position="130" Label="Valider" Action="Valider" MsgConfirm="Confirmer cette opération" MsgAttente="Veuillez patienter, Récéption en cours " />
+		<Bouton Position="Auto" Label="Annuler" Action="Accueil" />
+		
+    <OnInit>
+   			<Result>
+          <![CDATA[  
+				   	if(Integer.parseInt(%EtatSystem%)== 1)
+					{
+					  	%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+					} else	
+					{
+					    if(Integer.parseInt(%Niveau%) == 1)
+						{
+						  %THIS%="ERREUR: Réception déjà effectuée.";
+					  	} else
+						{
+					      if ((Integer.parseInt(%Niveau%) != 0) && (Integer.parseInt(%Niveau%) != 1))
+						    {
+						    %THIS%="ERREUR: Début de Journée déjà lancé, Réception non autorisée. ";
+					     	}
+						}
+					}
+          ]]> 
+				</Result>
+
+        <OnError>
+           %EtatSystem%="0";
+           %THIS%="ERREUR: Erreur Fatal : "+%ErrorMsg%;
+        </OnError>
+		</OnInit>
+		
+		<OnUpdate>
+		<!--
+				<Result>
+          <![CDATA[  
+				   	if(Integer.parseInt(%EtatSystem%)== 1)
+					{
+					  	%THIS%="ERREUR: Accée refusé, une procédure est en cours d'execution. ";
+					} else	
+					{
+					    if(Integer.parseInt(%Niveau%) == 1)
+						{
+						  %THIS%="ERREUR: Réception déjà effectuée.";
+					  	} else
+						{
+					      if ((Integer.parseInt(%Niveau%) != 0) && (Integer.parseInt(%Niveau%) != 1))
+					 	    {
+						    %THIS%="ERREUR: Début de Journée déjà lancé, Réception non autorisée. ";
+					     	} else
+							  {
+  				                %EtatSystem%=1;
+                                File File1002 = new File("/opt/apache-tomcat/webapps/TESTCTX/Etat/FL1002"); 
+                                File File4002 = new File("/opt/apache-tomcat/webapps/TESTCTX/Etat/FL4002"); 
+                                File1002.delete(); 
+                                File4002.delete(); 
+							  }
+						}
+					}
+          ]]> 
+				</Result>
+				-->
+
+        <Procedure Nom="DATESTAT('RECEPTION', 'D')" />
+<!--
+				<WebService Methode = "FtpGet" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1002</Set>
+            <Set Nom="FTP_USER" >t24crt</Set>
+            <Set Nom="FTP_PWD" >t24123crt</Set>
+            <Set Nom="FTP_HOST" >172.28.201.36</Set>
+        </WebService>
+
+        <WebService Methode = "FtpGet" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL4002</Set>
+            <Set Nom="FTP_USER" >rcp93</Set>
+            <Set Nom="FTP_PWD" >rcp93</Set>
+            <Set Nom="FTP_HOST" >172.28.70.185</Set>
+        </WebService>
+-->
+        <WebService Methode = "FileToTable" >
+					<Set Nom="URL_File" >%URLEtat%FL1002</Set>
+					<Set Nom="Table" >LIGNE_FL1002</Set>
+          <Set Nom="Ligne" >1:0:230:A::;</Set>
+          <Set Nom="Separator" ></Set>
+					<Set Nom="DB" >%IPDB%:%ConnexionDB%</Set>
+					<Set Nom="DBUser" >%UserDB%</Set>
+					<Set Nom="DBPWD" >%PWDDB%</Set>
+					<Return Nom="Nb" into="THIS01" /> 
+          <Return Nom="NbErr" into="THIS02" /> 
+				</WebService>
+
+
+        <WebService Methode = "FileToTable" >
+					<Set Nom="URL_File" >%URLEtat%FL4002</Set>
+					<Set Nom="Table" >LIGNE_FL4002</Set>
+          <Set Nom="Ligne" >1:0:200:A::;</Set>
+          <Set Nom="Separator" ></Set>
+					<Set Nom="DB" >%IPDB%:%ConnexionDB%</Set>
+					<Set Nom="DBUser" >%UserDB%</Set>
+					<Set Nom="DBPWD" >%PWDDB%</Set>
+					<Return Nom="Nb" into="THIS03" /> 
+          <Return Nom="NbErr" into="THIS04" /> 
+				</WebService>
+
+        <Procedure Nom="FORMAT1002()" />
+        <Procedure Nom="FORMAT4002()" />
+<!--			
+        <WebService Methode = "FtpDel" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL1002</Set>
+            <Set Nom="FTP_USER" >t24crt</Set>
+            <Set Nom="FTP_PWD" >t24123crt</Set>
+            <Set Nom="FTP_HOST" >172.28.201.36</Set>
+        </WebService>
+
+        <WebService Methode = "FtpDel" >
+            <Set Nom="URL" >%URLEtat%</Set>
+            <Set Nom="File" >FL4002</Set>
+            <Set Nom="FTP_USER" >rcp93</Set>
+            <Set Nom="FTP_PWD" >rcp93</Set>
+            <Set Nom="FTP_HOST" >172.28.70.185</Set>
+        </WebService>
+-->
+        <Procedure Nom="DATESTAT('RECEPTION', 'F')" />
+
+        <Result>
+    				<![CDATA[	
+               if (%THIS02%.equals("0") && %THIS04%.equals("0"))
+               {
+                 %THIS%="Confirmation: Nb. Opération recus FL1002 : "+(Integer.parseInt(%THIS01%)+Integer.parseInt(%THIS02%))+" <br> Nb. Opération rejetées FL1002 : "+%THIS02%+" <br> "+"" + " <br> Nb. Opération recus FL4002 : "+(Integer.parseInt(%THIS03%)+Integer.parseInt(%THIS04%))+" <br> Nb. Opération rejetées FL4002 : "+%THIS04%+"";
+                 %EtatSystem%="0";	
+    			 %Niveau%="1";
+
+               } else
+               {
+                 %THIS%="Confirmation: Nb. Opération recus FL1002 : "+(Integer.parseInt(%THIS01%)+Integer.parseInt(%THIS02%))+" <br> Nb. Opération rejetées FL1002 : <span style='color:#CC0000'>"+%THIS02%+"</span>" +  " <br> Nb. Opération recus FL4002 : "+(Integer.parseInt(%THIS03%)+Integer.parseInt(%THIS04%))+" <br> Nb. Opération rejetées FL4002 : <span style='color:#CC0000'>"+%THIS04%+"</span>";
+               }
+               
+            ]]>							
+				</Result>
+
+        <OnError>
+           %THIS%="ERREUR: "+%ErrorMsg%;
+           %EtatSystem%=0;
+        </OnError>
+				
+    </OnUpdate>		
+		 
+	</Formulaire>
+	
+</Entites>

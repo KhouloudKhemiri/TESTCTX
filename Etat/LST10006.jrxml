@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="822bfec4-f5db-4ee0-8482-89c68b6950b5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image.properties" value="true,true,0.3,-8,-8,0,0,616,864"/>
+	<queryString>
+		<![CDATA[SELECT CODOPE3002, count(CODOPE3002), sum(MNTOPE3002), LIBOPE
+FROM FL1000, FL5520 WHERE SU3002=0 and CODOPE3002=CODOPE group by CODOPE3002, LIBOPE ORDER BY CODOPE3002,LIBOPE]]>
+	</queryString>
+	<field name="CODOPE3002" class="java.lang.String"/>
+	<field name="COUNT(CODOPE3002)" class="java.math.BigDecimal"/>
+	<field name="SUM(MNTOPE3002)" class="java.lang.Double"/>
+	<field name="LIBOPE" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="20">
+			<staticText>
+				<reportElement mode="Opaque" x="194" y="0" width="165" height="15" backcolor="#00FF00" uuid="ea5266f2-8a30-445d-93e7-2c243225d6cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATISTIQUE DES MOUVEMENTS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="57" y="0" width="53" height="15" forecolor="#000000" uuid="de4a20e4-4fff-4ab3-b449-ec658a24fc49"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="70" height="20" backcolor="#CCCCCC" uuid="2cce7d79-96ac-41d8-81eb-163d89b00a75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="125" y="20" width="337" height="20" backcolor="#CCCCCC" uuid="ba059f6f-d4bd-4cf4-aa2d-9a0f152db772"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OPERATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="464" y="20" width="91" height="20" backcolor="#CCCCCC" uuid="61351d63-fafd-45e4-803d-6685d41b9210"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="72" y="20" width="51" height="20" backcolor="#CCCCCC" uuid="05a3e917-1af7-4ced-aa66-e87930f4f26f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODOPE]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="39" width="555" height="1" uuid="50ca59e8-fa7b-42b2-be4b-d486e85d5f8a"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="57" height="15" uuid="b81cae15-fc5d-44bf-8966-2284dbf32c79"/>
+				<text><![CDATA[Journée du : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="0" width="68" height="15" uuid="d69d06c7-7e7e-4fc2-90a9-2b1cf850e126"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Agence : 93]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="0e47ed39-425e-4fc3-8107-07da0898d631"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="0" width="70" height="20" uuid="67f36184-18c0-4f17-8177-befe470020d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COUNT(CODOPE3002)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="0" width="51" height="20" uuid="04d8449c-9fd8-4eba-919d-b3bf54ccb0a8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CODOPE3002}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="0" width="334" height="20" uuid="9706f793-9886-4d65-8e80-0e13f5fa96db"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{LIBOPE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="464" y="0" width="89" height="20" uuid="96d1ba1c-c987-4933-8430-ced3907baf02"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{SUM(MNTOPE3002)}==null || $F{SUM(MNTOPE3002)}==0) ? "" : new DecimalFormat("#,##0.000",new DecimalFormatSymbols(Locale.FRENCH)).format($F{SUM(MNTOPE3002)})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

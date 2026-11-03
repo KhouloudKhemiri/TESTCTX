@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<TabPage>
+		<Tab Nom="Liste" Cible="FRAIS_COMPTABLE_AFF.xml" />
+		<Tab Nom="Paiement" Cible="FRAIS_COMPTABLE_PAI.xml" />
+</TabPage>
+
+</Entites>

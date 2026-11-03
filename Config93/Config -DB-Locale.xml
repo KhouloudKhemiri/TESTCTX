@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Parametres>
+  <Param Nom="Nom Application" Valeur="Contentieux (93)" />
+  <Param Nom="ID" Valeur="02"  />
+  <Param Nom="IP_Aut_Server" Valeur="172.28.70.101"  />
+  <Param Nom="Port_Aut_Server" Valeur="7777"  />
+  <Param Nom="URL_Aut_Server" Valeur="/Identification/Identification?invoke=Identify" />
+  <Param Nom="URLConfig" Valeur="D:\Tomcat6.0\webapps\DE\Config93\"  />
+  <Param Nom="URLHTML" Valeur="D:\Tomcat6.0\webapps\DE\ModelHTML\"/>
+  <Param Nom="URLFILE" Valeur="D:\Tomcat6.0\webapps\DE\Data\" />
+  <Param Nom="URLEtat" Valeur="D:\Tomcat6.0\webapps\DE\Etat\" />
+  <Param Nom="URLImage" Valeur="D:\Tomcat6.0\webapps\DE\Images\" />
+  <Param Nom="ServerEtat" Valeur="rep_biatnet"  />
+ <Param Nom="EtatSystem" Valeur="0"  Global="Oui" />
+  <Param Nom="Niveau" Valeur="1"  Global="Oui" />
+  <Param Nom="Journee" Libelle="Journée comptable" Valeur="27/06/2008" Header="Oui" Global="Oui" />
+  <Param Nom="EtatGen" Valeur="0" Global="Oui" />
+
+  <Param Nom="ConnexionDB" Valeur="bdtest" />
+  <Param Nom="IPDB" Valeur="localhost:1521"  />
+  <Param Nom="UserDB" Valeur="usr_ctnx" />
+  <Param Nom="PWDDB" Valeur="Biat$123"  />
+ 
+</Parametres>
+

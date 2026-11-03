@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Entites>
+<Tableau Label="Modification" Titre="APUREMENT MEG CREDIT RECU EN TND" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="APUREMENT MEG CREDIT RECU EN TND"
+		Titre="APUREMENT MEG CREDIT RECU EN TND"
+    Tables="FL1019"
+		IndSuppression="SU1019"
+    LigneClickEvent="MODIFICATION"
+		Action="MODIFICATION"
+		Where =" CODOPE19='T008'"
+			OrderBy=" CODAGC19, DATOPE19, CODOPE19, REFOPE19"
+    >
+
+  <Text Position="0" Label="" ColTable="CODAGC19" Nom="CODAGC19" Type="AlphaNumerique" Longueur="2" Disabled="Oui"  Unique="Oui" />
+  <Text Position="0" Label="" ColTable="DATOPE19" Nom="DATOPE19" Type="Date" Longueur="10" Disabled="Oui" Unique="Oui" />
+  <Text Position="0" Label="" ColTable="CODOPE19" Nom="CODOPE19" Type="AlphaNumerique" Longueur="4" Disabled="Oui" Unique="Oui" />
+
+  <Text Position="NLigne" Label="Reference Instance" ColTable="AGCOPE19" Nom="AGCOPE19" Type="AlphaNumerique" Longueur="2"   Unique="Oui" PositionCel="1" LongueurCel="7" LabelCel="Agc Ref"/>
+	<Text Position="2" Label="" ColTable="SEROPE19" Nom="SEROPE19" Type="AlphaNumerique" Longueur="1"   Unique="Oui" PositionCel="2" LongueurCel="6" LabelCel="Ser Ref"/>
+	<Text Position="2" Label="" ColTable="ORDOPE19" Nom="ORDOPE19" Type="Numerique" Longueur="7" Unique="Oui" Obligatoire="Oui"	PositionCel="3" LongueurCel="9" LabelCel="Ordre Ref"/>
+
+ 	<Text Position="NLigne" Label="Montant" ColTable="MNTCRE19" Nom="MNTCRE19" Type="Float" Longueur="12" AprVirg="3" Unique="Non" Obligatoire="Oui" PositionCel="4" LongueurCel="15" LabelCel="Montant opération">
+      <OnInit>
+			    <Requet Tables="FL3195" Where=" SU3195 = 0 and (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+          <Requet Tables="FL3195" Where=" (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="NATOPE" Type="AlphaNumerique" ColTable="NATOPE95"/>
+					  <Select Nom="NAXOPE" Type="Numerique" ColTable="NAXOPE95"/>
+					  <Select Nom="ORXOPE" Type="Numerique" ColTable="ORXOPE95"/>
+					  <Select Nom="AGCEMT" Type="AlphaNumerique" ColTable="AGCEMT95"/>
+					  <Select Nom="DATMEG" Type="Date" ColTable="DATMEG95"/>
+					  <Select Nom="REFBAS" Type="AlphaNumerique" ColTable="REFBAS95"/>
+					  <Select Nom="DSCOPE" Type="AlphaNumerique" ColTable="DSCOPE95"/>
+				  </Requet>
+
+			    <Requet Tables="FL3195" Where=" SU3195 = 1 and (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+        <Result>
+                   %THIS020010% = %AGCEMT%;
+                   %THIS020011% = %DATMEG%;
+                   %THIS020012% = %REFBAS%;
+                   %THIS020013% = %DSCOPE%;
+                   %THIS020014% = %NAXOPE%;
+                   %THIS020015% = %ORXOPE%;
+                   %THIS020016% = 0;
+              </Result>
+    </OnInit>
+
+      <OnUpdate>
+			    <Requet Tables="FL3195" Where=" SU3195 = 0 and (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSACT" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+          <Requet Tables="FL3195" Where=" (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="NATOPE" Type="AlphaNumerique" ColTable="NATOPE95"/>
+					  <Select Nom="NAXOPE" Type="Numerique" ColTable="NAXOPE95"/>
+					  <Select Nom="ORXOPE" Type="Numerique" ColTable="ORXOPE95"/>
+					  <Select Nom="AGCEMT" Type="AlphaNumerique" ColTable="AGCEMT95"/>
+					  <Select Nom="DATMEG" Type="Date" ColTable="DATMEG95"/>
+					  <Select Nom="REFBAS" Type="AlphaNumerique" ColTable="REFBAS95"/>
+					  <Select Nom="DSCOPE" Type="AlphaNumerique" ColTable="DSCOPE95"/>
+				  </Requet>
+
+			    <Requet Tables="FL3195" Where=" SU3195 = 1 and (AGCNUM95 || SERNUM95 || ORDNUM95)=('%THIS020004%' || '%THIS020005%' || TO_NUMBER('%THIS020006%')) and MNTOPE95=REPLACE(REPLACE(REPLACE('%THIS020007%','+',''),'-',''),' ','')" >
+					  <Select Nom="INSSUP" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+
+        <Result>
+          <![CDATA[
+                     int p = %THIS020007%.indexOf("+");
+                     int m = %THIS020007%.indexOf("-");
+                     int e = %THIS020007%.indexOf("*");
+                     int d = %THIS020007%.indexOf("/");
+
+                     if ((p != -1) || (m != -1) || (e != -1) || (d != -1))
+                     {
+                      %THIS020007%="ERREUR: Montant erroné";
+                      return;
+                     }
+
+             if (Integer.parseInt(%INSACT%.trim())==0)
+							 { 
+                if (Integer.parseInt(%INSSUP%.trim())==0)
+                { 
+                 %THIS020007%="ERREUR: Instance Inexistante dans les Megs reçus en TND (FL3195)" ;
+                } else
+                {
+                 %THIS020006%="ERREUR: Instance existe et supprimée dans les Megs reçus en TND (FL3195)" ;
+                }
+               } else
+               { if (%NATOPE%.equals("CRE"))
+                 {
+                   %THIS020010% = %AGCEMT%;
+                   %THIS020011% = %DATMEG%;
+                   %THIS020012% = %REFBAS%;
+                   %THIS020013% = %DSCOPE%;
+                   %THIS020014% = %NAXOPE%;
+                   %THIS020015% = %ORXOPE%;
+                   %THIS020016% = 0;
+                 } else
+                 {
+                    %THIS020006%="ERREUR: Nature opération ennonée " + "(" + %NATOPE% + ")";
+                 }
+               }
+           ]]>
+              </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Agence concernée" ColTable="AGXOPE19" Nom="AGXOPE19" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="12" LabelCel="Agc concerné">
+		<Description Colonne="CODAGC5503" Label="LIB5503" Table="FL5503"/>
+    <OnUpdate>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS020008%' " >
+					  <Select Nom="NBRAGC" Type="AlphaNumerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				  <Result>          
+             if(Integer.parseInt(%NBRAGC%.trim())==0)
+							{
+                 %THIS020008%="ERREUR: Agence Inexistante" ;
+              } 
+				  </Result>
+    </OnUpdate>
+  </Text>
+
+  <Text Position="NLigne" Label="Description" ColTable="LIBOPE29" Nom="LIBOPE29" Type="AlphaNumerique" Longueur="29" Unique="Non" Obligatoire="Non" PositionCel="6" LongueurCel="26" LabelCel="Description"/>
+  <SimpleText Position="NLigne" ColTable="MEGOPE19" Label="Code emetteur du MEG : " Valeur="" />
+  <SimpleText Position="NLigne" ColTable="" Label="Date Envoie : " Valeur="" />
+  <SimpleText Position="NLigne" ColTable="" Label="Reference de base : " Valeur="" />
+  <SimpleText Position="NLigne" ColTable="" Label="Description Instance : " Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="NAXOPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="ORXOPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="KLXOPE19" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible"  ColTable="USROPE19" Label="" Valeur="" />
+  
+  
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+
+		 <OnInit>
+				<Result>
+				 %THIS020001%="93";
+				 %THIS020002%=%Journee%;
+				 %THIS020003%="T008";
+         %THIS020017%=%CODEUSER%;
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>

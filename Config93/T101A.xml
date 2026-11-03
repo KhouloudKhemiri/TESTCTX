@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Entites>
+<Tableau Label="Modification" Titre="OUVERTURE COMPTE PERSONNE PHYSIQUE" 
+	 BoutonInsertion="Non"
+         BoutonRechRapide="Oui"
+         BoutonRechAvance="Oui"
+         BoutonPDF="Non"
+         BoutonXLS="Oui"
+		 Init="Oui">
+
+	<Formulaire Nom="OUVERTURE COMPTE PERSONNE PHYSIQUE"
+		Titre="OUVERTURE COMPTE PERSONNE PHYSIQUE"
+    Tables="FL1030"
+		IndSuppression="SU1030"
+    LigneClickEvent="AFFICHAGE"
+		Action="AFFICHAGE"
+		Where =" CODCLO10 != 1 and INFCMP10='P'"
+			OrderBy=" CODAGC1030, CODNAT1030, ORDCPT1030, KLECPT1030"
+    >
+
+  <Text Position="0" Label="Agence" ColTable="CODAGC1030" Nom="CODAGC1030" Type="AlphaNumerique" Longueur="2" Unique="Oui" Obligatoire="Oui" PositionCel="1" LongueurCel="4" LabelCel="Agc">
+      <OnInit>
+			    <Requet Tables="FL5503" Where=" CODAGC5503='%THIS030001%' " >
+					  <Select Nom="LIBAGC" Type="AlphaNumerique" ColTable="LIB5503"/>
+				  </Requet>
+         
+				  <Result>          
+              %THIS030005% = %LIBAGC%;
+				  </Result>
+    </OnInit>
+  </Text>
+  <Text Position="2" Label="Nature" ColTable="CODNAT1030" Nom="CODNAT1030" Type="Numerique" Longueur="2" Unique="Oui" Obligatoire="Oui" PositionCel="2" LongueurCel="4" LabelCel="Nat">
+      <OnInit>
+        <Result>
+          <![CDATA[  
+						 if ((%THIS030002%.compareTo("03")==0) || (%THIS030002%.compareTo("04")==0) || (%THIS030002%.compareTo("06")==0))
+             {
+             }else
+             { %THIS030002%="ERREUR: Nature doit etre = 03, 04 ou 06";
+              return;
+             }
+             if (%THIS030002%.compareTo("03")==0)
+             {
+                %THIS030006% = "COMPTES COURANT DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS030002%.compareTo("04")==0)
+             {
+                %THIS030006% = "COMPTES CHEQUES DOUTEUX ET LITIGIEUX";
+             }
+             if (%THIS030002%.compareTo("06")==0)
+             {
+                %THIS030006% = "COMPTES DOUTEUX ET LITIGIEUX AUTRES COMPTES";
+             }
+               ]]> 
+				</Result>
+ 		  </OnInit>
+  </Text>
+  <Text Position="2" Label="Ordre" ColTable="ORDCPT1030" Nom="ORDCPT1030" Type="Numerique" Longueur="5" Unique="Oui" Obligatoire="Oui" PositionCel="3" LongueurCel="7" LabelCel="Ord"/>
+  <Text Position="2" Label="Clé" ColTable="KLECPT1030" Nom="KLECPT1030" Type="Numerique" Longueur="1" Unique="Oui" Obligatoire="Oui" PositionCel="4" LongueurCel="4" LabelCel="Clé">
+      <OnInit>
+			    <Requet Tables="FL1030" Where=" CODAGC1030='%THIS030001%' and CODNAT1030='%THIS030002%' and ORDCPT1030='%THIS030003%' and KLECPT1030='%THIS030004%' " >
+					  <Select Nom="SRVCPT" Type="AlphaNumerique" ColTable="SRVCPT10"/>            
+				  </Requet>
+
+				  <Result>
+          <![CDATA[  
+             if (%SRVCPT%.compareTo("1")==0)
+             {
+                %THIS030005% = "Attention le compte du client CTX est sous code surveillance";
+                %THIS030006% = "";
+             }
+          ]]> 
+         </Result>
+    </OnInit>
+  </Text>
+
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+  <SimpleText Position="77" ColTable="" Label="" Valeur="" />
+
+  <Text Position="NLigne" Label="Nom et Prénom" ColTable="NOMRSC" Nom="NOMRSC" Type="AlphaNumerique" Longueur="30" Unique="Non" Obligatoire="Oui" PositionCel="5" LongueurCel="27" LabelCel="Nom Prénom"/>
+  <Text Position="NLigne" Label="Adresse" ColTable="ADRPRS" Nom="ADRPRS" Type="AlphaNumerique" Longueur="46" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="NLigne" Label="Code PTT" ColTable="CODPTT1030A" Nom="CODPTT1030A" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Oui" PositionCel="6" LongueurCel="4" LabelCel="PTT">
+		<Description Colonne="CODPTT" Label="LIBPTT" Table="FL5501"/>
+  </Text>
+
+	<Text Position="NLigne" Label="Fonction" ColTable="FONCPT10" Nom="FONCPT10" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Non" />
+
+  <Text Position="NLigne" Label="Date Naissance" ColTable="NAICPT10" Nom="NAICPT10" Type="Date" Longueur="10" Unique="Non" Obligatoire="Oui" PositionCel="7" LongueurCel="8" LabelCel="Naissance"/>
+
+		<List Position="NLigne" Label="Sexe" ColTable="SEXCPT10" Index="Oui"  Obligatoire="Oui" Type="AlphaNumerique" Longueur="1" PositionCel="8" LongueurCel="4" LabelCel="Sexe"> 
+			<Option Valeur="M" >Masculin</Option>
+			<Option Valeur="F" >Féminin</Option>
+		</List>
+
+
+		<List Position="NLigne" Label="Document présenté" ColTable="CODDOC1030" Index="Oui"  Obligatoire="Oui" Type="Numerique" Longueur="1" PositionCel="9" LongueurCel="7" LabelCel="Code Doc"> 
+			<Option Valeur="0" >C.I.N</Option>
+			<Option Valeur="1" >Passeport</Option>
+			<Option Valeur="2" >C.Séjour</Option>
+		</List>
+
+	<Text Position="NLigne" Label="Numéro du document" ColTable="ORDDOC1030" Nom="ORDDOC1030" Type="AlphaNumerique" Longueur="8" Unique="Non" Obligatoire="Oui" PositionCel="10" LongueurCel="6" LabelCel="Num Doc"/>
+
+  <Text Position="NLigne" Label="Date de délivrance" ColTable="DATLIV1030" Nom="DATLIV1030" Type="Date" Longueur="10" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="4" Label="Lieu de délivrance" ColTable="LIELIV10" Nom="LIELIV10" Type="AlphaNumerique" Longueur="10" Unique="Non" Obligatoire="Oui" />
+	<Text Position="NLigne" Label="Code activité" ColTable="CODACT1030" Nom="CODACT1030" Type="Numerique" Longueur="4" Unique="Non" Obligatoire="Oui" >
+      <OnInit>
+			    <Requet Tables="FL5507" Where=" SU5507='0' and CODACT='%THIS030017%' " >
+					  <Select Nom="LIBAGCTIV" Type="AlphaNumerique" ColTable="LIBACT"/>
+				  </Requet>
+          
+				  <Result>          
+              %THIS030018% = %LIBAGCTIV%;
+				  </Result>
+    </OnInit>
+  </Text>
+
+  <SimpleText Position="2" ColTable="" Label="" Valeur="" />
+
+		<List Position="NLigne" Label="Nationalité" ColTable="CODPAY1030" Index="Oui"  Obligatoire="Oui" Type="AlphaNumerique" Longueur="2"> 
+   <Option Valeur="AD">AD  :  Andorra                       </Option>
+   <Option Valeur="AE">AE  :  U.A.E                         </Option>
+   <Option Valeur="AF">AF  :  Afghanistan                   </Option>
+   <Option Valeur="AG">AG  :  Antigua                       </Option>
+   <Option Valeur="AI">AI  :  Anguilla                      </Option>
+   <Option Valeur="AL">AL  :  Albania                       </Option>
+   <Option Valeur="AM">AM  :  Armenia                       </Option>
+   <Option Valeur="AN">AN  :  Neth Ant.                     </Option>
+   <Option Valeur="AO">AO  :  Angola                        </Option>
+   <Option Valeur="AQ">AQ  :  Antarctica                    </Option>
+   <Option Valeur="AR">AR  :  Argentina                     </Option>
+   <Option Valeur="AS">AS  :  American Samoa                </Option>
+   <Option Valeur="AT">AT  :  Austria                       </Option>
+   <Option Valeur="AU">AU  :  Australia                     </Option>
+   <Option Valeur="AW">AW  :  Aruba                         </Option>
+   <Option Valeur="AX">AX  :  ALAND                         </Option>
+   <Option Valeur="AZ">AZ  :  Azerbaijan                    </Option>
+   <Option Valeur="BA">BA  :  Bosnia-Herz                   </Option>
+   <Option Valeur="BB">BB  :  Barbados                      </Option>
+   <Option Valeur="BD">BD  :  Bangladesh                    </Option>
+   <Option Valeur="BE">BE  :  Belgium                       </Option>
+   <Option Valeur="BF">BF  :  Burkina Faso                  </Option>
+   <Option Valeur="BG">BG  :  Bulgaria                      </Option>
+   <Option Valeur="BH">BH  :  Bahrain                       </Option>
+   <Option Valeur="BI">BI  :  Burundi                       </Option>
+   <Option Valeur="BJ">BJ  :  Benin                         </Option>
+   <Option Valeur="BM">BM  :  Bermuda                       </Option>
+   <Option Valeur="BN">BN  :  Brunei                        </Option>
+   <Option Valeur="BO">BO  :  Bolivia                       </Option>
+   <Option Valeur="BR">BR  :  Brazil                        </Option>
+   <Option Valeur="BS">BS  :  Bahamas                       </Option>
+   <Option Valeur="BT">BT  :  Bhutan                        </Option>
+   <Option Valeur="BV">BV  :  Bouvet Island                 </Option>
+   <Option Valeur="BW">BW  :  Botswana                      </Option>
+   <Option Valeur="BY">BY  :  Belarus                       </Option>
+   <Option Valeur="BZ">BZ  :  Belize                        </Option>
+   <Option Valeur="CA">CA  :  Canada                        </Option>
+   <Option Valeur="CC">CC  :  Cocos Islands                 </Option>
+   <Option Valeur="CD">CD  :  Congo                         </Option>
+   <Option Valeur="CF">CF  :  Cent Afr                      </Option>
+   <Option Valeur="CG">CG  :  Congo                         </Option>
+   <Option Valeur="CH">CH  :  Switzerland                   </Option>
+   <Option Valeur="CI">CI  :  Ivory                         </Option>
+   <Option Valeur="CK">CK  :  Cook Islands                  </Option>
+   <Option Valeur="CL">CL  :  Chile                         </Option>
+   <Option Valeur="CM">CM  :  Cameroon                      </Option>
+   <Option Valeur="CN">CN  :  China                         </Option>
+   <Option Valeur="CO">CO  :  Columbia                      </Option>
+   <Option Valeur="CR">CR  :  Costa Rica                    </Option>
+   <Option Valeur="CU">CU  :  Cuba                          </Option>
+   <Option Valeur="CV">CV  :  Cape Verde                    </Option>
+   <Option Valeur="CX">CX  :  Christmas Is.                 </Option>
+   <Option Valeur="CY">CY  :  Cyprus                        </Option>
+   <Option Valeur="CZ">CZ  :  Czech Republic                </Option>
+   <Option Valeur="DE">DE  :  Germany                       </Option>
+   <Option Valeur="DJ">DJ  :  Djibouti                      </Option>
+   <Option Valeur="DK">DK  :  Denmark                       </Option>
+   <Option Valeur="DM">DM  :  Dominica                      </Option>
+   <Option Valeur="DO">DO  :  Dominican                     </Option>
+   <Option Valeur="DZ">DZ  :  Algeria                       </Option>
+   <Option Valeur="EC">EC  :  Ecuador                       </Option>
+   <Option Valeur="EE">EE  :  Estonia                       </Option>
+   <Option Valeur="EG">EG  :  Egypt                         </Option>
+   <Option Valeur="EH">EH  :  Western Sahara                </Option>
+   <Option Valeur="ER">ER  :  Eritrea                       </Option>
+   <Option Valeur="ES">ES  :  Spain                         </Option>
+   <Option Valeur="ET">ET  :  Ethiopia                      </Option>
+   <Option Valeur="EU">EU  :  EUR Countries                 </Option>
+   <Option Valeur="FI">FI  :  Finland                       </Option>
+   <Option Valeur="FJ">FJ  :  Fiji                          </Option>
+   <Option Valeur="FK">FK  :  Falkland Is.                  </Option>
+   <Option Valeur="FM">FM  :  Micronesia                    </Option>
+   <Option Valeur="FO">FO  :  Faroe Islands                 </Option>
+   <Option Valeur="FR">FR  :  France                        </Option>
+   <Option Valeur="GA">GA  :  Gabon                         </Option>
+   <Option Valeur="GB">GB  :  G.B.                          </Option>
+   <Option Valeur="GD">GD  :  Grenada                       </Option>
+   <Option Valeur="GE">GE  :  Georgia                       </Option>
+   <Option Valeur="GF">GF  :  French Guiana                 </Option>
+   <Option Valeur="GG">GG  :  Channel Islands               </Option>
+   <Option Valeur="GH">GH  :  Ghana                         </Option>
+   <Option Valeur="GI">GI  :  Gibraltar                     </Option>
+   <Option Valeur="GL">GL  :  Greenland                     </Option>
+   <Option Valeur="GM">GM  :  Gambia                        </Option>
+   <Option Valeur="GN">GN  :  Guinea                        </Option>
+   <Option Valeur="GO">GO  :  GOLD                          </Option>
+   <Option Valeur="GP">GP  :  Guadeloupe                    </Option>
+   <Option Valeur="GQ">GQ  :  Equ. Guinea                   </Option>
+   <Option Valeur="GR">GR  :  Greece                        </Option>
+   <Option Valeur="GS">GS  :  S Georgia                     </Option>
+   <Option Valeur="GT">GT  :  Guatemala                     </Option>
+   <Option Valeur="GU">GU  :  Guam                          </Option>
+   <Option Valeur="GW">GW  :  Guinea-Bissau                 </Option>
+   <Option Valeur="GY">GY  :  Guyana                        </Option>
+   <Option Valeur="HK">HK  :  H.K.                          </Option>
+   <Option Valeur="HM">HM  :  Heard .McDonald               </Option>
+   <Option Valeur="HN">HN  :  Honduras                      </Option>
+   <Option Valeur="HR">HR  :  Croatia                       </Option>
+   <Option Valeur="HT">HT  :  Haiti                         </Option>
+   <Option Valeur="HU">HU  :  Hungary                       </Option>
+   <Option Valeur="ID">ID  :  Indonesia                     </Option>
+   <Option Valeur="IE">IE  :  Ireland                       </Option>
+   <Option Valeur="IL">IL  :  Israel                        </Option>
+   <Option Valeur="IM">IM  :  Isle of Man                   </Option>
+   <Option Valeur="IN">IN  :  India                         </Option>
+   <Option Valeur="IO">IO  :  Br Ind. Oc. Ter               </Option>
+   <Option Valeur="IQ">IQ  :  Iraq                          </Option>
+   <Option Valeur="IR">IR  :  Iran                          </Option>
+   <Option Valeur="IS">IS  :  Iceland                       </Option>
+   <Option Valeur="IT">IT  :  Italy                         </Option>
+   <Option Valeur="JE">JE  :  Jersey                        </Option>
+   <Option Valeur="JM">JM  :  Jamaica                       </Option>
+   <Option Valeur="JO">JO  :  Jordan                        </Option>
+   <Option Valeur="JP">JP  :  Japan                         </Option>
+   <Option Valeur="KE">KE  :  Kenya                         </Option>
+   <Option Valeur="KG">KG  :  Kyrgyzstan                    </Option>
+   <Option Valeur="KH">KH  :  Cambodia                      </Option>
+   <Option Valeur="KI">KI  :  Kiribati                      </Option>
+   <Option Valeur="KM">KM  :  Comoro                        </Option>
+   <Option Valeur="KN">KN  :  St Kitts .Nevis               </Option>
+   <Option Valeur="KP">KP  :  Korea                         </Option>
+   <Option Valeur="KR">KR  :  Korea, Rep. of                </Option>
+   <Option Valeur="KW">KW  :  Kuwait                        </Option>
+   <Option Valeur="KY">KY  :  Cayman Islands                </Option>
+   <Option Valeur="KZ">KZ  :  Kazakstan                     </Option>
+   <Option Valeur="LA">LA  :  Lao                           </Option>
+   <Option Valeur="LB">LB  :  Lebanon                       </Option>
+   <Option Valeur="LC">LC  :  St. Lucia                     </Option>
+   <Option Valeur="LI">LI  :  Liecht                        </Option>
+   <Option Valeur="LK">LK  :  Sri Lanka                     </Option>
+   <Option Valeur="LR">LR  :  Liberia                       </Option>
+   <Option Valeur="LS">LS  :  Lesotho                       </Option>
+   <Option Valeur="LT">LT  :  Lithuania                     </Option>
+   <Option Valeur="LU">LU  :  Luxembourg                    </Option>
+   <Option Valeur="LV">LV  :  Latvia                        </Option>
+   <Option Valeur="LY">LY  :  Libya                         </Option>
+   <Option Valeur="MA">MA  :  Morocco                       </Option>
+   <Option Valeur="MC">MC  :  Monaco                        </Option>
+   <Option Valeur="MD">MD  :  Moldova, Rep of               </Option>
+   <Option Valeur="ME">ME  :  Montenegro                    </Option>
+   <Option Valeur="MF">MF  :  Saint Martin                  </Option>
+   <Option Valeur="MG">MG  :  Madagascar                    </Option>
+   <Option Valeur="MH">MH  :  Marshall Is.                  </Option>
+   <Option Valeur="MK">MK  :  Macedonia                     </Option>
+   <Option Valeur="ML">ML  :  Mali                          </Option>
+   <Option Valeur="MM">MM  :  Myanmar                       </Option>
+   <Option Valeur="MN">MN  :  Mongolia                      </Option>
+   <Option Valeur="MO">MO  :  Macau                         </Option>
+   <Option Valeur="MP">MP  :  N. Mariana Is.                </Option>
+   <Option Valeur="MQ">MQ  :  Martinique                    </Option>
+   <Option Valeur="MR">MR  :  Mauritania                    </Option>
+   <Option Valeur="MS">MS  :  Monserrat                     </Option>
+   <Option Valeur="MT">MT  :  Malta                         </Option>
+   <Option Valeur="MU">MU  :  Mauritius                     </Option>
+   <Option Valeur="MV">MV  :  Maldives                      </Option>
+   <Option Valeur="MW">MW  :  Malawi                        </Option>
+   <Option Valeur="MX">MX  :  Mexico                        </Option>
+   <Option Valeur="MY">MY  :  Malaysia                      </Option>
+   <Option Valeur="MZ">MZ  :  Mozambique                    </Option>
+   <Option Valeur="NA">NA  :  Namibia                       </Option>
+   <Option Valeur="NC">NC  :  New Caledonia                 </Option>
+   <Option Valeur="NE">NE  :  Niger                         </Option>
+   <Option Valeur="NF">NF  :  Norfolk Island                </Option>
+   <Option Valeur="NG">NG  :  Nigeria                       </Option>
+   <Option Valeur="NI">NI  :  Nicaragua                     </Option>
+   <Option Valeur="NL">NL  :  Netherlands                   </Option>
+   <Option Valeur="NO">NO  :  Norway                        </Option>
+   <Option Valeur="NP">NP  :  Nepal                         </Option>
+   <Option Valeur="NR">NR  :  Nauru                         </Option>
+   <Option Valeur="NU">NU  :  Niue                          </Option>
+   <Option Valeur="NZ">NZ  :  N.Z.                          </Option>
+   <Option Valeur="OM">OM  :  Oman                          </Option>
+   <Option Valeur="PA">PA  :  Panama                        </Option>
+   <Option Valeur="PE">PE  :  Peru                          </Option>
+   <Option Valeur="PF">PF  :  Fr. Polynesia                 </Option>
+   <Option Valeur="PG">PG  :  Pap. New Guinea               </Option>
+   <Option Valeur="PH">PH  :  Philippines                   </Option>
+   <Option Valeur="PI">PI  :  PLATINUM                      </Option>
+   <Option Valeur="PK">PK  :  Pakistan                      </Option>
+   <Option Valeur="PL">PL  :  Poland                        </Option>
+   <Option Valeur="PM">PM  :  St. Pierre                    </Option>
+   <Option Valeur="PN">PN  :  Pitcairn                      </Option>
+   <Option Valeur="PR">PR  :  Puerto Rico                   </Option>
+   <Option Valeur="PS">PS  :  Occp Palst Teri               </Option>
+   <Option Valeur="PT">PT  :  Portugal                      </Option>
+   <Option Valeur="PW">PW  :  Palau                         </Option>
+   <Option Valeur="PY">PY  :  Paraguay                      </Option>
+   <Option Valeur="QA">QA  :  Qatar                         </Option>
+   <Option Valeur="RE">RE  :  Reunion                       </Option>
+   <Option Valeur="RO">RO  :  Romania                       </Option>
+   <Option Valeur="RS">RS  :  Serbia                        </Option>
+   <Option Valeur="RU">RU  :  Russian Fed                   </Option>
+   <Option Valeur="RW">RW  :  Rwanda                        </Option>
+   <Option Valeur="SA">SA  :  Saudi Arabia                  </Option>
+   <Option Valeur="SB">SB  :  Solomon Islands               </Option>
+   <Option Valeur="SC">SC  :  Seychelles                    </Option>
+   <Option Valeur="SD">SD  :  Sudan                         </Option>
+   <Option Valeur="SE">SE  :  Sweden                        </Option>
+   <Option Valeur="SG">SG  :  Singapore                     </Option>
+   <Option Valeur="SH">SH  :  St. Helena                    </Option>
+   <Option Valeur="SI">SI  :  Slovenia                      </Option>
+   <Option Valeur="SJ">SJ  :  Svalbard                      </Option>
+   <Option Valeur="SK">SK  :  Slovakia                      </Option>
+   <Option Valeur="SL">SL  :  Sierra Leone                  </Option>
+   <Option Valeur="SM">SM  :  San Marino                    </Option>
+   <Option Valeur="SN">SN  :  Senegal                       </Option>
+   <Option Valeur="SO">SO  :  Somalia                       </Option>
+   <Option Valeur="SR">SR  :  Suriname                      </Option>
+   <Option Valeur="SS">SS  :  SILVER                        </Option>
+   <Option Valeur="ST">ST  :  Sao Tome                      </Option>
+   <Option Valeur="SV">SV  :  El Salvador                   </Option>
+   <Option Valeur="SY">SY  :  Syria                         </Option>
+   <Option Valeur="SZ">SZ  :  Swaziland                     </Option>
+   <Option Valeur="TC">TC  :  Turks . Caicos                </Option>
+   <Option Valeur="TD">TD  :  Chad                          </Option>
+   <Option Valeur="TF">TF  :  Fr. S. Territ.                </Option>
+   <Option Valeur="TG">TG  :  Togo                          </Option>
+   <Option Valeur="TH">TH  :  Thailand                      </Option>
+   <Option Valeur="TJ">TJ  :  Tajikistan                    </Option>
+   <Option Valeur="TK">TK  :  Tokelau                       </Option>
+   <Option Valeur="TL">TL  :  TIMOR.EST                     </Option>
+   <Option Valeur="TM">TM  :  Turkmenistan                  </Option>
+   <Option Valeur="TN">TN  :  Tunisia                       </Option>
+   <Option Valeur="TO">TO  :  Tonga                         </Option>
+   <Option Valeur="TP">TP  :  East Timor                    </Option>
+   <Option Valeur="TR">TR  :  Turkey                        </Option>
+   <Option Valeur="TT">TT  :  Trinidad Tobago               </Option>
+   <Option Valeur="TV">TV  :  Tuvalu                        </Option>
+   <Option Valeur="TW">TW  :  Taiwan                        </Option>
+   <Option Valeur="TZ">TZ  :  Tanzania                      </Option>
+   <Option Valeur="UA">UA  :  Ukraine                       </Option>
+   <Option Valeur="UG">UG  :  Uganda                        </Option>
+   <Option Valeur="UM">UM  :  US Minor Out Is               </Option>
+   <Option Valeur="US">US  :  USA                           </Option>
+   <Option Valeur="UY">UY  :  Uruguay                       </Option>
+   <Option Valeur="UZ">UZ  :  Uzbekistan                    </Option>
+   <Option Valeur="VA">VA  :  Vatican                       </Option>
+   <Option Valeur="VC">VC  :  St. Vincent                   </Option>
+   <Option Valeur="VE">VE  :  Venezuala                     </Option>
+   <Option Valeur="VG">VG  :  Virgin Islands                </Option>
+   <Option Valeur="VI">VI  :  Virgin Islands                </Option>
+   <Option Valeur="VN">VN  :  Vietnam                       </Option>
+   <Option Valeur="VU">VU  :  Vanuatu                       </Option>
+   <Option Valeur="WF">WF  :  Wallis .Futuna                </Option>
+   <Option Valeur="WS">WS  :  Samoa                         </Option>
+   <Option Valeur="XA">XA  :  XAU and XAG                   </Option>
+   <Option Valeur="XB">XB  :  European Unit                 </Option>
+   <Option Valeur="XC">XC  :  East Caribbean                </Option>
+   <Option Valeur="XD">XD  :  Special Drawing               </Option>
+   <Option Valeur="XE">XE  :  Europa                        </Option>
+   <Option Valeur="XG">XG  :  Gold                          </Option>
+   <Option Valeur="XO">XO  :  West Africa                   </Option>
+   <Option Valeur="XP">XP  :  XPD AND XPT                   </Option>
+   <Option Valeur="XS">XS  :  Silver                        </Option>
+   <Option Valeur="XX">XX  :  Worldwide                     </Option>
+   <Option Valeur="YE">YE  :  Yemen                         </Option>
+   <Option Valeur="YT">YT  :  Mayotte                       </Option>
+   <Option Valeur="YU">YU  :  Yugoslavia                    </Option>
+   <Option Valeur="ZA">ZA  :  South Afr                     </Option>
+   <Option Valeur="ZM">ZM  :  Zambia                        </Option>
+		  <Description Colonne="CODPAY" Label="LIBPAY" Table="COUNTRY"/>
+		</List>
+
+<!--	<Text Position="NLigne" Label="Nationalité" ColTable="CODPAY1030" Nom="CODPAY1030" Type="AlphaNumerique" Longueur="2" Unique="Non" Obligatoire="Oui" >
+		<Description Colonne="CODPAY" Label="LIBPAY" Table="FL5504"/>
+      <OnUpdate>
+			    <Requet Tables="FL5504" Where=" SU5504='0' and CODPAY='%THIS030019%' " >
+					  <Select Nom="NBRPAY" Type="Numerique" ColTable="'0'||count(*)"/>
+				  </Requet>
+				<Result>
+          <![CDATA[  
+             if (%THIS030019%.equals(""))
+             {
+             return;
+             }
+             if (Integer.parseInt(%NBRPAY%.trim())==0)
+							{
+                 %THIS030019%="ERREUR: Code Pays Inexistant" ;
+                 return;
+              }
+            if (%THIS030019%.equals("TN") && %THIS030013%.equals("2"))
+            {
+             %THIS030019% = "ERREUR: Incorerance entre nature de compte et nationalité";
+             return;
+            }
+            if (!%THIS030019%.equals("TN") && %THIS030013%.equals("0"))
+            {
+             %THIS030019% = "ERREUR: Incorerance entre nature de compte et nationalité";
+             return;
+            }
+            %THIS030022% = %THIS030001%;
+            %THIS030024% = %THIS030003%;
+          ]]> 
+				</Result>
+ 		  </OnUpdate>
+  </Text> -->
+
+	<Text Position="NLigne" Label="Indicatif Téléphone" ColTable="INDTEL10" Nom="INDTEL10" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Non" />
+	<Text Position="2" Label="Numéro Téléphone" ColTable="TELCPT10" Nom="TELCPT10" Type="Numerique" Longueur="6" Unique="Non" Obligatoire="Non" />
+
+	<Text Position="NLigne" Label="Ancien compte principal" ColTable="PPLAGC30" Nom="PPLAGC30" Type="AlphaNumerique" Longueur="2" Disabled="Oui" Unique="Non" Obligatoire="Non" />
+	<Text Position="2" Label="" ColTable="PPLNAT30" Nom="PPLNAT30" Type="Numerique" Longueur="2" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="2" Label="" ColTable="PPLORD30" Nom="PPLORD30" Type="Numerique" Longueur="5" Disabled="Oui" Unique="Non" Obligatoire="Oui" />
+	<Text Position="2" Label="" ColTable="PPLCLE30" Nom="PPLCLE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" />
+
+	<Text Position="NLigne" Label="Code risque BCT" ColTable="MATBCT30" Nom="MATBCT30" Type="Numerique" Longueur="6" Unique="Non" Obligatoire="Non" />
+
+	<Text Position="NLigne" Label="Classe créance" ColTable="CLASSE30" Nom="CLASSE30" Type="Numerique" Longueur="1" Unique="Non" Obligatoire="Oui" />
+
+  <SimpleText Position="0" Class="Invisible" ColTable="DVSCPT1030" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CATCLT1030" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SGNSLD10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDCPT10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="NBCDVC10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="OUVCPT10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CODCLO10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDAMY10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMY10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMX10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="SLDMMI10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="MVDMOI10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="CODOPE29" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="INFCMP10" Label="" Valeur="" />
+  <SimpleText Position="0" Class="Invisible" ColTable="EMPOUV10" Label="" Valeur="" />
+
+		<Bouton Position="NLigne" Label="Valider"  Action="ValiderQuitter" MsgConfirm="Confirmer cette opération" />
+		<Bouton Position="Auto" Label="Quitter" Action="Quitter" />
+		
+		 <OnInit>
+				<Result>
+            %THIS030028% = "TND";
+            %THIS030029% = "0";
+            %THIS030030% = "0";
+            %THIS030031% = "0";
+            %THIS030032% = "3";
+            %THIS030033% = %Journee%;
+            %THIS030034% = "0";
+            %THIS030035% = "0";
+            %THIS030036% = "0";
+            %THIS030037% = "0";
+            %THIS030038% = "0";
+            %THIS030039% = "0";
+            %THIS030040% = "T101";
+            %THIS030041% = "P";
+            %THIS030042% = %CODEUSER%;
+				</Result>
+ 		 </OnInit>	
+
+	</Formulaire>
+
+	   <OnInit>				
+				<Result>
+				</Result>
+        <OnError>
+        </OnError>			
+		</OnInit>
+	</Tableau>
+
+</Entites>
